@@ -1,0 +1,18 @@
+# Sample Portfolio Configuration
+# Direct Indexing Shadow System v0.1
+
+portfolio_id: P001
+cash: 1000000          # $1,000,000 initial cash
+start_date: 2024-01-02 # First trading day of 2024
+
+# Tax-loss harvesting threshold (flag lots with >3% loss)
+tlh_threshold: 0.03
+
+# Drift threshold (flag positions >0.5% from target)
+drift_threshold: 0.005
+
+# Minimum trade value to propose
+min_trade_value: 100
+
+# Output directory for generated files
+output_dir: output

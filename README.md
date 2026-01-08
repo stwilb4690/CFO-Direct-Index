@@ -13,106 +13,222 @@ This repository is for research, simulation, and evaluation purposes only.
 
 ---
 
-## Scope
-The project will implement a **shadow (paper) direct indexing system** capable of:
+## v0.1 Features
 
-- Initializing portfolios from fresh cash into the S&P 500
-- Simulating portfolio behavior over time
-- Applying tax-loss harvesting rules
-- Handling index additions and deletions
-- Managing drift and tracking error
-- Generating proposed trades (paper only)
-- Producing analytics and decision logs
-- Displaying results via an internal dashboard
+### Implemented
+- **Portfolio Initialization**: Deploy cash into S&P 500 constituents by market-cap weight
+- **Lot-Level Holdings Tracking**: Track shares, cost basis, and acquisition date per lot
+- **Mark-to-Market Valuation**: Calculate current value and unrealized P&L
+- **Tax-Loss Harvesting Detection**: Identify lots with losses exceeding threshold
+- **Drift Analysis**: Compare portfolio weights to benchmark
+- **Trade Proposal Generation**: Generate rebalance and TLH proposals (paper only)
+- **Decision Logging**: Append-only JSONL audit log
+- **CLI Interface**: Command-line tools for all operations
 
-No live trading or brokerage execution is permitted.
-
----
-
-## Initialization Mode (Default)
-
-The default simulation mode assumes portfolios begin with **100% cash** deployed into the S&P 500 on a specified start date.
-
-### Behavior
-- Portfolio starts with cash only
-- Holdings are constructed using S&P 500 constituent weights on the start date
-- Initial purchases occur on the start date
-- All tax lots originate on the start date
-- No legacy holdings or historical wash-sale constraints are assumed unless explicitly enabled
-
-This mode is intended to:
-- Establish a clean baseline
-- Measure tracking error, turnover, and tax outcomes
-- Evaluate strategy behavior over time
+### Out of Scope (v0.2+)
+- Wash-sale rule enforcement
+- Index reconstitution handling
+- Corporate actions (splits, dividends, spinoffs)
+- Interactive dashboard
+- Multi-day simulation engine
+- Historical backfill of existing portfolios
 
 ---
 
-## Core Components (Planned)
+## Installation
 
-- **Data Ingestion**
-  - Portfolio definitions
-  - Benchmark constituent data
-  - Market price data
-  - Corporate actions (if available)
+```bash
+# Clone the repository
+git clone <repository-url>
+cd CFO-Direct-Index
 
-- **Portfolio Engine**
-  - Target weight construction
-  - Lot-level holdings tracking
-  - Drift monitoring
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-- **Tax-Loss Harvesting Engine**
-  - Loss detection thresholds
-  - Wash-sale avoidance
-  - Lot selection rules
-  - Trade deferral logic
+# Install package with dependencies
+pip install -e .
 
-- **Index Implementation Logic**
-  - Handling S&P 500 additions and deletions
-  - Conservative implementation buffers
-  - Liquidity and tracking error controls
+# Install dev dependencies for testing
+pip install -e ".[dev]"
+```
 
-- **Simulation Engine**
-  - Daily or periodic rebalancing
-  - Paper trade generation
-  - Reproducible runs
+---
 
-- **Analytics & Reporting**
-  - Realized and unrealized P&L
-  - Harvested losses
-  - Tracking error metrics
-  - Turnover statistics
-  - Wash-sale flags
-  - Decision rationale logs
+## Quick Start
 
-- **Dashboard**
-  - Interactive internal dashboard
-  - Portfolio summary views
-  - Time-series metrics
-  - Trade review panels
+### 1. Initialize a Portfolio
+
+```bash
+di-pilot init \
+  --config data/sample/portfolio_config.yaml \
+  --constituents data/sample/sp500_constituents.csv \
+  --prices data/sample/prices.csv \
+  --date 2024-01-02
+```
+
+### 2. Calculate Valuation
+
+```bash
+di-pilot value \
+  --portfolio-id P001 \
+  --holdings output/holdings_P001_2024-01-02.csv \
+  --prices data/sample/prices.csv \
+  --date 2024-06-15
+```
+
+### 3. Analyze Drift
+
+```bash
+di-pilot drift \
+  --portfolio-id P001 \
+  --holdings output/holdings_P001_2024-01-02.csv \
+  --constituents data/sample/sp500_constituents.csv \
+  --prices data/sample/prices.csv \
+  --date 2024-06-15
+```
+
+### 4. Identify TLH Candidates
+
+```bash
+di-pilot tlh \
+  --portfolio-id P001 \
+  --holdings output/holdings_P001_2024-01-02.csv \
+  --prices data/sample/prices.csv \
+  --date 2024-06-15 \
+  --threshold 0.03
+```
+
+### 5. Generate Trade Proposals
+
+```bash
+di-pilot propose \
+  --portfolio-id P001 \
+  --holdings output/holdings_P001_2024-01-02.csv \
+  --constituents data/sample/sp500_constituents.csv \
+  --prices data/sample/prices.csv \
+  --date 2024-06-15
+```
+
+---
+
+## Project Structure
+
+```
+CFO-Direct-Index/
+├── README.md
+├── pyproject.toml
+├── src/
+│   └── di_pilot/
+│       ├── __init__.py
+│       ├── cli.py                 # Entry point
+│       ├── config.py              # Config loading (YAML)
+│       ├── models.py              # Data classes
+│       ├── data/
+│       │   ├── loaders.py         # CSV/Parquet I/O
+│       │   └── schemas.py         # Column schemas
+│       ├── portfolio/
+│       │   ├── initialize.py      # Cash → holdings
+│       │   ├── holdings.py        # Lot tracking
+│       │   └── valuation.py       # Mark-to-market
+│       ├── analytics/
+│       │   ├── drift.py           # Drift calculation
+│       │   ├── tlh.py             # TLH detection
+│       │   └── pnl.py             # P&L calculations
+│       ├── trading/
+│       │   └── proposals.py       # Trade proposals
+│       └── logging/
+│           └── decision_log.py    # Audit logging
+├── tests/
+│   ├── conftest.py
+│   ├── test_initialize.py
+│   ├── test_valuation.py
+│   ├── test_drift.py
+│   └── test_tlh.py
+├── data/
+│   └── sample/                    # Sample input files
+└── output/                        # Generated outputs (gitignored)
+```
+
+---
+
+## Configuration
+
+Portfolio configuration is defined in YAML:
+
+```yaml
+portfolio_id: P001
+cash: 1000000              # Initial cash amount
+start_date: 2024-01-02     # Portfolio start date
+
+# Optional parameters
+tlh_threshold: 0.03        # Tax-loss harvesting threshold (3%)
+drift_threshold: 0.005     # Drift threshold (0.5%)
+min_trade_value: 100       # Minimum trade value
+output_dir: output         # Output directory
+```
+
+---
+
+## Output Files
+
+| Output | Format | Description |
+|--------|--------|-------------|
+| `holdings_{portfolio_id}_{date}.csv` | CSV | Lot-level holdings |
+| `valuation_{portfolio_id}_{date}.csv` | CSV | Mark-to-market with P&L |
+| `drift_report_{portfolio_id}_{date}.csv` | CSV | Per-symbol drift analysis |
+| `tlh_candidates_{portfolio_id}_{date}.csv` | CSV | Tax-loss harvesting candidates |
+| `trade_proposals_{portfolio_id}_{date}.csv` | CSV | Proposed trades |
+| `decision_log.jsonl` | JSONL | Append-only audit log |
+
+---
+
+## Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=di_pilot --cov-report=term-missing
+
+# Run specific test file
+pytest tests/test_initialize.py -v
+```
 
 ---
 
 ## Constraints & Guardrails
 
-- No live order routing
-- No brokerage integrations
-- All trades are simulated only
-- All decisions must be explainable and logged
-- Human review assumed before any real-world action
-- Designed for use in a regulated RIA environment
+- **No live trading**: No brokerage API integrations
+- **Paper only**: All trades are proposals requiring human review
+- **Auditability**: All decisions logged with rationale
+- **Deterministic**: Same inputs produce identical outputs
+- **Conservative**: Default thresholds favor safety over optimization
 
 ---
 
-## Technology Assumptions
+## Technology Stack
 
-- Python-based implementation
-- File-based inputs (CSV/Parquet)
-- Local execution
-- Dashboard framework suitable for internal use (e.g., Streamlit)
+- Python 3.11+
+- `decimal.Decimal` for all monetary/share calculations
+- pandas for data manipulation
+- click for CLI
+- pyyaml for configuration
+- pytest for testing
 
 ---
 
 ## Status
 
-Design and evaluation phase only.  
+**v0.1** - Initial implementation complete.
+
+- Portfolio initialization from cash
+- Lot-level holdings tracking
+- Mark-to-market valuation
+- TLH candidate detection
+- Drift analysis
+- Trade proposal generation
+- Decision logging
+
 No production deployment.

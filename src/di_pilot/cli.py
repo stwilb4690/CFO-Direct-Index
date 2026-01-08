@@ -40,7 +40,7 @@ from di_pilot.logging import DecisionLogger, get_logger
 
 
 @click.group()
-@click.version_option(version="0.2.0", prog_name="di-pilot")
+@click.version_option(version="0.3.0", prog_name="di-pilot")
 def main():
     """
     S&P 500 Direct Indexing Shadow System.
@@ -49,6 +49,40 @@ def main():
     portfolio management strategies. No live trading.
     """
     pass
+
+
+@main.command()
+@click.option(
+    "--port", "-p",
+    type=int,
+    default=8501,
+    help="Port to run the GUI on (default: 8501)",
+)
+def gui(port: int):
+    """
+    Launch the web-based GUI.
+
+    Opens a browser window with the Direct Indexing Pilot dashboard
+    for running simulations without touching code.
+    """
+    import subprocess
+    from pathlib import Path
+
+    gui_path = Path(__file__).parent / "gui.py"
+
+    click.echo(f"Starting GUI on http://localhost:{port}")
+    click.echo("Press Ctrl+C to stop")
+
+    try:
+        subprocess.run([
+            sys.executable, "-m", "streamlit", "run",
+            str(gui_path),
+            "--server.port", str(port),
+            "--server.headless", "false",
+            "--browser.gatherUsageStats", "false",
+        ])
+    except KeyboardInterrupt:
+        click.echo("\nGUI stopped.")
 
 
 @main.command()

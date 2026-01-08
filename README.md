@@ -19,10 +19,43 @@ This repository is for research, simulation, and evaluation purposes only.
 |---------|----------|
 | v0.1 | Portfolio init, holdings tracking, TLH detection, drift analysis, trade proposals |
 | v0.2 | Backtest engine, forward test engine, data providers, metrics calculation, reports |
+| v0.3 | Web-based GUI for running simulations without code |
 
 ---
 
-## v0.2 Features (NEW)
+## v0.3 Features (NEW)
+
+### Web-Based GUI
+
+Run simulations through a user-friendly web interface - no code required!
+
+**Launch the GUI:**
+```bash
+di-pilot gui
+```
+
+Or with a custom port:
+```bash
+di-pilot gui --port 8080
+```
+
+**Features:**
+- Configure and run backtests, forward tests, and quick tests
+- View results with interactive charts (portfolio value, returns, drawdowns)
+- Analyze trades by type and reason
+- Export metrics and reports
+- Browse historical simulation runs
+
+**Screenshot of GUI capabilities:**
+- Sidebar configuration for simulation parameters
+- Performance metrics cards (return, Sharpe, drawdown, etc.)
+- Interactive portfolio value and returns charts
+- Trade analysis with pie charts and tables
+- Full documentation built-in
+
+---
+
+## v0.2 Features
 
 ### Simulation Capabilities
 
@@ -262,6 +295,16 @@ di-pilot simulate-backtest --start-date 2023-01-03 --end-date 2024-01-02
 di-pilot simulate-forward --start-date 2024-06-01 --simulate-days 30
 ```
 
+### v0.3 Commands
+
+```bash
+# Launch web GUI (default port 8501)
+di-pilot gui
+
+# Launch on custom port
+di-pilot gui --port 8080
+```
+
 ---
 
 ## Project Structure
@@ -273,7 +316,8 @@ CFO-Direct-Index/
 ├── src/
 │   └── di_pilot/
 │       ├── __init__.py
-│       ├── cli.py                 # Entry point (v0.1 + v0.2 commands)
+│       ├── cli.py                 # CLI entry point
+│       ├── gui.py                 # v0.3: Streamlit web GUI
 │       ├── config.py              # Config loading (YAML)
 │       ├── models.py              # Data classes
 │       ├── data/
@@ -348,7 +392,8 @@ pytest --cov=di_pilot --cov-report=term-missing
 - pandas / numpy for data manipulation
 - yfinance for market data
 - beautifulsoup4 for web scraping
-- click / rich for CLI
+- click for CLI
+- streamlit / plotly for web GUI
 - pyyaml for configuration
 - pytest for testing
 
@@ -356,15 +401,21 @@ pytest --cov=di_pilot --cov-report=term-missing
 
 ## Status
 
-**v0.2** - Simulation capabilities complete.
+**v0.3** - Web GUI complete.
+
+- Web-based GUI for running simulations (Streamlit)
+- Interactive charts (portfolio value, returns, drawdowns)
+- Trade analysis with visualizations
+- Results browser for historical runs
+- No code required for basic operations
+
+**v0.2** - Simulation capabilities.
 
 - Backtest engine with configurable parameters
 - Forward test with state persistence
 - Yahoo Finance data provider (free, no API key)
 - File-based caching for reproducibility
 - Performance metrics (CAGR, Sharpe, drawdown, etc.)
-- Markdown and JSON report generation
-- CLI commands for simulation
 
 **Known Limitations:**
 - Survivorship bias in backtest (uses current constituents)

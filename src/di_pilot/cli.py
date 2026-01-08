@@ -40,7 +40,7 @@ from di_pilot.logging import DecisionLogger, get_logger
 
 
 @click.group()
-@click.version_option(version="0.1.0", prog_name="di-pilot")
+@click.version_option(version="0.2.0", prog_name="di-pilot")
 def main():
     """
     S&P 500 Direct Indexing Shadow System.
@@ -651,6 +651,361 @@ def propose(
     click.echo(f"    Rebalance trades: {summary['rebalance_proposals']}")
     click.echo()
     click.echo("  Note: All trades are proposals only. Review before execution.")
+
+
+# =============================================================================
+# Simulation Commands (v0.2)
+# =============================================================================
+
+
+@main.command("simulate-backtest")
+@click.option(
+    "--start-date",
+    required=True,
+    type=str,
+    help="Start date (YYYY-MM-DD)",
+)
+@click.option(
+    "--end-date",
+    required=True,
+    type=str,
+    help="End date (YYYY-MM-DD)",
+)
+@click.option(
+    "--initial-cash",
+    type=float,
+    default=1000000,
+    help="Initial cash amount (default: 1000000)",
+)
+@click.option(
+    "--rebalance-freq",
+    type=click.Choice(["daily", "weekly", "monthly", "quarterly"]),
+    default="weekly",
+    help="Rebalance frequency (default: weekly)",
+)
+@click.option(
+    "--top-n",
+    type=int,
+    default=None,
+    help="Limit to top N symbols (for faster testing)",
+)
+@click.option(
+    "--output-dir", "-o",
+    type=click.Path(),
+    default="output",
+    help="Output directory",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable data caching",
+)
+def simulate_backtest(
+    start_date: str,
+    end_date: str,
+    initial_cash: float,
+    rebalance_freq: str,
+    top_n: Optional[int],
+    output_dir: str,
+    no_cache: bool,
+):
+    """
+    Run a backtest simulation.
+
+    Simulates deploying cash into S&P 500 from start_date to end_date,
+    with periodic rebalancing and tax-loss harvesting.
+
+    Example:
+        di-pilot simulate-backtest --start-date 2023-01-01 --end-date 2024-01-01
+    """
+    from datetime import timedelta
+
+    try:
+        start = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end = datetime.strptime(end_date, "%Y-%m-%d").date()
+    except ValueError as e:
+        click.echo(f"Invalid date format: {e}. Use YYYY-MM-DD.", err=True)
+        sys.exit(1)
+
+    if end <= start:
+        click.echo("End date must be after start date.", err=True)
+        sys.exit(1)
+
+    click.echo(f"\n{'='*60}")
+    click.echo(f"  Direct Indexing Backtest Simulation")
+    click.echo(f"{'='*60}")
+    click.echo(f"  Period: {start_date} to {end_date}")
+    click.echo(f"  Initial Cash: ${initial_cash:,.2f}")
+    click.echo(f"  Rebalance: {rebalance_freq}")
+    if top_n:
+        click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"{'='*60}\n")
+
+    # Set up data provider
+    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
+    from di_pilot.simulation import run_backtest, SimulationConfig, generate_report
+    from di_pilot.simulation.report import generate_quick_summary
+
+    try:
+        provider = YFinanceProvider()
+        if not no_cache:
+            cache = FileCache("data/cache")
+            provider = CachedDataProvider(provider, cache)
+    except Exception as e:
+        click.echo(f"Error initializing data provider: {e}", err=True)
+        sys.exit(1)
+
+    # Configure simulation
+    config = SimulationConfig(
+        initial_cash=Decimal(str(initial_cash)),
+        rebalance_freq=rebalance_freq,
+    )
+
+    # Run backtest
+    def progress(msg: str):
+        click.echo(f"  {msg}")
+
+    try:
+        result = run_backtest(
+            provider=provider,
+            start_date=start,
+            end_date=end,
+            config=config,
+            top_n_symbols=top_n,
+            progress_callback=progress,
+        )
+    except Exception as e:
+        click.echo(f"\nError running backtest: {e}", err=True)
+        sys.exit(1)
+
+    # Generate outputs
+    out_dir = Path(output_dir) / result.run_id
+    try:
+        paths = generate_report(result, out_dir)
+    except Exception as e:
+        click.echo(f"\nError generating report: {e}", err=True)
+        sys.exit(1)
+
+    # Print summary
+    click.echo(generate_quick_summary(result))
+
+    click.echo(f"Outputs saved to: {out_dir}")
+    for name, path in paths.items():
+        click.echo(f"  - {name}: {path.name}")
+
+
+@main.command("simulate-forward")
+@click.option(
+    "--start-date",
+    required=True,
+    type=str,
+    help="Start date (YYYY-MM-DD)",
+)
+@click.option(
+    "--initial-cash",
+    type=float,
+    default=1000000,
+    help="Initial cash amount (default: 1000000)",
+)
+@click.option(
+    "--rebalance-freq",
+    type=click.Choice(["daily", "weekly", "monthly", "quarterly"]),
+    default="weekly",
+    help="Rebalance frequency (default: weekly)",
+)
+@click.option(
+    "--simulate-days",
+    type=int,
+    default=0,
+    help="Days to simulate forward (0 = just initialize)",
+)
+@click.option(
+    "--top-n",
+    type=int,
+    default=None,
+    help="Limit to top N symbols (for faster testing)",
+)
+@click.option(
+    "--output-dir", "-o",
+    type=click.Path(),
+    default="output",
+    help="Output directory",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable data caching",
+)
+def simulate_forward(
+    start_date: str,
+    initial_cash: float,
+    rebalance_freq: str,
+    simulate_days: int,
+    top_n: Optional[int],
+    output_dir: str,
+    no_cache: bool,
+):
+    """
+    Run a forward test simulation.
+
+    Deploys cash into S&P 500 on start_date and optionally simulates
+    forward for the specified number of trading days.
+
+    Example:
+        di-pilot simulate-forward --start-date 2024-01-02 --simulate-days 30
+    """
+    try:
+        start = datetime.strptime(start_date, "%Y-%m-%d").date()
+    except ValueError as e:
+        click.echo(f"Invalid date format: {e}. Use YYYY-MM-DD.", err=True)
+        sys.exit(1)
+
+    click.echo(f"\n{'='*60}")
+    click.echo(f"  Direct Indexing Forward Test Simulation")
+    click.echo(f"{'='*60}")
+    click.echo(f"  Start Date: {start_date}")
+    click.echo(f"  Initial Cash: ${initial_cash:,.2f}")
+    click.echo(f"  Rebalance: {rebalance_freq}")
+    if simulate_days > 0:
+        click.echo(f"  Simulate: {simulate_days} trading days")
+    if top_n:
+        click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"{'='*60}\n")
+
+    # Set up data provider
+    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
+    from di_pilot.simulation import run_forward_test, SimulationConfig, generate_report
+    from di_pilot.simulation.report import generate_quick_summary
+
+    try:
+        provider = YFinanceProvider()
+        if not no_cache:
+            cache = FileCache("data/cache")
+            provider = CachedDataProvider(provider, cache)
+    except Exception as e:
+        click.echo(f"Error initializing data provider: {e}", err=True)
+        sys.exit(1)
+
+    # Configure simulation
+    config = SimulationConfig(
+        initial_cash=Decimal(str(initial_cash)),
+        rebalance_freq=rebalance_freq,
+    )
+
+    # Run forward test
+    def progress(msg: str):
+        click.echo(f"  {msg}")
+
+    try:
+        result = run_forward_test(
+            provider=provider,
+            start_date=start,
+            config=config,
+            top_n_symbols=top_n,
+            simulate_days=simulate_days,
+            progress_callback=progress,
+        )
+    except Exception as e:
+        click.echo(f"\nError running forward test: {e}", err=True)
+        sys.exit(1)
+
+    # Generate outputs
+    out_dir = Path(output_dir) / result.run_id
+    try:
+        paths = generate_report(result, out_dir)
+    except Exception as e:
+        click.echo(f"\nError generating report: {e}", err=True)
+        sys.exit(1)
+
+    # Print summary
+    click.echo(generate_quick_summary(result))
+
+    click.echo(f"Outputs saved to: {out_dir}")
+    for name, path in paths.items():
+        click.echo(f"  - {name}: {path.name}")
+
+
+@main.command("quick-test")
+@click.option(
+    "--days",
+    type=int,
+    default=30,
+    help="Number of days to backtest (default: 30)",
+)
+@click.option(
+    "--top-n",
+    type=int,
+    default=20,
+    help="Number of top symbols to use (default: 20)",
+)
+@click.option(
+    "--output-dir", "-o",
+    type=click.Path(),
+    default="output",
+    help="Output directory",
+)
+def quick_test(days: int, top_n: int, output_dir: str):
+    """
+    Run a quick sanity-check backtest.
+
+    Uses a small universe (top 20 symbols) for fast execution.
+    Good for verifying the system works correctly.
+
+    Example:
+        di-pilot quick-test --days 30 --top-n 20
+    """
+    from datetime import timedelta
+
+    end = datetime.now().date() - timedelta(days=1)  # Yesterday
+    start = end - timedelta(days=days + 7)  # Add buffer for weekends
+
+    click.echo(f"\n{'='*60}")
+    click.echo(f"  Quick Sanity Check Backtest")
+    click.echo(f"{'='*60}")
+    click.echo(f"  Period: ~{days} trading days")
+    click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"{'='*60}\n")
+
+    # Set up data provider
+    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
+    from di_pilot.simulation import run_quick_backtest, generate_report
+    from di_pilot.simulation.report import generate_quick_summary
+    from di_pilot.simulation.backtest import run_quick_backtest
+
+    try:
+        provider = YFinanceProvider()
+        cache = FileCache("data/cache")
+        provider = CachedDataProvider(provider, cache)
+    except Exception as e:
+        click.echo(f"Error initializing data provider: {e}", err=True)
+        sys.exit(1)
+
+    click.echo("  Running backtest (this may take a minute)...")
+
+    try:
+        result = run_quick_backtest(
+            provider=provider,
+            start_date=start,
+            end_date=end,
+            initial_cash=Decimal("1000000"),
+            top_n=top_n,
+        )
+    except Exception as e:
+        click.echo(f"\nError running backtest: {e}", err=True)
+        sys.exit(1)
+
+    # Generate outputs
+    out_dir = Path(output_dir) / result.run_id
+    try:
+        paths = generate_report(result, out_dir)
+    except Exception as e:
+        click.echo(f"\nError generating report: {e}", err=True)
+        sys.exit(1)
+
+    # Print summary
+    click.echo(generate_quick_summary(result))
+
+    click.echo(f"Outputs saved to: {out_dir}")
 
 
 if __name__ == "__main__":

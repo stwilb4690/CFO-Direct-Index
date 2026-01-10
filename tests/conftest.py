@@ -149,3 +149,204 @@ def temp_output_dir() -> Path:
 def temp_csv_file(temp_output_dir: Path) -> Path:
     """Create a temporary CSV file path."""
     return temp_output_dir / "test_data.csv"
+
+
+# =============================================================================
+# EODHD Provider Fixtures
+# =============================================================================
+
+
+@pytest.fixture
+def sample_eodhd_price_data() -> dict[str, list[dict]]:
+    """
+    Sample EODHD API price response data.
+
+    Format matches the EODHD EOD endpoint:
+    https://eodhd.com/api/eod/{symbol}.US
+    """
+    return {
+        "AAPL": [
+            {
+                "date": "2024-01-02",
+                "open": 184.22,
+                "high": 185.88,
+                "low": 183.43,
+                "close": 185.64,
+                "adjusted_close": 185.64,
+                "volume": 82488700,
+            },
+            {
+                "date": "2024-01-03",
+                "open": 184.22,
+                "high": 185.15,
+                "low": 183.20,
+                "close": 184.25,
+                "adjusted_close": 184.25,
+                "volume": 58414460,
+            },
+            {
+                "date": "2024-01-04",
+                "open": 182.15,
+                "high": 183.09,
+                "low": 180.88,
+                "close": 181.91,
+                "adjusted_close": 181.91,
+                "volume": 71983640,
+            },
+            {
+                "date": "2024-01-05",
+                "open": 181.99,
+                "high": 182.76,
+                "low": 180.17,
+                "close": 181.18,
+                "adjusted_close": 181.18,
+                "volume": 62303340,
+            },
+        ],
+        "MSFT": [
+            {
+                "date": "2024-01-02",
+                "open": 373.86,
+                "high": 376.04,
+                "low": 371.32,
+                "close": 374.58,
+                "adjusted_close": 374.58,
+                "volume": 18157000,
+            },
+            {
+                "date": "2024-01-03",
+                "open": 372.45,
+                "high": 373.30,
+                "low": 368.68,
+                "close": 370.87,
+                "adjusted_close": 370.87,
+                "volume": 20264000,
+            },
+            {
+                "date": "2024-01-04",
+                "open": 369.15,
+                "high": 370.73,
+                "low": 366.00,
+                "close": 366.53,
+                "adjusted_close": 366.53,
+                "volume": 20547400,
+            },
+            {
+                "date": "2024-01-05",
+                "open": 367.36,
+                "high": 368.50,
+                "low": 365.25,
+                "close": 367.94,
+                "adjusted_close": 367.94,
+                "volume": 18932500,
+            },
+        ],
+        "SPY": [
+            {
+                "date": "2024-01-02",
+                "open": 472.50,
+                "high": 474.13,
+                "low": 469.95,
+                "close": 472.65,
+                "adjusted_close": 472.65,
+                "volume": 65852600,
+            },
+            {
+                "date": "2024-01-03",
+                "open": 470.50,
+                "high": 471.41,
+                "low": 468.00,
+                "close": 468.79,
+                "adjusted_close": 468.79,
+                "volume": 73152200,
+            },
+            {
+                "date": "2024-01-04",
+                "open": 468.25,
+                "high": 469.40,
+                "low": 465.18,
+                "close": 465.92,
+                "adjusted_close": 465.92,
+                "volume": 68136600,
+            },
+            {
+                "date": "2024-01-05",
+                "open": 467.22,
+                "high": 468.86,
+                "low": 465.44,
+                "close": 467.92,
+                "adjusted_close": 467.92,
+                "volume": 63765700,
+            },
+            {
+                "date": "2024-01-08",
+                "open": 469.70,
+                "high": 474.04,
+                "low": 469.60,
+                "close": 473.62,
+                "adjusted_close": 473.62,
+                "volume": 52019300,
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def sample_eodhd_constituents_data() -> dict:
+    """
+    Sample EODHD API constituents response data.
+
+    Format matches the EODHD fundamentals endpoint for GSPC.INDX
+    """
+    return {
+        "General": {
+            "Code": "GSPC",
+            "Type": "INDEX",
+            "Name": "S&P 500",
+        },
+        "Components": {
+            "AAPL.US": {"Code": "AAPL", "Exchange": "US", "Name": "Apple Inc", "Weight": 7.12},
+            "MSFT.US": {"Code": "MSFT", "Exchange": "US", "Name": "Microsoft Corp", "Weight": 6.85},
+            "AMZN.US": {"Code": "AMZN", "Exchange": "US", "Name": "Amazon.com Inc", "Weight": 3.42},
+            "NVDA.US": {"Code": "NVDA", "Exchange": "US", "Name": "NVIDIA Corp", "Weight": 3.15},
+            "GOOGL.US": {"Code": "GOOGL", "Exchange": "US", "Name": "Alphabet Inc Class A", "Weight": 2.08},
+            "GOOG.US": {"Code": "GOOG", "Exchange": "US", "Name": "Alphabet Inc Class C", "Weight": 1.79},
+            "META.US": {"Code": "META", "Exchange": "US", "Name": "Meta Platforms Inc", "Weight": 2.45},
+            "BRK.B.US": {"Code": "BRK.B", "Exchange": "US", "Name": "Berkshire Hathaway Inc", "Weight": 1.72},
+            "TSLA.US": {"Code": "TSLA", "Exchange": "US", "Name": "Tesla Inc", "Weight": 1.58},
+            "UNH.US": {"Code": "UNH", "Exchange": "US", "Name": "UnitedHealth Group Inc", "Weight": 1.25},
+            "JNJ.US": {"Code": "JNJ", "Exchange": "US", "Name": "Johnson & Johnson", "Weight": 1.12},
+            "JPM.US": {"Code": "JPM", "Exchange": "US", "Name": "JPMorgan Chase & Co", "Weight": 1.18},
+            "V.US": {"Code": "V", "Exchange": "US", "Name": "Visa Inc", "Weight": 1.05},
+            "XOM.US": {"Code": "XOM", "Exchange": "US", "Name": "Exxon Mobil Corp", "Weight": 1.08},
+            "PG.US": {"Code": "PG", "Exchange": "US", "Name": "Procter & Gamble Co", "Weight": 0.95},
+            # Remaining weight distributed among ~490 other stocks
+            # Using a simplified subset for testing
+        },
+    }
+
+
+@pytest.fixture
+def mock_eodhd_response():
+    """
+    Factory fixture for creating mock EODHD API responses.
+
+    Usage:
+        def test_something(mock_eodhd_response):
+            response = mock_eodhd_response(status_code=200, json_data={...})
+    """
+    from unittest.mock import MagicMock
+
+    def _create_response(status_code: int = 200, json_data=None, raise_for_status=False):
+        mock_response = MagicMock()
+        mock_response.status_code = status_code
+        mock_response.json.return_value = json_data or []
+
+        if raise_for_status:
+            mock_response.raise_for_status.side_effect = Exception("HTTP Error")
+        else:
+            mock_response.raise_for_status.return_value = None
+
+        return mock_response
+
+    return _create_response

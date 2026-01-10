@@ -7,6 +7,7 @@ benchmark constituent data with built-in caching for reproducibility.
 
 from di_pilot.data.providers.base import DataProvider, DataProviderError
 from di_pilot.data.providers.cache import CachedDataProvider, FileCache
+from di_pilot.data.providers.eodhd_provider import EODHDProvider, get_eodhd_provider
 from di_pilot.data.providers.yfinance_provider import YFinanceProvider
 
 __all__ = [
@@ -14,5 +15,7 @@ __all__ = [
     "DataProviderError",
     "CachedDataProvider",
     "FileCache",
+    "EODHDProvider",
     "YFinanceProvider",
+    "get_eodhd_provider",
 ]

@@ -959,6 +959,428 @@ def simulate_forward(
         click.echo(f"  - {name}: {path.name}")
 
 
+# =============================================================================
+# Forward Test Runner Commands (Daily Cron-style)
+# =============================================================================
+
+
+@main.group()
+def forward():
+    """
+    Forward test runner for daily portfolio updates.
+
+    Initialize a portfolio and run daily updates via cron.
+    State is persisted to data/portfolios/{portfolio_id}/.
+
+    Examples:
+        di-pilot forward init --portfolio-id P001 --cash 1000000
+        di-pilot forward run --portfolio-id P001
+        di-pilot forward status --portfolio-id P001
+    """
+    pass
+
+
+@forward.command("init")
+@click.option(
+    "--portfolio-id", "-i",
+    required=True,
+    help="Unique portfolio identifier",
+)
+@click.option(
+    "--cash",
+    required=True,
+    type=float,
+    help="Initial cash amount",
+)
+@click.option(
+    "--start-date",
+    type=str,
+    default=None,
+    help="Start date (YYYY-MM-DD). Defaults to today.",
+)
+@click.option(
+    "--top-n",
+    type=int,
+    default=None,
+    help="Limit to top N symbols by weight",
+)
+@click.option(
+    "--rebalance-freq",
+    type=click.Choice(["daily", "weekly", "monthly", "quarterly"]),
+    default="weekly",
+    help="Rebalance frequency (default: weekly)",
+)
+@click.option(
+    "--data-dir",
+    type=click.Path(),
+    default="data/portfolios",
+    help="Directory for portfolio data",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable data caching",
+)
+@click.option(
+    "--provider",
+    type=click.Choice(["yfinance", "eodhd"]),
+    default="yfinance",
+    help="Data provider to use (default: yfinance)",
+)
+def forward_init(
+    portfolio_id: str,
+    cash: float,
+    start_date: Optional[str],
+    top_n: Optional[int],
+    rebalance_freq: str,
+    data_dir: str,
+    no_cache: bool,
+    provider: str,
+):
+    """
+    Initialize a new portfolio for forward testing.
+
+    Creates a new portfolio by deploying cash into S&P 500 constituents.
+    State is saved to data/portfolios/{portfolio_id}/state.json.
+
+    Example:
+        di-pilot forward init --portfolio-id P001 --cash 1000000
+    """
+    from di_pilot.simulation.forward import ForwardTestRunner
+    from di_pilot.simulation import SimulationConfig
+
+    # Parse start date
+    effective_date = None
+    if start_date:
+        try:
+            effective_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        except ValueError:
+            click.echo(f"Invalid date format: {start_date}. Use YYYY-MM-DD.", err=True)
+            sys.exit(1)
+
+    click.echo(f"\n{'='*60}")
+    click.echo(f"  Forward Test Portfolio Initialization")
+    click.echo(f"{'='*60}")
+    click.echo(f"  Portfolio ID: {portfolio_id}")
+    click.echo(f"  Initial Cash: ${cash:,.2f}")
+    click.echo(f"  Start Date: {start_date or 'today'}")
+    click.echo(f"  Rebalance: {rebalance_freq}")
+    click.echo(f"  Provider: {provider}")
+    if top_n:
+        click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"{'='*60}\n")
+
+    # Set up data provider
+    data_provider = _get_provider(provider, not no_cache)
+    if data_provider is None:
+        sys.exit(1)
+
+    # Configure runner
+    config = SimulationConfig(
+        initial_cash=Decimal(str(cash)),
+        rebalance_freq=rebalance_freq,
+    )
+    runner = ForwardTestRunner(data_dir=data_dir, config=config)
+
+    # Check if portfolio exists
+    if runner.portfolio_exists(portfolio_id):
+        click.echo(f"Error: Portfolio {portfolio_id} already exists.", err=True)
+        click.echo(f"Delete {data_dir}/{portfolio_id}/state.json to reinitialize.", err=True)
+        sys.exit(1)
+
+    # Initialize portfolio
+    click.echo("  Fetching constituents and prices...")
+    try:
+        state = runner.initialize_portfolio(
+            portfolio_id=portfolio_id,
+            initial_cash=Decimal(str(cash)),
+            provider=data_provider,
+            start_date=effective_date,
+            top_n_symbols=top_n,
+        )
+    except Exception as e:
+        click.echo(f"\nError initializing portfolio: {e}", err=True)
+        sys.exit(1)
+
+    # Summary
+    click.echo()
+    click.echo("Portfolio initialized successfully!")
+    click.echo(f"  Positions: {len(set(lot.symbol for lot in state.lots))}")
+    click.echo(f"  Lots: {len(state.lots)}")
+    click.echo(f"  Cash remaining: ${float(state.cash):,.2f}")
+
+    if state.snapshots:
+        snap = state.snapshots[-1]
+        click.echo(f"  Total value: ${float(snap.total_value):,.2f}")
+
+    click.echo()
+    click.echo(f"State saved to: {data_dir}/{portfolio_id}/state.json")
+    click.echo(f"Run daily updates with: di-pilot forward run --portfolio-id {portfolio_id}")
+
+
+@forward.command("run")
+@click.option(
+    "--portfolio-id", "-i",
+    required=True,
+    help="Portfolio identifier",
+)
+@click.option(
+    "--date",
+    type=str,
+    default=None,
+    help="Date to run (YYYY-MM-DD). Defaults to today.",
+)
+@click.option(
+    "--force-rebalance",
+    is_flag=True,
+    help="Force rebalance regardless of schedule",
+)
+@click.option(
+    "--data-dir",
+    type=click.Path(),
+    default="data/portfolios",
+    help="Directory for portfolio data",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable data caching",
+)
+@click.option(
+    "--provider",
+    type=click.Choice(["yfinance", "eodhd"]),
+    default="yfinance",
+    help="Data provider to use (default: yfinance)",
+)
+def forward_run(
+    portfolio_id: str,
+    date: Optional[str],
+    force_rebalance: bool,
+    data_dir: str,
+    no_cache: bool,
+    provider: str,
+):
+    """
+    Run one day of forward test simulation.
+
+    Updates the portfolio with today's prices, executes TLH and
+    rebalancing if scheduled, and saves the updated state.
+
+    Designed to be called daily via cron:
+        0 18 * * 1-5 di-pilot forward run --portfolio-id P001
+
+    Example:
+        di-pilot forward run --portfolio-id P001
+    """
+    from di_pilot.simulation.forward import ForwardTestRunner
+
+    # Parse date
+    run_date = None
+    if date:
+        try:
+            run_date = datetime.strptime(date, "%Y-%m-%d").date()
+        except ValueError:
+            click.echo(f"Invalid date format: {date}. Use YYYY-MM-DD.", err=True)
+            sys.exit(1)
+
+    # Set up data provider
+    data_provider = _get_provider(provider, not no_cache)
+    if data_provider is None:
+        sys.exit(1)
+
+    # Initialize runner
+    runner = ForwardTestRunner(data_dir=data_dir)
+
+    # Check if portfolio exists
+    if not runner.portfolio_exists(portfolio_id):
+        click.echo(f"Error: Portfolio {portfolio_id} not found.", err=True)
+        click.echo(f"Initialize with: di-pilot forward init --portfolio-id {portfolio_id} --cash <amount>", err=True)
+        sys.exit(1)
+
+    # Run daily update
+    click.echo(f"Running daily update for {portfolio_id}...")
+    try:
+        snapshot = runner.run_daily(
+            portfolio_id=portfolio_id,
+            provider=data_provider,
+            as_of_date=run_date,
+            force_rebalance=force_rebalance,
+        )
+    except Exception as e:
+        click.echo(f"\nError running daily update: {e}", err=True)
+        sys.exit(1)
+
+    # Summary
+    click.echo()
+    click.echo(f"Daily Update Complete ({snapshot.date})")
+    click.echo(f"  Total Value: ${float(snapshot.total_value):,.2f}")
+    click.echo(f"  Daily Return: {float(snapshot.daily_return):+.2%}")
+    click.echo(f"  Cumulative Return: {float(snapshot.cumulative_return):+.2%}")
+    click.echo(f"  Positions: {snapshot.num_positions}")
+    click.echo(f"  Unrealized P&L: ${float(snapshot.unrealized_pnl):,.2f}")
+    click.echo(f"  Realized P&L: ${float(snapshot.realized_pnl):,.2f}")
+
+
+@forward.command("status")
+@click.option(
+    "--portfolio-id", "-i",
+    required=True,
+    help="Portfolio identifier",
+)
+@click.option(
+    "--live",
+    is_flag=True,
+    help="Fetch live prices for current values",
+)
+@click.option(
+    "--json-output",
+    is_flag=True,
+    help="Output as JSON",
+)
+@click.option(
+    "--data-dir",
+    type=click.Path(),
+    default="data/portfolios",
+    help="Directory for portfolio data",
+)
+@click.option(
+    "--no-cache",
+    is_flag=True,
+    help="Disable data caching",
+)
+@click.option(
+    "--provider",
+    type=click.Choice(["yfinance", "eodhd"]),
+    default="yfinance",
+    help="Data provider to use (default: yfinance)",
+)
+def forward_status(
+    portfolio_id: str,
+    live: bool,
+    json_output: bool,
+    data_dir: str,
+    no_cache: bool,
+    provider: str,
+):
+    """
+    Get current portfolio status.
+
+    Shows portfolio value, positions, drift, and TLH candidates.
+
+    Example:
+        di-pilot forward status --portfolio-id P001
+        di-pilot forward status --portfolio-id P001 --live --json-output
+    """
+    import json as json_lib
+    from di_pilot.simulation.forward import ForwardTestRunner
+
+    # Initialize runner
+    runner = ForwardTestRunner(data_dir=data_dir)
+
+    # Check if portfolio exists
+    if not runner.portfolio_exists(portfolio_id):
+        click.echo(f"Error: Portfolio {portfolio_id} not found.", err=True)
+        sys.exit(1)
+
+    # Get provider if live data requested
+    data_provider = None
+    if live:
+        data_provider = _get_provider(provider, not no_cache)
+        if data_provider is None:
+            sys.exit(1)
+
+    # Get status
+    try:
+        status = runner.get_portfolio_status(portfolio_id, provider=data_provider)
+    except Exception as e:
+        click.echo(f"\nError getting status: {e}", err=True)
+        sys.exit(1)
+
+    # Output
+    if json_output:
+        click.echo(json_lib.dumps(status, indent=2, default=str))
+    else:
+        click.echo(f"\n{'='*60}")
+        click.echo(f"  Portfolio Status: {portfolio_id}")
+        click.echo(f"{'='*60}")
+        click.echo(f"  Last Update: {status['current_date']}")
+        click.echo(f"  Initial Cash: ${status['initial_cash']:,.2f}")
+
+        if "total_value" in status:
+            click.echo(f"  Total Value: ${status['total_value']:,.2f}")
+            click.echo(f"  Cumulative Return: {status.get('cumulative_return', 0):+.2%}")
+
+        if live and "live_total_value" in status:
+            click.echo(f"  Live Value: ${status['live_total_value']:,.2f}")
+            click.echo(f"  Live Return: {status['live_return']:+.2%}")
+
+        click.echo(f"  Cash: ${status['cash']:,.2f}")
+        click.echo(f"  Positions: {status['num_positions']}")
+        click.echo(f"  Lots: {status['num_lots']}")
+        click.echo(f"  Realized P&L: ${status['realized_pnl']:,.2f}")
+        click.echo(f"  Harvested Losses: ${status['harvested_losses']:,.2f}")
+
+        # Top positions
+        if status.get("positions"):
+            click.echo()
+            click.echo("  Top Positions:")
+            for pos in status["positions"][:5]:
+                if "market_value" in pos:
+                    click.echo(
+                        f"    {pos['symbol']}: {pos['shares']:.2f} shares, "
+                        f"${pos['market_value']:,.2f} ({pos['unrealized_pnl']:+,.2f})"
+                    )
+                else:
+                    click.echo(
+                        f"    {pos['symbol']}: {pos['shares']:.2f} shares, "
+                        f"${pos['total_cost']:,.2f} cost"
+                    )
+
+        # TLH candidates
+        if status.get("tlh_candidates"):
+            click.echo()
+            click.echo("  TLH Candidates:")
+            for cand in status["tlh_candidates"][:3]:
+                click.echo(
+                    f"    {cand['symbol']}: ${cand['loss_amount']:,.2f} "
+                    f"({cand['loss_pct']:.2%})"
+                )
+
+        # Significant drift
+        if status.get("significant_drift"):
+            click.echo()
+            click.echo("  Significant Drift:")
+            for symbol, drift_val in list(status["significant_drift"].items())[:3]:
+                click.echo(f"    {symbol}: {drift_val:+.2%}")
+
+        click.echo()
+
+
+def _get_provider(provider_name: str, use_cache: bool):
+    """Helper to get data provider by name."""
+    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
+
+    try:
+        if provider_name == "yfinance":
+            provider = YFinanceProvider()
+        elif provider_name == "eodhd":
+            from di_pilot.data.providers import EODHDProvider
+            provider = EODHDProvider()
+        else:
+            click.echo(f"Unknown provider: {provider_name}", err=True)
+            return None
+
+        if use_cache:
+            cache = FileCache("data/cache")
+            return CachedDataProvider(provider, cache)
+
+        return provider
+
+    except Exception as e:
+        click.echo(f"Error initializing data provider: {e}", err=True)
+        return None
+
+
 @main.command("quick-test")
 @click.option(
     "--days",

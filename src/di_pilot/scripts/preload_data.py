@@ -32,14 +32,42 @@ def preload_sp500_data(
     provider = get_eodhd_provider(use_cache=True)
     
     # Get constituents
+    # Get constituents
     if progress_callback:
-        progress_callback("Fetching S&P 500 constituents...")
+        progress_callback(f"Fetching S&P 500 constituents history ({start_date} to {end_date})...")
     
-    constituents = provider.get_constituents(as_of_date=end_date)
-    symbols = [c.symbol for c in constituents]
+    unique_symbols = set()
+    
+    # Iterate quarterly to capture changes in index composition
+    current = start_date
+    while current <= end_date:
+        try:
+            # Check constituents at this point in time
+            constituents = provider.get_constituents(as_of_date=current)
+            snapshot_symbols = {c.symbol for c in constituents}
+            unique_symbols.update(snapshot_symbols)
+            
+            if progress_callback:
+                progress_callback(f"  {current}: Found {len(snapshot_symbols)} symbols (Total unique: {len(unique_symbols)})")
+                
+        except Exception as e:
+            if progress_callback:
+                progress_callback(f"Warning: Failed to fetch constituents for {current}: {e}")
+        
+        # Advance 3 months (approx 90 days)
+        current += timedelta(days=90)
+    
+    # Final check at end date
+    try:
+        constituents = provider.get_constituents(as_of_date=end_date)
+        unique_symbols.update({c.symbol for c in constituents})
+    except Exception:
+        pass
+
+    symbols = sorted(list(unique_symbols))
     
     if progress_callback:
-        progress_callback(f"Found {len(symbols)} constituents")
+        progress_callback(f"Found {len(symbols)} unique historical constituents")
     
     # Fetch price data (will be cached)
     if progress_callback:

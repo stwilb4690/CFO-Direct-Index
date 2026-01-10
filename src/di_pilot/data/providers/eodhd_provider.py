@@ -5,16 +5,16 @@ Uses the EODHD API (https://eodhd.com/api/) to fetch historical price data
 and S&P 500 constituent information with historical support.
 """
 
-import os
+import decimal
 import time
 from datetime import date, timedelta
-import decimal
 from decimal import Decimal
 from typing import Optional
 
 import pandas as pd
 import requests
 
+from di_pilot.config import load_api_keys
 from di_pilot.models import BenchmarkConstituent, PriceData
 from di_pilot.data.providers.base import DataProvider, DataProviderError
 
@@ -55,18 +55,36 @@ class EODHDProvider(DataProvider):
         Initialize EODHD provider.
 
         Args:
-            api_key: EODHD API key (defaults to EODHD_API_KEY env var)
+            api_key: EODHD API key (defaults to loading from config sources)
             max_retries: Maximum retries for failed requests
             retry_delay: Delay between retries (seconds)
 
         Raises:
-            DataProviderError: If API key is not provided or found in env
+            DataProviderError: If API key is not provided or found in config
+
+        Note:
+            API key is loaded from (in priority order):
+            1. api_key parameter
+            2. EODHD_API_KEY environment variable
+            3. .env file in project root
+            4. config/api_keys.yaml
         """
-        self._api_key = api_key or os.environ.get("EODHD_API_KEY")
+        if api_key:
+            self._api_key = api_key
+        else:
+            # Load from configuration sources
+            api_keys = load_api_keys()
+            self._api_key = api_keys.get("eodhd_api_key")
+
         if not self._api_key:
             raise DataProviderError(
-                "EODHD API key is required. Set EODHD_API_KEY environment variable "
-                "or pass api_key parameter."
+                "EODHD API key is not configured. Please set it using one of:\n"
+                "  1. Pass api_key parameter to EODHDProvider\n"
+                "  2. Environment variable: export EODHD_API_KEY=your-key\n"
+                "  3. .env file: EODHD_API_KEY=your-key\n"
+                "  4. config/api_keys.yaml: eodhd_api_key: your-key\n"
+                "\n"
+                "Get your API key at: https://eodhd.com/"
             )
 
         self._max_retries = max_retries

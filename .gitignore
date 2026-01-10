@@ -210,3 +210,6 @@ __marimo__/
 output/
 data/cache/
 *.jsonl
+
+# API keys and secrets
+config/api_keys.yaml

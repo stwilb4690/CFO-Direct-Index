@@ -1,10 +1,11 @@
 """
 Configuration loading and management for the Direct Indexing Shadow System.
 
-This module handles loading portfolio configurations from YAML files and
-provides validation of configuration parameters.
+This module handles loading portfolio configurations from YAML files,
+API key management, and validation of configuration parameters.
 """
 
+import os
 from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -15,9 +16,129 @@ import yaml
 from di_pilot.models import PortfolioConfig
 
 
+# Default paths for configuration files
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+DEFAULT_ENV_FILE = PROJECT_ROOT / ".env"
+DEFAULT_API_KEYS_FILE = PROJECT_ROOT / "config" / "api_keys.yaml"
+
+
 class ConfigurationError(Exception):
     """Raised when configuration is invalid or cannot be loaded."""
     pass
+
+
+def load_api_keys(
+    env_file: str | Path | None = None,
+    api_keys_file: str | Path | None = None,
+) -> dict[str, str]:
+    """
+    Load API keys from multiple sources with priority.
+
+    Sources are checked in this order (later sources override earlier):
+    1. config/api_keys.yaml file
+    2. .env file in project root
+    3. Environment variables
+
+    Args:
+        env_file: Path to .env file (defaults to project root .env)
+        api_keys_file: Path to api_keys.yaml (defaults to config/api_keys.yaml)
+
+    Returns:
+        Dictionary with API keys:
+        - eodhd_api_key: EODHD API key (if available)
+
+    Example:
+        >>> keys = load_api_keys()
+        >>> eodhd_key = keys.get("eodhd_api_key")
+    """
+    api_keys: dict[str, str] = {}
+
+    # 1. Load from config/api_keys.yaml
+    yaml_path = Path(api_keys_file) if api_keys_file else DEFAULT_API_KEYS_FILE
+    if yaml_path.exists():
+        try:
+            with open(yaml_path, "r") as f:
+                yaml_config = yaml.safe_load(f) or {}
+            if isinstance(yaml_config, dict):
+                if "eodhd_api_key" in yaml_config:
+                    api_keys["eodhd_api_key"] = str(yaml_config["eodhd_api_key"])
+        except (yaml.YAMLError, OSError):
+            pass  # Silently ignore yaml errors
+
+    # 2. Load from .env file
+    env_path = Path(env_file) if env_file else DEFAULT_ENV_FILE
+    if env_path.exists():
+        try:
+            from dotenv import dotenv_values
+            env_values = dotenv_values(env_path)
+            if "EODHD_API_KEY" in env_values:
+                api_keys["eodhd_api_key"] = str(env_values["EODHD_API_KEY"])
+        except ImportError:
+            # python-dotenv not installed, try manual parsing
+            api_keys.update(_parse_env_file(env_path))
+
+    # 3. Override with environment variables (highest priority)
+    if os.environ.get("EODHD_API_KEY"):
+        api_keys["eodhd_api_key"] = os.environ["EODHD_API_KEY"]
+
+    return api_keys
+
+
+def _parse_env_file(env_path: Path) -> dict[str, str]:
+    """
+    Simple .env file parser as fallback when python-dotenv is not installed.
+
+    Args:
+        env_path: Path to .env file
+
+    Returns:
+        Dictionary with parsed environment variables
+    """
+    result: dict[str, str] = {}
+    try:
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                # Skip comments and empty lines
+                if not line or line.startswith("#"):
+                    continue
+                # Parse KEY=VALUE format
+                if "=" in line:
+                    key, _, value = line.partition("=")
+                    key = key.strip()
+                    value = value.strip()
+                    # Remove quotes if present
+                    if (value.startswith('"') and value.endswith('"')) or \
+                       (value.startswith("'") and value.endswith("'")):
+                        value = value[1:-1]
+                    if key == "EODHD_API_KEY":
+                        result["eodhd_api_key"] = value
+    except OSError:
+        pass
+    return result
+
+
+def get_eodhd_api_key() -> str:
+    """
+    Get the EODHD API key from available configuration sources.
+
+    Returns:
+        The EODHD API key
+
+    Raises:
+        ConfigurationError: If EODHD_API_KEY is not configured
+    """
+    api_keys = load_api_keys()
+    if "eodhd_api_key" not in api_keys or not api_keys["eodhd_api_key"]:
+        raise ConfigurationError(
+            "EODHD API key is not configured. Please set it using one of:\n"
+            "  1. Environment variable: export EODHD_API_KEY=your-key\n"
+            "  2. .env file: EODHD_API_KEY=your-key\n"
+            "  3. config/api_keys.yaml: eodhd_api_key: your-key\n"
+            "\n"
+            "Get your API key at: https://eodhd.com/"
+        )
+    return api_keys["eodhd_api_key"]
 
 
 def load_portfolio_config(config_path: str | Path) -> PortfolioConfig:

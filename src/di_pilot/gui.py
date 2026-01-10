@@ -17,6 +17,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from di_pilot.config import load_api_keys
+
 # Page configuration
 st.set_page_config(
     page_title="Direct Indexing Pilot",
@@ -92,6 +94,7 @@ def run_simulation(
     rebalance_freq: str,
     top_n: int | None,
     simulate_days: int | None,
+    provider: str = "yfinance",
 ) -> tuple[bool, str, str | None]:
     """Run a simulation and return (success, output, run_id)."""
 
@@ -106,6 +109,7 @@ def run_simulation(
         cmd.extend(["--rebalance-freq", rebalance_freq])
         if top_n and top_n > 0:
             cmd.extend(["--top-n", str(top_n)])
+        cmd.extend(["--provider", provider])
 
     elif sim_type == "forward":
         cmd.extend(["simulate-forward"])
@@ -113,6 +117,7 @@ def run_simulation(
         cmd.extend(["--initial-cash", str(initial_cash)])
         if simulate_days and simulate_days > 0:
             cmd.extend(["--simulate-days", str(simulate_days)])
+        cmd.extend(["--provider", provider])
 
     elif sim_type == "quick":
         cmd.extend(["quick-test"])
@@ -121,6 +126,7 @@ def run_simulation(
             cmd.extend(["--end-date", end_date.isoformat()])
         if top_n and top_n > 0:
             cmd.extend(["--top-n", str(top_n)])
+        cmd.extend(["--provider", provider])
 
     try:
         result = subprocess.run(
@@ -150,6 +156,60 @@ def run_simulation(
         return False, "Simulation timed out after 10 minutes", None
     except Exception as e:
         return False, f"Error running simulation: {e}", None
+
+
+def check_eodhd_api_key() -> tuple[bool, str]:
+    """Check if EODHD API key is configured.
+
+    Returns:
+        Tuple of (is_configured, status_message)
+    """
+    try:
+        api_keys = load_api_keys()
+        key = api_keys.get("eodhd_api_key", "")
+        if key and key != "your-api-key-here":
+            # Mask the key for display
+            masked = key[:4] + "..." + key[-4:] if len(key) > 8 else "****"
+            return True, f"Configured ({masked})"
+        return False, "Not configured"
+    except Exception as e:
+        return False, f"Error: {e}"
+
+
+def test_eodhd_connection() -> tuple[bool, str]:
+    """Test connection to EODHD API.
+
+    Returns:
+        Tuple of (success, message)
+    """
+    try:
+        from di_pilot.data.providers import get_eodhd_provider
+
+        provider = get_eodhd_provider(use_cache=False)
+        # Try to get a single day of SPY data as a connectivity test
+        from datetime import date, timedelta
+        test_date = date.today() - timedelta(days=7)
+        end_date = date.today()
+
+        prices = provider.get_prices(
+            symbols=["SPY"],
+            start_date=test_date,
+            end_date=end_date,
+        )
+
+        if "SPY" in prices and len(prices["SPY"]) > 0:
+            return True, f"Connected! Retrieved {len(prices['SPY'])} price records for SPY"
+        else:
+            return False, "Connected but no data returned"
+
+    except Exception as e:
+        error_msg = str(e)
+        if "API key" in error_msg:
+            return False, "API key not configured or invalid"
+        elif "429" in error_msg or "rate limit" in error_msg.lower():
+            return False, "Rate limited - try again later"
+        else:
+            return False, f"Connection failed: {error_msg}"
 
 
 def render_metrics_cards(metrics: dict):
@@ -342,6 +402,37 @@ def render_sidebar():
     st.sidebar.title("📈 DI Pilot")
     st.sidebar.markdown("---")
 
+    # Data Provider selection
+    st.sidebar.subheader("Data Provider")
+    provider = st.sidebar.selectbox(
+        "Provider",
+        options=["yfinance", "eodhd"],
+        format_func=lambda x: {
+            "yfinance": "Yahoo Finance (Free)",
+            "eodhd": "EODHD (API Key Required)",
+        }.get(x, x),
+    )
+
+    # Show API key status and test button for EODHD
+    if provider == "eodhd":
+        is_configured, status_msg = check_eodhd_api_key()
+        if is_configured:
+            st.sidebar.success(f"API Key: {status_msg}")
+        else:
+            st.sidebar.warning(f"API Key: {status_msg}")
+            st.sidebar.caption("Set EODHD_API_KEY in .env or config/api_keys.yaml")
+
+        if st.sidebar.button("Test Connection"):
+            with st.sidebar:
+                with st.spinner("Testing connection..."):
+                    success, message = test_eodhd_connection()
+                if success:
+                    st.success(message)
+                else:
+                    st.error(message)
+
+    st.sidebar.markdown("---")
+
     # Simulation type
     sim_type = st.sidebar.selectbox(
         "Simulation Type",
@@ -426,6 +517,7 @@ def render_sidebar():
         "rebalance_freq": rebalance_freq,
         "top_n": top_n,
         "simulate_days": simulate_days,
+        "provider": provider,
     }
 
 
@@ -444,7 +536,7 @@ def main_page():
         st.header("Run New Simulation")
 
         # Show current configuration
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.info(f"**Type:** {config['sim_type'].title()}")
         with col2:
@@ -454,6 +546,9 @@ def main_page():
                 st.info(f"**Symbols:** Top {config['top_n']}")
             else:
                 st.info("**Symbols:** All S&P 500")
+        with col4:
+            provider_name = "Yahoo Finance" if config["provider"] == "yfinance" else "EODHD"
+            st.info(f"**Provider:** {provider_name}")
 
         # Warnings
         if config["sim_type"] == "backtest" and not config["top_n"]:
@@ -473,6 +568,7 @@ def main_page():
                     rebalance_freq=config["rebalance_freq"],
                     top_n=config["top_n"],
                     simulate_days=config["simulate_days"],
+                    provider=config["provider"],
                 )
 
             if success:

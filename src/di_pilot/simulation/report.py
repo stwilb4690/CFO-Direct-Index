@@ -87,6 +87,13 @@ def _generate_markdown_report(
     is_backtest = isinstance(result, BacktestResult)
     sim_type = "Backtest" if is_backtest else "Forward Test"
 
+    # Calculate benchmark comparison
+    benchmark_return = None
+    active_return = None
+    if is_backtest and hasattr(result, 'benchmark_return') and result.benchmark_return is not None:
+        benchmark_return = float(result.benchmark_return)
+        active_return = metrics.total_return - benchmark_return
+
     lines = [
         f"# Direct Indexing {sim_type} Report",
         "",
@@ -107,6 +114,58 @@ def _generate_markdown_report(
         f"| Total Return | {metrics.total_return:.2%} |",
         f"| CAGR | {metrics.cagr:.2%} |",
         "",
+    ]
+
+    # Add benchmark comparison section if available
+    if benchmark_return is not None:
+        lines.extend([
+            "---",
+            "",
+            "## Benchmark Comparison",
+            "",
+            f"| Metric | Strategy | S&P 500 | Difference |",
+            f"|--------|----------|---------|------------|",
+            f"| Total Return | {metrics.total_return:.2%} | {benchmark_return:.2%} | {active_return:+.2%} |",
+            "",
+        ])
+
+        # Add analysis section
+        issues = []
+        highlights = []
+
+        if active_return < -0.02:
+            issues.append(f"Strategy underperformed benchmark by {abs(active_return):.2%}")
+        elif active_return > 0.01:
+            highlights.append(f"Strategy outperformed benchmark by {active_return:.2%}")
+
+        if metrics.harvested_losses < 0:
+            issues.append(f"Realized capital GAINS of ${abs(metrics.harvested_losses):,.2f} (should only harvest losses)")
+        elif metrics.harvested_losses > 0:
+            highlights.append(f"Successfully harvested ${metrics.harvested_losses:,.2f} in tax losses")
+
+        cash_pct = metrics.final_cash / metrics.final_value if metrics.final_value > 0 else 0
+        if cash_pct > 0.05:
+            issues.append(f"High cash balance ({cash_pct:.1%}) may create cash drag")
+
+        if metrics.total_trades > metrics.trading_days * 2:
+            issues.append(f"High trading activity ({metrics.total_trades} trades) - review transaction costs")
+
+        if issues or highlights:
+            lines.extend(["### Analysis", ""])
+
+            if issues:
+                lines.append("**⚠️ Issues Detected:**")
+                for issue in issues:
+                    lines.append(f"- {issue}")
+                lines.append("")
+
+            if highlights:
+                lines.append("**✓ Highlights:**")
+                for highlight in highlights:
+                    lines.append(f"- {highlight}")
+                lines.append("")
+
+    lines.extend([
         "---",
         "",
         "## Performance Metrics",
@@ -128,7 +187,7 @@ def _generate_markdown_report(
         f"| Max Drawdown Date | {metrics.max_drawdown_date} |",
         f"| Average Drawdown | {metrics.avg_drawdown:.2%} |",
         "",
-    ]
+    ])
 
     if metrics.tracking_error is not None:
         lines.extend([
@@ -270,6 +329,13 @@ def generate_quick_summary(
     is_backtest = isinstance(result, BacktestResult)
     sim_type = "Backtest" if is_backtest else "Forward Test"
 
+    # Calculate benchmark return if available
+    benchmark_return = None
+    active_return = None
+    if is_backtest and hasattr(result, 'benchmark_return') and result.benchmark_return is not None:
+        benchmark_return = float(result.benchmark_return)
+        active_return = metrics.total_return - benchmark_return
+
     lines = [
         f"\n{'='*60}",
         f"  {sim_type} Summary: {result.run_id}",
@@ -281,6 +347,14 @@ def generate_quick_summary(
         f"  Initial:     ${float(result.config.initial_cash):>14,.2f}",
         f"  Final:       ${metrics.final_value:>14,.2f}",
         f"  Return:      {metrics.total_return:>14.2%}",
+    ]
+
+    # Add benchmark comparison if available
+    if benchmark_return is not None:
+        lines.append(f"  S&P 500:     {benchmark_return:>14.2%}")
+        lines.append(f"  Active:      {active_return:>14.2%}")
+
+    lines.extend([
         f"  CAGR:        {metrics.cagr:>14.2%}",
         "",
         f"  Volatility:  {metrics.annualized_volatility:>14.2%}",
@@ -293,7 +367,29 @@ def generate_quick_summary(
         "",
         f"  Positions:   {metrics.final_positions:>14}",
         f"  Cash:        ${metrics.final_cash:>14,.2f}",
-        f"{'='*60}\n",
-    ]
+    ])
+
+    # Add analysis/issues section
+    issues = []
+    if active_return is not None and active_return < -0.02:
+        issues.append(f"  ⚠️  Underperformed benchmark by {abs(active_return):.2%}")
+    if metrics.harvested_losses < 0:  # Positive harvested_losses means gains taken
+        issues.append(f"  ⚠️  Realized capital GAINS (should only harvest losses)")
+    cash_pct = metrics.final_cash / metrics.final_value if metrics.final_value > 0 else 0
+    if cash_pct > 0.05:
+        issues.append(f"  ⚠️  High cash balance ({cash_pct:.1%}) - potential cash drag")
+    if metrics.total_trades > metrics.trading_days * 2:
+        issues.append(f"  ⚠️  High trading activity ({metrics.total_trades} trades)")
+
+    if issues:
+        lines.append("")
+        lines.append("  ISSUES DETECTED:")
+        lines.extend(issues)
+
+    if active_return is not None and active_return >= 0:
+        lines.append("")
+        lines.append(f"  ✓ Strategy matched or outperformed benchmark")
+
+    lines.append(f"{'='*60}\n")
 
     return "\n".join(lines)

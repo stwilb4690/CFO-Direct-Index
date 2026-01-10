@@ -121,9 +121,12 @@ def run_simulation(
 
     elif sim_type == "quick":
         cmd.extend(["quick-test"])
-        cmd.extend(["--start-date", start_date.isoformat()])
-        if end_date:
-            cmd.extend(["--end-date", end_date.isoformat()])
+        # Calculate days from date range
+        if end_date and start_date:
+            days = (end_date - start_date).days
+            cmd.extend(["--days", str(max(days, 5))])  # Minimum 5 days
+        else:
+            cmd.extend(["--days", "30"])  # Default 30 days
         if top_n and top_n > 0:
             cmd.extend(["--top-n", str(top_n)])
         cmd.extend(["--provider", provider])
@@ -156,6 +159,52 @@ def run_simulation(
         return False, "Simulation timed out after 10 minutes", None
     except Exception as e:
         return False, f"Error running simulation: {e}", None
+
+
+def save_api_key_to_env(api_key: str) -> bool:
+    """Save EODHD API key to .env file.
+    
+    Args:
+        api_key: The API key to save
+        
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        env_path = get_project_root() / ".env"
+        
+        # Strip whitespace from API key
+        api_key = api_key.strip()
+        
+        # Read existing content
+        existing_lines = []
+        if env_path.exists():
+            with open(env_path, "r") as f:
+                existing_lines = f.readlines()
+        
+        # Update or add the API key
+        key_found = False
+        new_lines = []
+        for line in existing_lines:
+            if line.strip().startswith("EODHD_API_KEY="):
+                new_lines.append(f"EODHD_API_KEY={api_key}\n")
+                key_found = True
+            else:
+                new_lines.append(line)
+        
+        # Add key if not found
+        if not key_found:
+            if new_lines and not new_lines[-1].endswith("\n"):
+                new_lines.append("\n")
+            new_lines.append(f"EODHD_API_KEY={api_key}\n")
+        
+        # Write back
+        with open(env_path, "w") as f:
+            f.writelines(new_lines)
+        
+        return True
+    except Exception:
+        return False
 
 
 def check_eodhd_api_key() -> tuple[bool, str]:
@@ -420,7 +469,33 @@ def render_sidebar():
             st.sidebar.success(f"API Key: {status_msg}")
         else:
             st.sidebar.warning(f"API Key: {status_msg}")
-            st.sidebar.caption("Set EODHD_API_KEY in .env or config/api_keys.yaml")
+        
+        # API Key input field
+        with st.sidebar.expander("🔑 Configure API Key", expanded=not is_configured):
+            with st.form("api_key_form"):
+                api_key_input = st.text_input(
+                    "EODHD API Key",
+                    type="password",
+                    placeholder="Paste your EODHD API key here",
+                    help="Get your API key at https://eodhd.com/",
+                )
+                
+                submitted = st.form_submit_button("💾 Save API Key", use_container_width=True)
+                
+                if submitted:
+                    if api_key_input:
+                        # Check for whitespace issues
+                        has_whitespace = api_key_input != api_key_input.strip()
+                        if has_whitespace:
+                            st.warning("⚠️ Your API key had leading/trailing spaces - they have been removed.")
+                        
+                        if save_api_key_to_env(api_key_input):
+                            st.success("✅ API key saved!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to save. Check file permissions.")
+                    else:
+                        st.warning("Please enter an API key first.")
 
         if st.sidebar.button("Test Connection"):
             with st.sidebar:
@@ -484,19 +559,20 @@ def render_sidebar():
             index=1,
         )
 
-    # Top N symbols
+    # Top N symbols - only for Quick Test mode (Backtest uses full S&P 500)
     top_n = None
-    if sim_type in ["backtest", "quick"]:
+    if sim_type == "quick":
         use_top_n = st.sidebar.checkbox(
             "Limit to Top N Symbols",
-            value=sim_type == "quick",
+            value=True,  # Default to checked for quick test
+            help="Quick Test mode uses top N symbols by weight for faster testing",
         )
         if use_top_n:
             top_n = st.sidebar.slider(
                 "Number of Symbols",
                 min_value=5,
                 max_value=100,
-                value=20 if sim_type == "quick" else 50,
+                value=20,
             )
 
     # Simulate days (forward test only)
@@ -551,10 +627,11 @@ def main_page():
             st.info(f"**Provider:** {provider_name}")
 
         # Warnings
-        if config["sim_type"] == "backtest" and not config["top_n"]:
+        if config["sim_type"] == "backtest":
             st.warning(
-                "⚠️ Running a full backtest with all S&P 500 symbols may take several minutes. "
-                "Consider using 'Limit to Top N Symbols' for faster testing."
+                "⚠️ **Full Backtest Mode**: Running with all S&P 500 symbols (~500). "
+                "This may take 10-15 minutes depending on data provider. "
+                "Use **Quick Test** mode for faster iteration with a subset of symbols."
             )
 
         # Run button

@@ -208,6 +208,7 @@ __marimo__/
 
 # Project-specific
 output/
+outputs/
 data/cache/
 *.jsonl
 

@@ -734,6 +734,12 @@ def propose(
     is_flag=True,
     help="Disable data caching",
 )
+@click.option(
+    "--provider",
+    type=click.Choice(["yfinance", "eodhd"]),
+    default="yfinance",
+    help="Data provider to use (default: yfinance)",
+)
 def simulate_backtest(
     start_date: str,
     end_date: str,
@@ -742,6 +748,7 @@ def simulate_backtest(
     top_n: Optional[int],
     output_dir: str,
     no_cache: bool,
+    provider: str,
 ):
     """
     Run a backtest simulation.
@@ -773,20 +780,15 @@ def simulate_backtest(
     click.echo(f"  Rebalance: {rebalance_freq}")
     if top_n:
         click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"  Provider: {provider}")
     click.echo(f"{'='*60}\n")
 
     # Set up data provider
-    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
     from di_pilot.simulation import run_backtest, SimulationConfig, generate_report
     from di_pilot.simulation.report import generate_quick_summary
 
-    try:
-        provider = YFinanceProvider()
-        if not no_cache:
-            cache = FileCache("data/cache")
-            provider = CachedDataProvider(provider, cache)
-    except Exception as e:
-        click.echo(f"Error initializing data provider: {e}", err=True)
+    data_provider = _get_provider(provider, not no_cache)
+    if data_provider is None:
         sys.exit(1)
 
     # Configure simulation
@@ -801,7 +803,7 @@ def simulate_backtest(
 
     try:
         result = run_backtest(
-            provider=provider,
+            provider=data_provider,
             start_date=start,
             end_date=end,
             config=config,
@@ -870,6 +872,12 @@ def simulate_backtest(
     is_flag=True,
     help="Disable data caching",
 )
+@click.option(
+    "--provider",
+    type=click.Choice(["yfinance", "eodhd"]),
+    default="yfinance",
+    help="Data provider to use (default: yfinance)",
+)
 def simulate_forward(
     start_date: str,
     initial_cash: float,
@@ -878,6 +886,7 @@ def simulate_forward(
     top_n: Optional[int],
     output_dir: str,
     no_cache: bool,
+    provider: str,
 ):
     """
     Run a forward test simulation.
@@ -904,20 +913,15 @@ def simulate_forward(
         click.echo(f"  Simulate: {simulate_days} trading days")
     if top_n:
         click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"  Provider: {provider}")
     click.echo(f"{'='*60}\n")
 
     # Set up data provider
-    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
     from di_pilot.simulation import run_forward_test, SimulationConfig, generate_report
     from di_pilot.simulation.report import generate_quick_summary
 
-    try:
-        provider = YFinanceProvider()
-        if not no_cache:
-            cache = FileCache("data/cache")
-            provider = CachedDataProvider(provider, cache)
-    except Exception as e:
-        click.echo(f"Error initializing data provider: {e}", err=True)
+    data_provider = _get_provider(provider, not no_cache)
+    if data_provider is None:
         sys.exit(1)
 
     # Configure simulation
@@ -932,7 +936,7 @@ def simulate_forward(
 
     try:
         result = run_forward_test(
-            provider=provider,
+            provider=data_provider,
             start_date=start,
             config=config,
             top_n_symbols=top_n,
@@ -1400,7 +1404,13 @@ def _get_provider(provider_name: str, use_cache: bool):
     default="output",
     help="Output directory",
 )
-def quick_test(days: int, top_n: int, output_dir: str):
+@click.option(
+    "--provider",
+    type=click.Choice(["yfinance", "eodhd"]),
+    default="yfinance",
+    help="Data provider to use (default: yfinance)",
+)
+def quick_test(days: int, top_n: int, output_dir: str, provider: str):
     """
     Run a quick sanity-check backtest.
 
@@ -1420,27 +1430,23 @@ def quick_test(days: int, top_n: int, output_dir: str):
     click.echo(f"{'='*60}")
     click.echo(f"  Period: ~{days} trading days")
     click.echo(f"  Symbols: Top {top_n} by weight")
+    click.echo(f"  Provider: {provider}")
     click.echo(f"{'='*60}\n")
 
     # Set up data provider
-    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
-    from di_pilot.simulation import run_quick_backtest, generate_report
+    from di_pilot.simulation import generate_report
     from di_pilot.simulation.report import generate_quick_summary
     from di_pilot.simulation.backtest import run_quick_backtest
 
-    try:
-        provider = YFinanceProvider()
-        cache = FileCache("data/cache")
-        provider = CachedDataProvider(provider, cache)
-    except Exception as e:
-        click.echo(f"Error initializing data provider: {e}", err=True)
+    data_provider = _get_provider(provider, use_cache=True)
+    if data_provider is None:
         sys.exit(1)
 
     click.echo("  Running backtest (this may take a minute)...")
 
     try:
         result = run_quick_backtest(
-            provider=provider,
+            provider=data_provider,
             start_date=start,
             end_date=end,
             initial_cash=Decimal("1000000"),

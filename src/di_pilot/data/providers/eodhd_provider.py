@@ -355,21 +355,28 @@ class EODHDProvider(DataProvider):
         constituents = []
         total_weight = Decimal("0")
 
-        for symbol, weight_info in components.items():
-            # Handle different weight formats
-            if isinstance(weight_info, dict):
-                weight = weight_info.get("Weight") or weight_info.get("weight", 0)
+        for key, component_info in components.items():
+            # EODHD returns components with numeric keys (0, 1, 2...)
+            # The actual symbol is in the 'Code' field of the value
+            if isinstance(component_info, dict):
+                symbol = component_info.get("Code") or component_info.get("code")
+                weight = component_info.get("Weight") or component_info.get("weight", 0)
             else:
-                weight = weight_info
+                # Fallback: key is symbol, value is weight
+                symbol = key
+                weight = component_info
+
+            if not symbol:
+                continue
 
             try:
-                weight_decimal = Decimal(str(weight))
+                weight_decimal = Decimal(str(weight)) if weight else Decimal("0")
                 # EODHD weights may be percentages or decimals
                 if weight_decimal > 1:
                     weight_decimal = weight_decimal / Decimal("100")
 
                 # Clean symbol (remove exchange suffix if present)
-                clean_symbol = symbol.split(".")[0].upper()
+                clean_symbol = str(symbol).split(".")[0].upper()
 
                 constituents.append(
                     BenchmarkConstituent(

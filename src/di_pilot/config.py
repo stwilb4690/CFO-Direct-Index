@@ -17,7 +17,8 @@ from di_pilot.models import PortfolioConfig
 
 
 # Default paths for configuration files
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+# config.py is at src/di_pilot/config.py, so go up 3 levels to project root
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 DEFAULT_ENV_FILE = PROJECT_ROOT / ".env"
 DEFAULT_API_KEYS_FILE = PROJECT_ROOT / "config" / "api_keys.yaml"
 

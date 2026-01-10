@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Indexing Backtest Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header {
+            border-bottom: 3px solid #0066a1;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #0066a1;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .header .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .header .report-date {
+            float: right;
+            text-align: right;
+            color: #666;
+        }
+        .summary-box {
+            background: #f8f9fa;
+            border-left: 4px solid #0066a1;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+        }
+        .summary-box h2 {
+            color: #0066a1;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .summary-item {
+            text-align: center;
+        }
+        .summary-item .label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .summary-item .value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0066a1;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #0066a1;
+            font-size: 16px;
+            border-bottom: 2px solid #0066a1;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: right;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: #f5f5f5;
+            color: #333;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .positive {
+            color: #28a745;
+        }
+        .negative {
+            color: #dc3545;
+        }
+        .highlight-row {
+            background: #e8f4f8;
+            font-weight: 600;
+        }
+        .tax-alpha-row {
+            background: #d4edda;
+            font-weight: 600;
+        }
+        .metric-card {
+            display: inline-block;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px 20px;
+            margin: 5px;
+            min-width: 150px;
+            text-align: center;
+        }
+        .metric-card .label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .metric-card .value {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .chart-container {
+            margin: 20px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #666;
+        }
+        @media print {
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="report-date">
+            <strong>January 10, 2026</strong>
+        </div>
+        <h1>Direct Indexing Portfolio Backtest Report</h1>
+        <div class="subtitle">S&P 500 Tax-Managed Strategy</div>
+    </div>
+    
+    <div class="summary-box">
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="label">Portfolio Inception</div>
+                <div class="value">2025-01-02</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">Total Account Value</div>
+                <div class="value">$1,000,869.43</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">Tax Rate</div>
+                <div class="value">37.00% ST / 23.80% LT</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="two-columns">
+        <div class="section">
+            <h2>Report Summary</h2>
+            <h3 style="font-size: 14px; margin-bottom: 10px; color: #333;">Realized Gains / Losses ($)</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>YTD</th>
+                    <th>Since Inception</th>
+                </tr>
+                <tr>
+                    <td>Short Term</td>
+                    <td class="positive">$274,521.71</td>
+                    <td class="positive">$274,521.71</td>
+                </tr>
+                <tr>
+                    <td>Long Term</td>
+                    <td class="positive">$117,652.16</td>
+                    <td class="positive">$117,652.16</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>Net Realized</td>
+                    <td class="positive">$392,173.87</td>
+                    <td class="positive">$392,173.87</td>
+                </tr>
+            </table>
+            
+            <h3 style="font-size: 14px; margin-bottom: 10px; color: #333;">Tax Savings Estimate</h3>
+            <table>
+                <tr>
+                    <td>Short-Term Tax Savings</td>
+                    <td class="positive">$101,573.03</td>
+                </tr>
+                <tr>
+                    <td>Long-Term Tax Savings</td>
+                    <td class="positive">$28,001.21</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>Total Tax Savings</td>
+                    <td class="positive">$129,574.25</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>Pre-Tax / After-Tax Returns</h2>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>MTD</th>
+                    <th>QTD</th>
+                    <th>YTD</th>
+                    <th>Inception</th>
+                </tr>
+                <tr>
+                    <td>Pre-Tax Return</td>
+                    <td>0.09%</td>
+                    <td>0.09%</td>
+                    <td>0.09%</td>
+                    <td>0.09%</td>
+                </tr>
+                <tr>
+                    <td>After-Tax Return (Est.)</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>13.04%</td>
+                </tr>
+                <tr class="tax-alpha-row">
+                    <td>Tax Alpha</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td class="positive">12.96%</td>
+                </tr>
+            </table>
+            
+            <div style="margin-top: 20px;">
+                <div class="metric-card">
+                    <div class="label">Total Return</div>
+                    <div class="value positive">0.09%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Sharpe Ratio</div>
+                    <div class="value">0.02</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Max Drawdown</div>
+                    <div class="value negative">-5.47%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Performance Chart</h2>
+        <div class="chart-container">
+            
+    <div id="performance-chart" style="width:100%; height:400px;"></div>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script>
+        var dates = ['2025-01-02', '2025-01-03', '2025-01-06', '2025-01-07', '2025-01-08', '2025-01-10', '2025-01-13', '2025-01-14', '2025-01-15', '2025-01-16', '2025-01-17', '2025-01-21', '2025-01-22', '2025-01-23', '2025-01-24', '2025-01-27', '2025-01-28', '2025-01-29', '2025-01-30', '2025-01-31'];
+        var strategyValues = [100.0, 101.91745635313232, 103.80621438081803, 101.16679065864368, 101.11029640074582, 99.42672015252174, 98.80917308492532, 98.12915520422621, 101.04817655432296, 99.44603357255203, 101.29080658229404, 101.8701104964506, 103.56985292034179, 103.65685432282716, 103.22603716780729, 98.13000625725105, 101.35523641090629, 100.32849037993155, 100.22860502364057, 100.0869426244329];
+        var afterTaxValues = [100.0, 102.59942606449361, 105.17015380354061, 103.21269979272753, 103.83817524619097, 102.83656870932818, 102.90099135309305, 102.90294318375521, 106.50393424521326, 105.58376097480361, 108.11050369590691, 109.37177732142474, 111.75348945667723, 112.52246057052389, 112.77361312686531, 108.35955192767035, 112.26675179268688, 111.92197547307343, 112.50405982814374, 113.04436714029734];
+        
+        var strategyTrace = {
+            x: dates,
+            y: strategyValues,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Strategy (Pre-Tax)',
+            line: {color: '#2E86AB', width: 2}
+        };
+        
+        var afterTaxTrace = {
+            x: dates,
+            y: afterTaxValues,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Strategy + Tax Alpha',
+            line: {color: '#28A745', width: 2, dash: 'dot'}
+        };
+        
+        var baselineTrace = {
+            x: dates,
+            y: dates.map(() => 100),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Baseline (100)',
+            line: {color: '#999999', width: 1, dash: 'dash'}
+        };
+        
+        var layout = {
+            title: 'Portfolio Performance (Indexed to 100)',
+            xaxis: {title: 'Date'},
+            yaxis: {title: 'Indexed Value'},
+            legend: {x: 0, y: 1, orientation: 'h'},
+            hovermode: 'x unified',
+            margin: {t: 50, r: 50, b: 60, l: 60}
+        };
+        
+        Plotly.newPlot('performance-chart', [strategyTrace, afterTaxTrace, baselineTrace], layout);
+    </script>
+    
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Performance Summary</h2>
+        <table>
+            <tr>
+                <th>Strategy</th>
+                <th>MTD</th>
+                <th>QTD</th>
+                <th>YTD</th>
+                <th>1-Year</th>
+                <th>3-Year</th>
+                <th>5-Year</th>
+                <th>Since Inception</th>
+            </tr>
+            <tr>
+                <td>Direct Index Strategy (Pre-Tax)</td>
+                <td>0.09%</td>
+                <td>0.09%</td>
+                <td>0.09%</td>
+                <td>0.09%</td>
+                <td>—</td>
+                <td>—</td>
+                <td><strong>0.09%</strong></td>
+            </tr>
+            <tr class="tax-alpha-row">
+                <td>Direct Index Strategy + Tax Alpha</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td><strong>13.04%</strong></td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Trading Activity</h2>
+        <div class="two-columns">
+            <table>
+                <tr>
+                    <td>Total Trades</td>
+                    <td>17</td>
+                </tr>
+                <tr>
+                    <td>Buy Trades</td>
+                    <td>14</td>
+                </tr>
+                <tr>
+                    <td>Sell Trades</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>TLH Trades</td>
+                    <td>3</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>Total Turnover</td>
+                    <td>169.99%</td>
+                </tr>
+                <tr>
+                    <td>Avg Daily Turnover</td>
+                    <td>8.4993%</td>
+                </tr>
+                <tr>
+                    <td>Rebalance Trades</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Harvested Losses</td>
+                    <td>$392,173.87</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Risk Metrics</h2>
+        <table>
+            <tr>
+                <td>Annualized Volatility</td>
+                <td>30.80%</td>
+            </tr>
+            <tr>
+                <td>Maximum Drawdown</td>
+                <td class="negative">-5.47%</td>
+            </tr>
+            <tr>
+                <td>Max Drawdown Date</td>
+                <td>2025-01-14</td>
+            </tr>
+            <tr>
+                <td>Average Drawdown</td>
+                <td class="negative">-2.50%</td>
+            </tr>
+            <tr>
+                <td>CAGR</td>
+                <td class="positive">1.10%</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Portfolio Holdings (Final)</h2>
+        <table>
+            <tr>
+                <td>Total Value</td>
+                <td>$1,000,869.43</td>
+            </tr>
+            <tr>
+                <td>Cash Balance</td>
+                <td>$68,681.16</td>
+            </tr>
+            <tr>
+                <td>Number of Positions</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Number of Tax Lots</td>
+                <td>11</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="footer">
+        <p><strong>Run ID:</strong> backtest_2025-01-02_2025-01-31_242c2965</p>
+        <p><strong>Generated:</strong> 2026-01-10 12:37:59</p>
+        <p><em>Report generated by Direct Indexing Pilot v0.3.0</em></p>
+    </div>
+</body>
+</html>

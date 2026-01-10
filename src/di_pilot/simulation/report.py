@@ -28,6 +28,7 @@ def generate_report(
     - metrics.json: Machine-readable metrics
     - trades.csv: All executed trades
     - portfolio_daily.csv: Daily portfolio values
+    - professional_report.html: Professional HTML report with charts
 
     Args:
         result: Backtest or Forward test result
@@ -64,6 +65,15 @@ def generate_report(
     with open(report_path, "w") as f:
         f.write(markdown)
     paths["report"] = report_path
+
+    # Generate professional HTML report
+    try:
+        from di_pilot.simulation.professional_report import generate_professional_report
+        html_path = generate_professional_report(result, output_dir)
+        paths["professional_report"] = html_path
+    except Exception as e:
+        # Don't fail if professional report fails
+        print(f"Warning: Could not generate professional report: {e}")
 
     return paths
 

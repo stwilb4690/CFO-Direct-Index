@@ -33,12 +33,14 @@ class BacktestResult:
         start_date: date,
         end_date: date,
         final_state: SimulationState,
+        benchmark_prices: dict[date, Decimal] = None,
     ):
         self.run_id = run_id
         self.config = config
         self.start_date = start_date
         self.end_date = end_date
         self.final_state = final_state
+        self.benchmark_prices = benchmark_prices or {}
 
     @property
     def trades(self) -> list[SimulationTrade]:
@@ -61,6 +63,25 @@ class BacktestResult:
     @property
     def total_return(self) -> Decimal:
         return (self.final_value - self.initial_value) / self.initial_value
+
+    @property
+    def benchmark_return(self) -> Decimal:
+        """Calculate total return of the benchmark."""
+        if not self.benchmark_prices:
+            return Decimal("0")
+        
+        # Get start and end prices
+        dates = sorted(self.benchmark_prices.keys())
+        if not dates:
+            return Decimal("0")
+            
+        start_price = self.benchmark_prices[dates[0]]
+        end_price = self.benchmark_prices[dates[-1]]
+        
+        if start_price == 0:
+            return Decimal("0")
+            
+        return (end_price - start_price) / start_price
 
     @property
     def total_trades(self) -> int:
@@ -91,7 +112,28 @@ class BacktestResult:
     def snapshots_to_dataframe(self) -> pd.DataFrame:
         """Convert snapshots to DataFrame."""
         records = []
+        # Create map of date to benchmark price
+        bench_map = {d: float(p) for d, p in self.benchmark_prices.items()}
+        
+        # Get initial benchmark price for normalization
+        initial_bench = None
+        
         for snap in self.snapshots:
+            bench_price = bench_map.get(snap.date)
+            
+            # Initialize benchmark tracking
+            if initial_bench is None and bench_price is not None:
+                initial_bench = bench_price
+                
+            # Calculate daily benchmark return
+            # (Approximated since we only strictly have prices)
+            bench_return = 0.0
+            if initial_bench and bench_price:
+                # This is actually cumulative return relative to start
+                bench_cum_return = (bench_price - initial_bench) / initial_bench
+            else:
+                bench_cum_return = 0.0
+
             records.append({
                 "date": snap.date,
                 "total_value": float(snap.total_value),
@@ -103,6 +145,8 @@ class BacktestResult:
                 "realized_pnl": float(snap.realized_pnl),
                 "daily_return": float(snap.daily_return),
                 "cumulative_return": float(snap.cumulative_return),
+                "benchmark_price": bench_price,
+                "benchmark_return": bench_cum_return,
             })
         return pd.DataFrame(records)
 
@@ -192,6 +236,16 @@ def run_backtest(
     if not trading_days:
         raise ValueError(f"No trading days between {start_date} and {end_date}")
 
+    # Fetch BENCHMARK prices (SPY)
+    if progress_callback:
+        progress_callback("Fetching benchmark (SPY) data...")
+    
+    benchmark_df = provider.get_prices(["SPY"], start_date, end_date)
+    benchmark_prices = {}
+    if not benchmark_df.empty:
+        for _, row in benchmark_df.iterrows():
+            benchmark_prices[row["date"]] = Decimal(str(row["close"]))
+
     # Get all price data upfront
     if progress_callback:
         progress_callback(f"Fetching price data for {len(symbols)} symbols...")
@@ -241,8 +295,11 @@ def run_backtest(
     # Simulate each trading day
     total_days = len(trading_days)
     for i, current_date in enumerate(trading_days[1:], 1):
-        if progress_callback and i % 20 == 0:
-            progress_callback(f"Simulating day {i}/{total_days}...")
+        # Report progress every 5 days or at 25%, 50%, 75%, 100%
+        if progress_callback:
+            pct = int((i / total_days) * 100)
+            if i % 5 == 0 or pct in [25, 50, 75] or i == total_days - 1:
+                progress_callback(f"Progress: {pct}% (Day {i}/{total_days})")
 
         if current_date not in price_by_date:
             continue
@@ -266,7 +323,7 @@ def run_backtest(
         state = engine.record_snapshot(state, prices, current_date)
 
     if progress_callback:
-        progress_callback("Backtest complete!")
+        progress_callback("Progress: 100% - Backtest complete!")
 
     return BacktestResult(
         run_id=run_id,
@@ -274,6 +331,7 @@ def run_backtest(
         start_date=start_date,
         end_date=end_date,
         final_state=state,
+        benchmark_prices=benchmark_prices,
     )
 
 

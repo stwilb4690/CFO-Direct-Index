@@ -78,6 +78,26 @@ class FileCache:
                 cached_symbols = set(df["symbol"].unique())
                 requested_symbols = set(s.upper() for s in symbols)
                 if requested_symbols.issubset(cached_symbols):
+                    # Validate date coverage - reject cache if it doesn't cover requested range
+                    if not df.empty and "date" in df.columns:
+                        cached_dates = df["date"].unique()
+                        cached_min = min(cached_dates)
+                        cached_max = max(cached_dates)
+
+                        # Convert to date objects if needed for comparison
+                        if hasattr(cached_min, 'date'):
+                            cached_min = cached_min.date()
+                        if hasattr(cached_max, 'date'):
+                            cached_max = cached_max.date()
+
+                        # Allow 7-day tolerance for weekends/holidays at boundaries
+                        start_gap = (cached_min - start_date).days if isinstance(cached_min, date) else 0
+                        end_gap = (end_date - cached_max).days if isinstance(cached_max, date) else 0
+
+                        if start_gap > 7 or end_gap > 7:
+                            # Cache doesn't cover requested range - treat as cache miss
+                            return None
+
                     return df[df["symbol"].isin(requested_symbols)]
             except Exception:
                 # Cache corrupted, will re-fetch

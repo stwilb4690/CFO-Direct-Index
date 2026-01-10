@@ -100,6 +100,10 @@ class SimulationConfig:
     use_current_constituents: bool = True  # Mode 1 vs Mode 2
     rebalance_freq: str = "weekly"  # weekly, monthly, quarterly
 
+    # Institutional Direct Indexing settings
+    target_positions: int = 350  # Number of stocks to hold (300-350 institutional standard)
+    # Setting to 0 or None means use all available constituents
+
 
 @dataclass
 class SimulationState:
@@ -162,6 +166,10 @@ class SimulationEngine:
         """
         Initialize portfolio from cash.
 
+        Uses institutional direct indexing approach:
+        - Selects top N constituents by weight (default 350)
+        - Maintains tight tracking error (<0.3%) while enabling efficient TLH
+
         Args:
             portfolio_id: Unique identifier for this simulation
             start_date: Start date for the simulation
@@ -189,7 +197,14 @@ class SimulationEngine:
         if not valid_constituents:
             raise ValueError("No valid constituents with prices")
 
-        # Renormalize weights
+        # Institutional approach: select top N by weight for tight tracking + efficient TLH
+        if self.config.target_positions and self.config.target_positions > 0:
+            # Sort by weight descending
+            valid_constituents = sorted(valid_constituents, key=lambda c: c.weight, reverse=True)
+            # Take top N positions
+            valid_constituents = valid_constituents[:self.config.target_positions]
+
+        # Renormalize weights to sum to 1.0
         total_weight = sum(c.weight for c in valid_constituents)
         if total_weight == Decimal("0"):
             raise ValueError("Total weight is zero")
@@ -517,7 +532,15 @@ class SimulationEngine:
         current_date: date,
     ) -> SimulationState:
         """
-        Execute tax-loss harvesting.
+        Execute tax-loss harvesting with correlated replacement buys.
+
+        For each loss candidate:
+        1. Sell the losing position
+        2. Buy a correlated replacement (same sector, different company)
+        3. Maintain market exposure while realizing tax loss
+
+        This is the institutional approach - selling without reinvesting
+        would create cash drag and tracking error.
 
         Args:
             state: Current simulation state
@@ -527,8 +550,16 @@ class SimulationEngine:
         Returns:
             Updated simulation state
         """
+        from di_pilot.data.tlh_pairs import get_replacement_candidates, get_sector_etf_fallback
+
         candidates = self.identify_tlh_candidates(state, prices, current_date)
         timestamp = datetime.combine(current_date, datetime.min.time())
+
+        # Build set of wash-sale restricted symbols
+        wash_restricted = {
+            symbol for symbol, sell_date in state.wash_sale_symbols.items()
+            if (current_date - sell_date).days < self.config.tlh_wash_sale_days
+        }
 
         for lot in candidates:
             # Check wash sale restriction
@@ -537,11 +568,31 @@ class SimulationEngine:
             ):
                 continue
 
+            # Find a valid replacement before proceeding
+            replacement_symbol = None
+            replacement_candidates = get_replacement_candidates(lot.symbol, wash_restricted)
+
+            for candidate in replacement_candidates:
+                if candidate in prices and prices[candidate].close > Decimal("0"):
+                    replacement_symbol = candidate
+                    break
+
+            # Fallback to sector ETF if no direct replacement
+            if not replacement_symbol:
+                etf = get_sector_etf_fallback(lot.symbol)
+                if etf and etf in prices and prices[etf].close > Decimal("0"):
+                    replacement_symbol = etf
+
+            # Skip TLH if no valid replacement found (to avoid cash drag)
+            if not replacement_symbol:
+                continue
+
             price = prices[lot.symbol].close
             loss_amount = lot.shares * (price - lot.cost_basis)
+            proceeds = lot.shares * price
 
-            # Record trade
-            trade = SimulationTrade.create(
+            # Record TLH sell trade
+            sell_trade = SimulationTrade.create(
                 timestamp=timestamp,
                 symbol=lot.symbol,
                 side=TradeSide.SELL,
@@ -551,14 +602,46 @@ class SimulationEngine:
                 lot_id=lot.lot_id,
                 notes=f"TLH harvest, loss ${abs(loss_amount):.2f}",
             )
-            state.trades.append(trade)
+            state.trades.append(sell_trade)
 
-            # Update state
-            state.cash += lot.shares * price
+            # Update state for sell
+            state.cash += proceeds
             state.realized_pnl += loss_amount
             state.harvested_losses += abs(loss_amount)
             state.wash_sale_symbols[lot.symbol] = current_date
             state.lots.remove(lot)
+
+            # Buy replacement to maintain market exposure
+            replacement_price = prices[replacement_symbol].close
+            shares_to_buy = (proceeds / replacement_price).quantize(
+                Decimal("0.000001"), rounding=ROUND_DOWN
+            )
+
+            if shares_to_buy > Decimal("0"):
+                # Create new lot for replacement
+                replacement_lot = TaxLot.create(
+                    symbol=replacement_symbol,
+                    shares=shares_to_buy,
+                    cost_basis=replacement_price,
+                    acquisition_date=current_date,
+                    portfolio_id=state.portfolio_id,
+                )
+                state.lots.append(replacement_lot)
+
+                # Record replacement buy trade
+                buy_trade = SimulationTrade.create(
+                    timestamp=timestamp,
+                    symbol=replacement_symbol,
+                    side=TradeSide.BUY,
+                    shares=shares_to_buy,
+                    price=replacement_price,
+                    reason=TradeReason.TLH_REPLACEMENT_BUY,
+                    notes=f"TLH replacement for {lot.symbol}",
+                )
+                state.trades.append(buy_trade)
+
+                # Update cash for buy
+                state.cash -= shares_to_buy * replacement_price
 
         return state
 

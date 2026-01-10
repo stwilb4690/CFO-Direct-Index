@@ -211,6 +211,14 @@ def run_backtest(
 
     constituents = provider.get_constituents(as_of_date=start_date)
 
+    # Warn about historical constituent support
+    if not provider.supports_historical_constituents:
+        if progress_callback:
+            progress_callback(
+                "WARNING: Using current S&P 500 members (survivorship bias). "
+                "Use EODHD provider for historical constituent accuracy."
+            )
+
     # Optionally limit to top N
     if top_n_symbols:
         constituents = sorted(constituents, key=lambda c: c.weight, reverse=True)[:top_n_symbols]
@@ -235,6 +243,27 @@ def run_backtest(
     trading_days = provider.get_trading_days(start_date, end_date)
     if not trading_days:
         raise ValueError(f"No trading days between {start_date} and {end_date}")
+
+    # Validate date range coverage
+    actual_first = trading_days[0]
+    actual_last = trading_days[-1]
+    expected_days = (end_date - start_date).days * 5 // 7  # Rough estimate excluding weekends
+
+    if (actual_first - start_date).days > 7:
+        raise ValueError(
+            f"Data provider returned data starting {actual_first}, but requested {start_date}. "
+            f"Try running with --no-cache flag to fetch fresh data."
+        )
+
+    if (end_date - actual_last).days > 7:
+        raise ValueError(
+            f"Data provider returned data only through {actual_last}, but requested {end_date}. "
+            f"Received {len(trading_days)} trading days instead of expected ~{expected_days}. "
+            f"Try running with --no-cache flag to fetch fresh data, or check your data provider subscription."
+        )
+
+    if progress_callback:
+        progress_callback(f"Found {len(trading_days)} trading days ({actual_first} to {actual_last})")
 
     # Fetch BENCHMARK prices (SPY)
     if progress_callback:

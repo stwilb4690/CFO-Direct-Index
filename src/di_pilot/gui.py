@@ -585,6 +585,18 @@ def render_sidebar():
             value=0,
         )
 
+    # Cache management
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("Cache")
+    if st.sidebar.button("🗑️ Clear Data Cache", help="Clear cached price and constituent data to fetch fresh data"):
+        try:
+            from di_pilot.data.providers.cache import FileCache
+            cache = FileCache()
+            cache.clear()
+            st.sidebar.success("Cache cleared! Fresh data will be fetched on next run.")
+        except Exception as e:
+            st.sidebar.error(f"Failed to clear cache: {e}")
+
     return {
         "sim_type": sim_type,
         "start_date": start_date,

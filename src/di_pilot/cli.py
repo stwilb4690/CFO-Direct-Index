@@ -740,6 +740,13 @@ def propose(
     default="eodhd",
     help="Data provider to use (default: eodhd)",
 )
+@click.option(
+    "--run-name",
+    "-r",
+    type=str,
+    default=None,
+    help="Optional human-friendly name to prefix output folder",
+)
 def simulate_backtest(
     start_date: str,
     end_date: str,
@@ -749,7 +756,7 @@ def simulate_backtest(
     output_dir: str,
     no_cache: bool,
     provider: str,
-    run_name: str | None = None,
+    run_name: Optional[str],
 ):
     """
     Run a backtest simulation.
@@ -816,12 +823,22 @@ def simulate_backtest(
         sys.exit(1)
 
     # Generate outputs
-    # If user provided a run name, include it in the output folder for easy recall.
+    # Sanitize run_name and prefix result.run_id if provided
+    def _sanitize(name: str) -> str:
+        import re
+        # Replace whitespace with underscore and remove unsafe chars
+        s = re.sub(r"\s+", "_", name.strip())
+        s = re.sub(r"[^A-Za-z0-9_\-\.]+", "", s)
+        return s
+
+    run_id_name = result.run_id
     if run_name:
-        safe_name = str(run_name).strip().replace(" ", "_")
-        out_dir = Path(output_dir) / f"{safe_name}_{result.run_id}"
-    else:
-        out_dir = Path(output_dir) / result.run_id
+        try:
+            run_id_name = f"{_sanitize(run_name)}_{result.run_id}"
+        except Exception:
+            run_id_name = result.run_id
+
+    out_dir = Path(output_dir) / run_id_name
     try:
         paths = generate_report(result, out_dir)
     except Exception as e:
@@ -884,6 +901,13 @@ def simulate_backtest(
     default="eodhd",
     help="Data provider to use (default: eodhd)",
 )
+@click.option(
+    "--run-name",
+    "-r",
+    type=str,
+    default=None,
+    help="Optional human-friendly name to prefix output folder",
+)
 def simulate_forward(
     start_date: str,
     initial_cash: float,
@@ -893,7 +917,7 @@ def simulate_forward(
     output_dir: str,
     no_cache: bool,
     provider: str,
-    run_name: str | None = None,
+    run_name: Optional[str] = None,
 ):
     """
     Run a forward test simulation.
@@ -955,11 +979,21 @@ def simulate_forward(
         sys.exit(1)
 
     # Generate outputs
+    # Sanitize run_name and prefix result.run_id if provided
+    def _sanitize(name: str) -> str:
+        import re
+        s = re.sub(r"\s+", "_", name.strip())
+        s = re.sub(r"[^A-Za-z0-9_\-\.]+", "", s)
+        return s
+
+    run_id_name = result.run_id
     if run_name:
-        safe_name = str(run_name).strip().replace(" ", "_")
-        out_dir = Path(output_dir) / f"{safe_name}_{result.run_id}"
-    else:
-        out_dir = Path(output_dir) / result.run_id
+        try:
+            run_id_name = f"{_sanitize(run_name)}_{result.run_id}"
+        except Exception:
+            run_id_name = result.run_id
+
+    out_dir = Path(output_dir) / run_id_name
     try:
         paths = generate_report(result, out_dir)
     except Exception as e:
@@ -1419,7 +1453,14 @@ def _get_provider(provider_name: str, use_cache: bool):
     default="eodhd",
     help="Data provider to use (default: eodhd)",
 )
-def quick_test(days: int, top_n: int, output_dir: str, provider: str):
+@click.option(
+    "--run-name",
+    "-r",
+    type=str,
+    default=None,
+    help="Optional human-friendly name to prefix output folder",
+)
+def quick_test(days: int, top_n: int, output_dir: str, provider: str, run_name: Optional[str]):
     """
     Run a quick sanity-check backtest.
 
@@ -1466,7 +1507,21 @@ def quick_test(days: int, top_n: int, output_dir: str, provider: str):
         sys.exit(1)
 
     # Generate outputs
-    out_dir = Path(output_dir) / result.run_id
+    # Sanitize run_name and prefix result.run_id if provided
+    def _sanitize(name: str) -> str:
+        import re
+        s = re.sub(r"\s+", "_", name.strip())
+        s = re.sub(r"[^A-Za-z0-9_\-\.]+", "", s)
+        return s
+
+    run_id_name = result.run_id
+    if run_name:
+        try:
+            run_id_name = f"{_sanitize(run_name)}_{result.run_id}"
+        except Exception:
+            run_id_name = result.run_id
+
+    out_dir = Path(output_dir) / run_id_name
     try:
         paths = generate_report(result, out_dir)
     except Exception as e:

@@ -97,7 +97,17 @@ def list_existing_runs() -> list[str]:
 
 def load_run_results(run_id: str) -> dict:
     """Load results from a simulation run."""
-    run_dir = get_outputs_dir() / run_id
+    # Support both `outputs/` and legacy `output/` directories
+    candidate_dirs = [get_outputs_dir(), get_project_root() / "output"]
+    run_dir = None
+    for d in candidate_dirs:
+        p = d / run_id
+        if p.exists():
+            run_dir = p
+            break
+    if run_dir is None:
+        # Fallback to outputs/ path even if it doesn't exist
+        run_dir = get_outputs_dir() / run_id
     results = {"run_id": run_id, "run_dir": run_dir}
 
     # Load metrics
@@ -133,6 +143,7 @@ def run_simulation(
     top_n: int | None,
     simulate_days: int | None,
     provider: str = "eodhd",
+    run_name: str | None = None,
 ) -> tuple[bool, str, str | None]:
     """Run a simulation and return (success, output, run_id)."""
 
@@ -150,6 +161,8 @@ def run_simulation(
         if top_n and top_n > 0:
             cmd.extend(["--top-n", str(top_n)])
         cmd.extend(["--provider", provider])
+        if run_name:
+            cmd.extend(["--run-name", run_name])
 
     elif sim_type == "forward":
         cmd.extend(["simulate-forward"])
@@ -158,6 +171,8 @@ def run_simulation(
         if simulate_days and simulate_days > 0:
             cmd.extend(["--simulate-days", str(simulate_days)])
         cmd.extend(["--provider", provider])
+        if run_name:
+            cmd.extend(["--run-name", run_name])
 
     elif sim_type == "quick":
         cmd.extend(["quick-test"])
@@ -170,6 +185,8 @@ def run_simulation(
         if top_n and top_n > 0:
             cmd.extend(["--top-n", str(top_n)])
         cmd.extend(["--provider", provider])
+        if run_name:
+            cmd.extend(["--run-name", run_name])
 
     try:
         result = subprocess.run(
@@ -649,6 +666,13 @@ def render_sidebar():
             value=0,
         )
 
+    # Optional run name to prefix output folder
+    run_name = st.sidebar.text_input(
+        "Run Name (optional)",
+        value="",
+        help="Optional label to prefix the output folder name for easier identification",
+    )
+
     # Cache management
     st.sidebar.markdown("---")
     st.sidebar.subheader("Cache")
@@ -669,6 +693,7 @@ def render_sidebar():
         "rebalance_freq": rebalance_freq,
         "top_n": top_n,
         "simulate_days": simulate_days,
+        "run_name": run_name.strip() if isinstance(run_name, str) and run_name.strip() != "" else None,
         "provider": provider,
     }
 
@@ -722,6 +747,7 @@ def main_page():
                     top_n=config["top_n"],
                     simulate_days=config["simulate_days"],
                     provider=config["provider"],
+                    run_name=config.get("run_name"),
                 )
 
             if success:

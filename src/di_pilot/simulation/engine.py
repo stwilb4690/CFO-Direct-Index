@@ -107,10 +107,12 @@ class SimulationConfig:
     max_tlh_trades_per_day: int = 10  # Conservative: max 10 TLH trades per day
     max_tlh_pct_per_day: Decimal = Decimal("0.03")  # Max 3% of portfolio harvested per day
     
-    # TLH behavior mode (matching Fidelity pattern)
-    # If True: TLH sells just add cash, which gets deployed during rebalancing
+    # TLH behavior mode
+    # Professional direct indexers (Parametric, Aperio) do IMMEDIATE replacement buys
+    # to maintain market exposure. This is the recommended approach.
+    # If True: TLH sells just add cash (NOT recommended - creates cash drag)
     # If False: TLH sells are immediately followed by correlated replacement buys
-    tlh_skip_replacement_buys: bool = True  # Fidelity pattern: sell only, no immediate replacement
+    tlh_skip_replacement_buys: bool = False  # Professional behavior: immediate replacements
     
     # Dividend simulation (matching Fidelity pattern)
     # If True: Simulate dividend payments based on yield estimates

@@ -6,7 +6,7 @@ Manages portfolio state, executes trades, and handles rebalancing and TLH logic.
 
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
-from decimal import Decimal, ROUND_DOWN
+from decimal import Decimal, ROUND_DOWN, ROUND_HALF_UP
 from enum import Enum
 from typing import Optional
 import uuid
@@ -95,14 +95,18 @@ class SimulationConfig:
     min_trade_value: Decimal = Decimal("100")
     max_turnover_pct: Decimal = Decimal("0.10")  # Max 10% turnover per rebalance
     rebalance_band_pct: Decimal = Decimal("0.02")  # Rebalance if drift > 2%
-    tlh_loss_threshold: Decimal = Decimal("0.03")  # Harvest losses > 3%
+    tlh_loss_threshold: Decimal = Decimal("0.05")  # Harvest losses > 5% (institutional standard)
     tlh_wash_sale_days: int = 30  # Wash sale window
     use_current_constituents: bool = True  # Mode 1 vs Mode 2
     rebalance_freq: str = "weekly"  # weekly, monthly, quarterly
 
     # Institutional Direct Indexing settings
+    # Philosophy: Index tracking FIRST, TLH SECOND
+    # We're not trying to wring out every loss - we want tight tracking with TLH as a bonus
     target_positions: int = 350  # Number of stocks to hold (300-350 institutional standard)
     # Setting to 0 or None means use all available constituents
+    max_tlh_trades_per_day: int = 10  # Conservative: max 10 TLH trades per day
+    max_tlh_pct_per_day: Decimal = Decimal("0.03")  # Max 3% of portfolio harvested per day
 
 
 @dataclass
@@ -539,8 +543,10 @@ class SimulationEngine:
         2. Buy a correlated replacement (same sector, different company)
         3. Maintain market exposure while realizing tax loss
 
-        This is the institutional approach - selling without reinvesting
-        would create cash drag and tracking error.
+        Includes safeguards against:
+        - Ping-pong trading (A→B, B→A same day)
+        - Over-harvesting (daily limits)
+        - Cash accumulation (proper rounding)
 
         Args:
             state: Current simulation state
@@ -552,27 +558,62 @@ class SimulationEngine:
         """
         from di_pilot.data.tlh_pairs import get_replacement_candidates, get_sector_etf_fallback
 
+        # TLH limits from config - institutional approach: index tracking first, TLH second
+        max_trades = self.config.max_tlh_trades_per_day
+        max_harvest_pct = self.config.max_tlh_pct_per_day
+
         candidates = self.identify_tlh_candidates(state, prices, current_date)
         timestamp = datetime.combine(current_date, datetime.min.time())
 
-        # Build set of wash-sale restricted symbols
+        # Build set of wash-sale restricted symbols (from previous days)
         wash_restricted = {
             symbol for symbol, sell_date in state.wash_sale_symbols.items()
             if (current_date - sell_date).days < self.config.tlh_wash_sale_days
         }
 
+        # FIX 1: Track symbols traded TODAY to prevent ping-pong (A→B, B→A)
+        traded_today: set[str] = set()
+
+        # Track TLH activity for limits
+        tlh_trades_today = 0
+        harvested_today = Decimal("0")
+
+        # Calculate portfolio value for harvest limit
+        portfolio_value = state.cash + sum(
+            lot.shares * prices.get(lot.symbol, PriceData(lot.symbol, current_date, lot.cost_basis)).close
+            for lot in state.lots
+        )
+
+        # FIX 2: Get existing portfolio symbols to avoid buying what we already own
+        existing_symbols = {lot.symbol for lot in state.lots}
+
         for lot in candidates:
+            # Check TLH limits (index tracking first, TLH second)
+            if tlh_trades_today >= max_trades:
+                break
+            if harvested_today >= portfolio_value * max_harvest_pct:
+                break
+
             # Check wash sale restriction
             if state.is_wash_sale_restricted(
                 lot.symbol, current_date, self.config.tlh_wash_sale_days
             ):
                 continue
 
-            # Find a valid replacement before proceeding
-            replacement_symbol = None
-            replacement_candidates = get_replacement_candidates(lot.symbol, wash_restricted)
+            # FIX 1: Skip if this symbol was already traded today (prevents ping-pong)
+            if lot.symbol in traded_today:
+                continue
 
+            # Find a valid replacement before proceeding
+            # FIX 1: Exclude both wash_restricted AND traded_today from candidates
+            excluded_symbols = wash_restricted | traded_today | existing_symbols
+            replacement_candidates = get_replacement_candidates(lot.symbol, excluded_symbols)
+
+            replacement_symbol = None
             for candidate in replacement_candidates:
+                # FIX 2: Skip if we already own this symbol
+                if candidate in existing_symbols:
+                    continue
                 if candidate in prices and prices[candidate].close > Decimal("0"):
                     replacement_symbol = candidate
                     break
@@ -580,7 +621,7 @@ class SimulationEngine:
             # Fallback to sector ETF if no direct replacement
             if not replacement_symbol:
                 etf = get_sector_etf_fallback(lot.symbol)
-                if etf and etf in prices and prices[etf].close > Decimal("0"):
+                if etf and etf not in existing_symbols and etf in prices and prices[etf].close > Decimal("0"):
                     replacement_symbol = etf
 
             # Skip TLH if no valid replacement found (to avoid cash drag)
@@ -590,6 +631,30 @@ class SimulationEngine:
             price = prices[lot.symbol].close
             loss_amount = lot.shares * (price - lot.cost_basis)
             proceeds = lot.shares * price
+
+            # Calculate replacement shares BEFORE executing trades
+            replacement_price = prices[replacement_symbol].close
+            # FIX 3: Use ROUND_HALF_UP instead of ROUND_DOWN to minimize cash drag
+            shares_to_buy = (proceeds / replacement_price).quantize(
+                Decimal("0.000001"), rounding=ROUND_HALF_UP
+            )
+
+            # Only proceed if we can buy meaningful shares
+            if shares_to_buy <= Decimal("0"):
+                continue
+
+            # FIX 4: Create replacement lot FIRST (atomic swap)
+            replacement_lot = TaxLot.create(
+                symbol=replacement_symbol,
+                shares=shares_to_buy,
+                cost_basis=replacement_price,
+                acquisition_date=current_date,
+                portfolio_id=state.portfolio_id,
+            )
+            state.lots.append(replacement_lot)
+
+            # Now remove the original lot (after replacement exists)
+            state.lots.remove(lot)
 
             # Record TLH sell trade
             sell_trade = SimulationTrade.create(
@@ -604,44 +669,37 @@ class SimulationEngine:
             )
             state.trades.append(sell_trade)
 
-            # Update state for sell
-            state.cash += proceeds
+            # Record replacement buy trade
+            buy_trade = SimulationTrade.create(
+                timestamp=timestamp,
+                symbol=replacement_symbol,
+                side=TradeSide.BUY,
+                shares=shares_to_buy,
+                price=replacement_price,
+                reason=TradeReason.TLH_REPLACEMENT_BUY,
+                notes=f"TLH replacement for {lot.symbol}",
+            )
+            state.trades.append(buy_trade)
+
+            # Update cash (net of sell proceeds - buy cost)
+            buy_cost = shares_to_buy * replacement_price
+            state.cash += proceeds - buy_cost
+
+            # Update tracking
             state.realized_pnl += loss_amount
             state.harvested_losses += abs(loss_amount)
             state.wash_sale_symbols[lot.symbol] = current_date
-            state.lots.remove(lot)
 
-            # Buy replacement to maintain market exposure
-            replacement_price = prices[replacement_symbol].close
-            shares_to_buy = (proceeds / replacement_price).quantize(
-                Decimal("0.000001"), rounding=ROUND_DOWN
-            )
+            # FIX 1: Mark BOTH symbols as traded today to prevent ping-pong
+            traded_today.add(lot.symbol)
+            traded_today.add(replacement_symbol)
 
-            if shares_to_buy > Decimal("0"):
-                # Create new lot for replacement
-                replacement_lot = TaxLot.create(
-                    symbol=replacement_symbol,
-                    shares=shares_to_buy,
-                    cost_basis=replacement_price,
-                    acquisition_date=current_date,
-                    portfolio_id=state.portfolio_id,
-                )
-                state.lots.append(replacement_lot)
+            # Update existing_symbols since we now own the replacement
+            existing_symbols.add(replacement_symbol)
 
-                # Record replacement buy trade
-                buy_trade = SimulationTrade.create(
-                    timestamp=timestamp,
-                    symbol=replacement_symbol,
-                    side=TradeSide.BUY,
-                    shares=shares_to_buy,
-                    price=replacement_price,
-                    reason=TradeReason.TLH_REPLACEMENT_BUY,
-                    notes=f"TLH replacement for {lot.symbol}",
-                )
-                state.trades.append(buy_trade)
-
-                # Update cash for buy
-                state.cash -= shares_to_buy * replacement_price
+            # Track limits
+            tlh_trades_today += 1
+            harvested_today += abs(loss_amount)
 
         return state
 

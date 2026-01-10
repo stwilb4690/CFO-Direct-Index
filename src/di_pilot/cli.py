@@ -736,9 +736,9 @@ def propose(
 )
 @click.option(
     "--provider",
-    type=click.Choice(["yfinance", "eodhd"]),
-    default="yfinance",
-    help="Data provider to use (default: yfinance)",
+    type=click.Choice(["eodhd"]),
+    default="eodhd",
+    help="Data provider to use (default: eodhd)",
 )
 def simulate_backtest(
     start_date: str,
@@ -749,6 +749,7 @@ def simulate_backtest(
     output_dir: str,
     no_cache: bool,
     provider: str,
+    run_name: str | None = None,
 ):
     """
     Run a backtest simulation.
@@ -815,7 +816,12 @@ def simulate_backtest(
         sys.exit(1)
 
     # Generate outputs
-    out_dir = Path(output_dir) / result.run_id
+    # If user provided a run name, include it in the output folder for easy recall.
+    if run_name:
+        safe_name = str(run_name).strip().replace(" ", "_")
+        out_dir = Path(output_dir) / f"{safe_name}_{result.run_id}"
+    else:
+        out_dir = Path(output_dir) / result.run_id
     try:
         paths = generate_report(result, out_dir)
     except Exception as e:
@@ -874,9 +880,9 @@ def simulate_backtest(
 )
 @click.option(
     "--provider",
-    type=click.Choice(["yfinance", "eodhd"]),
-    default="yfinance",
-    help="Data provider to use (default: yfinance)",
+    type=click.Choice(["eodhd"]),
+    default="eodhd",
+    help="Data provider to use (default: eodhd)",
 )
 def simulate_forward(
     start_date: str,
@@ -887,6 +893,7 @@ def simulate_forward(
     output_dir: str,
     no_cache: bool,
     provider: str,
+    run_name: str | None = None,
 ):
     """
     Run a forward test simulation.
@@ -948,7 +955,11 @@ def simulate_forward(
         sys.exit(1)
 
     # Generate outputs
-    out_dir = Path(output_dir) / result.run_id
+    if run_name:
+        safe_name = str(run_name).strip().replace(" ", "_")
+        out_dir = Path(output_dir) / f"{safe_name}_{result.run_id}"
+    else:
+        out_dir = Path(output_dir) / result.run_id
     try:
         paths = generate_report(result, out_dir)
     except Exception as e:
@@ -1027,9 +1038,9 @@ def forward():
 )
 @click.option(
     "--provider",
-    type=click.Choice(["yfinance", "eodhd"]),
-    default="yfinance",
-    help="Data provider to use (default: yfinance)",
+    type=click.Choice(["eodhd"]),
+    default="eodhd",
+    help="Data provider to use (default: eodhd)",
 )
 def forward_init(
     portfolio_id: str,
@@ -1152,9 +1163,9 @@ def forward_init(
 )
 @click.option(
     "--provider",
-    type=click.Choice(["yfinance", "eodhd"]),
-    default="yfinance",
-    help="Data provider to use (default: yfinance)",
+    type=click.Choice(["eodhd"]),
+    default="eodhd",
+    help="Data provider to use (default: eodhd)",
 )
 def forward_run(
     portfolio_id: str,
@@ -1254,9 +1265,9 @@ def forward_run(
 )
 @click.option(
     "--provider",
-    type=click.Choice(["yfinance", "eodhd"]),
-    default="yfinance",
-    help="Data provider to use (default: yfinance)",
+    type=click.Choice(["eodhd"]),
+    default="eodhd",
+    help="Data provider to use (default: eodhd)",
 )
 def forward_status(
     portfolio_id: str,
@@ -1362,12 +1373,10 @@ def forward_status(
 
 def _get_provider(provider_name: str, use_cache: bool):
     """Helper to get data provider by name."""
-    from di_pilot.data.providers import YFinanceProvider, CachedDataProvider, FileCache
+    from di_pilot.data.providers import CachedDataProvider, FileCache
 
     try:
-        if provider_name == "yfinance":
-            provider = YFinanceProvider()
-        elif provider_name == "eodhd":
+        if provider_name == "eodhd":
             from di_pilot.data.providers import EODHDProvider
             provider = EODHDProvider()
         else:
@@ -1406,9 +1415,9 @@ def _get_provider(provider_name: str, use_cache: bool):
 )
 @click.option(
     "--provider",
-    type=click.Choice(["yfinance", "eodhd"]),
-    default="yfinance",
-    help="Data provider to use (default: yfinance)",
+    type=click.Choice(["eodhd"]),
+    default="eodhd",
+    help="Data provider to use (default: eodhd)",
 )
 def quick_test(days: int, top_n: int, output_dir: str, provider: str):
     """

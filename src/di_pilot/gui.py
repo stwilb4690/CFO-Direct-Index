@@ -49,12 +49,50 @@ def list_existing_runs() -> list[str]:
     outputs_dir = get_outputs_dir()
     if not outputs_dir.exists():
         return []
+    # Also consider `output/` (singular) since CLI historically saved there.
+    candidate_dirs = [get_project_root() / "outputs", get_project_root() / "output"]
 
-    runs = []
-    for path in sorted(outputs_dir.iterdir(), reverse=True):
-        if path.is_dir() and (path / "metrics.json").exists():
-            runs.append(path.name)
-    return runs
+    runs_info: list[tuple[str, str]] = []  # (sort_key, run_name)
+    seen = set()
+
+    for out_dir in candidate_dirs:
+        if not out_dir.exists():
+            continue
+
+        for path in out_dir.iterdir():
+            if not path.is_dir():
+                continue
+
+            run_name = path.name
+            if run_name in seen:
+                continue
+            seen.add(run_name)
+
+            metrics_file = path / "metrics.json"
+            sort_key = None
+
+            if metrics_file.exists():
+                try:
+                    with open(metrics_file, "r") as f:
+                        data = json.load(f)
+                    # Prefer end_date then start_date
+                    sort_key = data.get("end_date") or data.get("start_date")
+                except Exception:
+                    sort_key = None
+
+            if not sort_key:
+                # Fallback to directory modification time
+                try:
+                    sort_key = str(path.stat().st_mtime)
+                except Exception:
+                    sort_key = "0"
+
+            runs_info.append((sort_key, run_name))
+
+    # Sort runs by sort_key descending (newest first)
+    runs_info.sort(key=lambda x: x[0], reverse=True)
+
+    return [r[1] for r in runs_info]
 
 
 def load_run_results(run_id: str) -> dict:
@@ -94,11 +132,13 @@ def run_simulation(
     rebalance_freq: str,
     top_n: int | None,
     simulate_days: int | None,
-    provider: str = "yfinance",
+    provider: str = "eodhd",
 ) -> tuple[bool, str, str | None]:
     """Run a simulation and return (success, output, run_id)."""
 
-    cmd = ["di-pilot"]
+    # Use the module entry point via the current Python interpreter so the
+    # console script is not required to be installed in PATH.
+    cmd = [sys.executable, "-m", "di_pilot.cli"]
 
     if sim_type == "backtest":
         cmd.extend(["simulate-backtest"])
@@ -233,6 +273,7 @@ def test_eodhd_connection() -> tuple[bool, str]:
     """
     try:
         from di_pilot.data.providers import get_eodhd_provider
+        import pandas as pd
 
         provider = get_eodhd_provider(use_cache=False)
         # Try to get a single day of SPY data as a connectivity test
@@ -246,19 +287,43 @@ def test_eodhd_connection() -> tuple[bool, str]:
             end_date=end_date,
         )
 
-        if "SPY" in prices and len(prices["SPY"]) > 0:
-            return True, f"Connected! Retrieved {len(prices['SPY'])} price records for SPY"
-        else:
+        # Support providers that return dicts (symbol -> records)
+        if isinstance(prices, dict):
+            if "SPY" in prices and len(prices["SPY"]) > 0:
+                return True, f"Connected! Retrieved {len(prices['SPY'])} price records for SPY"
             return False, "Connected but no data returned"
 
+        # Support providers that return pandas DataFrame
+        if isinstance(prices, pd.DataFrame):
+            if prices.empty:
+                return False, "Connected but no data returned"
+
+            # Count rows for SPY if symbol column exists
+            if "symbol" in prices.columns:
+                # Sum the boolean mask (fast and avoids summing DataFrame columns)
+                count = int((prices["symbol"].astype(str).str.upper() == "SPY").sum())
+            else:
+                count = len(prices)
+
+            if count > 0:
+                return True, f"Connected! Retrieved {count} price records for SPY"
+            return False, "Connected but no data returned"
+
+        # Unknown response type
+        return False, "Connected but no data returned"
+
     except Exception as e:
+        import traceback
         error_msg = str(e)
+        tb = traceback.format_exc()
         if "API key" in error_msg:
             return False, "API key not configured or invalid"
         elif "429" in error_msg or "rate limit" in error_msg.lower():
             return False, "Rate limited - try again later"
         else:
-            return False, f"Connection failed: {error_msg}"
+            # Include brief traceback to help debugging in GUI logs
+            short_tb = tb.splitlines()[-3:]
+            return False, f"Connection failed: {error_msg} -- {' | '.join(short_tb)}"
 
 
 def render_metrics_cards(metrics: dict):
@@ -455,9 +520,8 @@ def render_sidebar():
     st.sidebar.subheader("Data Provider")
     provider = st.sidebar.selectbox(
         "Provider",
-        options=["yfinance", "eodhd"],
+        options=["eodhd"],
         format_func=lambda x: {
-            "yfinance": "Yahoo Finance (Free)",
             "eodhd": "EODHD (API Key Required)",
         }.get(x, x),
     )
@@ -635,7 +699,7 @@ def main_page():
             else:
                 st.info("**Symbols:** All S&P 500")
         with col4:
-            provider_name = "Yahoo Finance" if config["provider"] == "yfinance" else "EODHD"
+            provider_name = "EODHD"
             st.info(f"**Provider:** {provider_name}")
 
         # Warnings

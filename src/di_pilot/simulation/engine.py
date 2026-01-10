@@ -100,13 +100,22 @@ class SimulationConfig:
     use_current_constituents: bool = True  # Mode 1 vs Mode 2
     rebalance_freq: str = "weekly"  # weekly, monthly, quarterly
 
-    # Institutional Direct Indexing settings
-    # Philosophy: Index tracking FIRST, TLH SECOND
-    # We're not trying to wring out every loss - we want tight tracking with TLH as a bonus
-    target_positions: int = 350  # Number of stocks to hold (300-350 institutional standard)
-    # Setting to 0 or None means use all available constituents
+    # Fidelity-style Direct Indexing settings
+    # Philosophy: Hold ALL index constituents for accurate tracking
+    target_positions: int = 0  # 0 means hold ALL S&P 500 constituents (~503 stocks)
+    # Set to 350 for "institutional" approach with fewer positions
     max_tlh_trades_per_day: int = 10  # Conservative: max 10 TLH trades per day
     max_tlh_pct_per_day: Decimal = Decimal("0.03")  # Max 3% of portfolio harvested per day
+    
+    # TLH behavior mode (matching Fidelity pattern)
+    # If True: TLH sells just add cash, which gets deployed during rebalancing
+    # If False: TLH sells are immediately followed by correlated replacement buys
+    tlh_skip_replacement_buys: bool = True  # Fidelity pattern: sell only, no immediate replacement
+    
+    # Dividend simulation (matching Fidelity pattern)
+    # If True: Simulate dividend payments based on yield estimates
+    enable_dividend_simulation: bool = True  # Enable by default to match real-world behavior
+    average_dividend_yield: Decimal = Decimal("0.015")  # 1.5% average S&P yield
 
 
 @dataclass
@@ -604,6 +613,44 @@ class SimulationEngine:
             if lot.symbol in traded_today:
                 continue
 
+            price = prices[lot.symbol].close
+            loss_amount = lot.shares * (price - lot.cost_basis)
+            proceeds = lot.shares * price
+
+            # MODE: Skip replacement buys (Fidelity pattern)
+            # Just sell the losing position and let cash accumulate for rebalancing
+            if self.config.tlh_skip_replacement_buys:
+                # Remove the lot
+                state.lots.remove(lot)
+                
+                # Record TLH sell trade
+                sell_trade = SimulationTrade.create(
+                    timestamp=timestamp,
+                    symbol=lot.symbol,
+                    side=TradeSide.SELL,
+                    shares=lot.shares,
+                    price=price,
+                    reason=TradeReason.TLH_SELL,
+                    lot_id=lot.lot_id,
+                    notes=f"TLH harvest (no replacement), loss ${abs(loss_amount):.2f}",
+                )
+                state.trades.append(sell_trade)
+                
+                # Add proceeds to cash
+                state.cash += proceeds
+                
+                # Update tracking
+                state.realized_pnl += loss_amount
+                state.harvested_losses += abs(loss_amount)
+                state.wash_sale_symbols[lot.symbol] = current_date
+                traded_today.add(lot.symbol)
+                
+                # Track limits
+                tlh_trades_today += 1
+                harvested_today += abs(loss_amount)
+                continue
+
+            # MODE: Do replacement buys (original behavior)
             # Find a valid replacement before proceeding
             # FIX 1: Exclude both wash_restricted AND traded_today from candidates
             excluded_symbols = wash_restricted | traded_today | existing_symbols
@@ -627,10 +674,6 @@ class SimulationEngine:
             # Skip TLH if no valid replacement found (to avoid cash drag)
             if not replacement_symbol:
                 continue
-
-            price = prices[lot.symbol].close
-            loss_amount = lot.shares * (price - lot.cost_basis)
-            proceeds = lot.shares * price
 
             # Calculate replacement shares BEFORE executing trades
             replacement_price = prices[replacement_symbol].close
@@ -784,3 +827,53 @@ class SimulationEngine:
             return days_since >= 90
 
         return days_since >= 7  # Default to weekly
+
+    def process_dividends(
+        self,
+        state: SimulationState,
+        prices: dict[str, PriceData],
+        current_date: date,
+    ) -> SimulationState:
+        """
+        Process dividend payments for the portfolio.
+        
+        Simulates quarterly dividends based on average yield estimate.
+        Dividends are paid to cash (matching Fidelity pattern).
+        
+        Args:
+            state: Current simulation state
+            prices: Current prices
+            current_date: Current date
+            
+        Returns:
+            Updated state with dividend cash added
+        """
+        if not self.config.enable_dividend_simulation:
+            return state
+        
+        # Simulate dividends on quarter-end months (Mar, Jun, Sep, Dec)
+        # Most S&P 500 dividends cluster around these dates
+        if current_date.month not in [3, 6, 9, 12]:
+            return state
+        
+        # Only process on last week of the quarter
+        if current_date.day < 20:
+            return state
+        
+        # Calculate quarterly dividend (annual yield / 4)
+        quarterly_yield = self.config.average_dividend_yield / Decimal("4")
+        
+        # Calculate total dividend across all holdings
+        total_dividend = Decimal("0")
+        for lot in state.lots:
+            if lot.symbol in prices:
+                lot_value = lot.shares * prices[lot.symbol].close
+                dividend = lot_value * quarterly_yield
+                total_dividend += dividend
+        
+        if total_dividend > Decimal("0"):
+            # Add dividend to cash
+            state.cash += total_dividend
+        
+        return state
+

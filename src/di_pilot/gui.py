@@ -194,7 +194,7 @@ def run_simulation(
             capture_output=True,
             text=True,
             cwd=get_project_root(),
-            timeout=600,  # 10 minute timeout
+            timeout=1800,  # 30 minute timeout (first run with 500 symbols can be slow)
         )
 
         output = result.stdout + result.stderr
@@ -603,9 +603,10 @@ def render_sidebar():
     st.sidebar.markdown("---")
     st.sidebar.subheader("Configuration")
 
-    # Date inputs
-    default_start = date.today() - timedelta(days=365)
-    default_end = date.today() - timedelta(days=1)
+
+    # Date inputs - default to Jan 2025 for testing
+    default_start = date(2025, 1, 1)
+    default_end = date(2025, 1, 31)
 
     start_date = st.sidebar.date_input(
         "Start Date",
@@ -666,6 +667,35 @@ def render_sidebar():
             value=0,
         )
 
+    # Advanced Settings (TLH and Dividends)
+    st.sidebar.markdown("---")
+    with st.sidebar.expander("⚙️ Advanced Settings"):
+        st.markdown("**TLH Behavior**")
+        tlh_skip_replacement = st.checkbox(
+            "Skip TLH Replacement Buys",
+            value=False,
+            help="When enabled, TLH sells just add cash (Fidelity pattern). "
+                 "When disabled, immediately buy correlated replacements.",
+        )
+        
+        st.markdown("**Dividend Simulation**")
+        enable_dividends = st.checkbox(
+            "Enable Dividend Simulation",
+            value=False,
+            help="Simulate quarterly dividend payments that add to cash balance.",
+        )
+        
+        dividend_yield = 1.5
+        if enable_dividends:
+            dividend_yield = st.slider(
+                "Average Dividend Yield (%)",
+                min_value=0.5,
+                max_value=4.0,
+                value=1.5,
+                step=0.1,
+                help="Average S&P 500 yield is ~1.5%",
+            )
+
     # Optional run name to prefix output folder
     run_name = st.sidebar.text_input(
         "Run Name (optional)",
@@ -675,7 +705,7 @@ def render_sidebar():
 
     # Cache management
     st.sidebar.markdown("---")
-    st.sidebar.subheader("Cache")
+    st.sidebar.subheader("Data Cache")
     if st.sidebar.button("🗑️ Clear Data Cache", help="Clear cached price and constituent data to fetch fresh data"):
         try:
             from di_pilot.data.providers.cache import FileCache
@@ -684,6 +714,18 @@ def render_sidebar():
             st.sidebar.success("Cache cleared! Fresh data will be fetched on next run.")
         except Exception as e:
             st.sidebar.error(f"Failed to clear cache: {e}")
+    
+    if st.sidebar.button("📥 Preload 3 Years Data", help="Download all S&P 500 data for 2022-2025 to speed up full backtests"):
+        with st.sidebar:
+            with st.spinner("Downloading S&P 500 data (this takes 10-20 min first time)..."):
+                try:
+                    from di_pilot.scripts.preload_data import preload_sp500_data
+                    end = date.today() - timedelta(days=1)
+                    start = date(end.year - 3, end.month, end.day)
+                    stats = preload_sp500_data(start, end)
+                    st.success(f"Downloaded {stats['price_records']:,} records for {stats['symbols']} symbols!")
+                except Exception as e:
+                    st.error(f"Preload failed: {e}")
 
     return {
         "sim_type": sim_type,
@@ -695,6 +737,9 @@ def render_sidebar():
         "simulate_days": simulate_days,
         "run_name": run_name.strip() if isinstance(run_name, str) and run_name.strip() != "" else None,
         "provider": provider,
+        "tlh_skip_replacement": tlh_skip_replacement,
+        "enable_dividends": enable_dividends,
+        "dividend_yield": dividend_yield,
     }
 
 
@@ -772,22 +817,65 @@ def main_page():
         if not runs:
             st.info("No simulation results found. Run a simulation first!")
         else:
-            # Select run
-            default_idx = 0
-            if "last_run_id" in st.session_state:
-                try:
-                    default_idx = runs.index(st.session_state["last_run_id"])
-                except ValueError:
-                    pass
+            # Create columns for run selection and actions
+            col_select, col_actions = st.columns([3, 1])
+            
+            with col_select:
+                # Select run - default to most recent
+                default_idx = 0
+                if "last_run_id" in st.session_state:
+                    try:
+                        default_idx = runs.index(st.session_state["last_run_id"])
+                    except ValueError:
+                        pass
 
-            selected_run = st.selectbox(
-                "Select Run",
-                options=runs,
-                index=default_idx,
-            )
+                selected_run = st.selectbox(
+                    "Select Run (newest first)",
+                    options=runs,
+                    index=default_idx,
+                    format_func=lambda x: f"📊 {x}" if x == runs[0] else x,
+                )
+            
+            with col_actions:
+                st.write("")  # Spacer
+                if st.button("🗑️ Delete Run", help="Delete the selected run"):
+                    if selected_run:
+                        try:
+                            import shutil
+                            for out_dir in ["outputs", "output"]:
+                                run_path = get_project_root() / out_dir / selected_run
+                                if run_path.exists():
+                                    shutil.rmtree(run_path)
+                                    st.success(f"Deleted {selected_run}")
+                                    st.rerun()
+                        except Exception as e:
+                            st.error(f"Failed to delete: {e}")
 
             if selected_run:
                 results = load_run_results(selected_run)
+                
+                # Quick info bar
+                st.markdown("---")
+                if "metrics" in results:
+                    m = results["metrics"]
+                    info_cols = st.columns(5)
+                    with info_cols[0]:
+                        st.metric("Return", f"{m.get('total_return', 0):.1%}")
+                    with info_cols[1]:
+                        st.metric("vs S&P", f"{m.get('total_return', 0) - 0.1863:.1%}" if m.get('total_return') else "N/A")
+                    with info_cols[2]:
+                        st.metric("Sharpe", f"{m.get('sharpe_ratio', 0):.2f}")
+                    with info_cols[3]:
+                        st.metric("Max DD", f"{m.get('max_drawdown', 0):.1%}")
+                    with info_cols[4]:
+                        st.metric("Trades", f"{m.get('total_trades', 0)}")
+                
+                # Open HTML report button
+                run_dir = results.get("run_dir")
+                if run_dir:
+                    html_report = run_dir / "professional_report.html"
+                    if html_report.exists():
+                        st.markdown(f"📄 **[Open Professional Report](file:///{html_report})**")
 
                 # Metrics
                 if "metrics" in results:
@@ -814,7 +902,7 @@ def main_page():
                 # Report
                 if "report" in results:
                     st.markdown("---")
-                    with st.expander("📄 Full Report"):
+                    with st.expander("📄 Full Markdown Report"):
                         st.markdown(results["report"])
 
                 # Raw metrics JSON

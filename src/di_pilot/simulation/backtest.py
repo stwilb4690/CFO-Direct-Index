@@ -339,6 +339,9 @@ def run_backtest(
 
         state.current_date = current_date
 
+        # Process dividends (if enabled) - adds to cash balance
+        state = engine.process_dividends(state, prices, current_date)
+
         # Check if rebalance day
         if engine.should_rebalance(current_date, last_rebalance):
             # Execute TLH first (on rebalance days)

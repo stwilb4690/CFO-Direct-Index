@@ -154,13 +154,13 @@ def _generate_markdown_report(
             lines.extend(["### Analysis", ""])
 
             if issues:
-                lines.append("**⚠️ Issues Detected:**")
+                lines.append("**[!] Issues Detected:**")
                 for issue in issues:
                     lines.append(f"- {issue}")
                 lines.append("")
 
             if highlights:
-                lines.append("**✓ Highlights:**")
+                lines.append("**[OK] Highlights:**")
                 for highlight in highlights:
                     lines.append(f"- {highlight}")
                 lines.append("")
@@ -372,14 +372,14 @@ def generate_quick_summary(
     # Add analysis/issues section
     issues = []
     if active_return is not None and active_return < -0.02:
-        issues.append(f"  ⚠️  Underperformed benchmark by {abs(active_return):.2%}")
+        issues.append(f"  [!] Underperformed benchmark by {abs(active_return):.2%}")
     if metrics.harvested_losses < 0:  # Positive harvested_losses means gains taken
-        issues.append(f"  ⚠️  Realized capital GAINS (should only harvest losses)")
+        issues.append(f"  [!] Realized capital GAINS (should only harvest losses)")
     cash_pct = metrics.final_cash / metrics.final_value if metrics.final_value > 0 else 0
     if cash_pct > 0.05:
-        issues.append(f"  ⚠️  High cash balance ({cash_pct:.1%}) - potential cash drag")
+        issues.append(f"  [!] High cash balance ({cash_pct:.1%}) - potential cash drag")
     if metrics.total_trades > metrics.trading_days * 2:
-        issues.append(f"  ⚠️  High trading activity ({metrics.total_trades} trades)")
+        issues.append(f"  [!] High trading activity ({metrics.total_trades} trades)")
 
     if issues:
         lines.append("")
@@ -388,7 +388,7 @@ def generate_quick_summary(
 
     if active_return is not None and active_return >= 0:
         lines.append("")
-        lines.append(f"  ✓ Strategy matched or outperformed benchmark")
+        lines.append(f"  [OK] Strategy matched or outperformed benchmark")
 
     lines.append(f"{'='*60}\n")
 

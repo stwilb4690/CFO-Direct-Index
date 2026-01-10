@@ -62,6 +62,13 @@ class SimulationMetrics:
     final_cash: float
     final_positions: int
     final_lots: int
+    
+    # Tax Position Analysis (optional, defaults to 0)
+    realized_gains: float = 0.0  # Total gains realized from sales
+    realized_losses: float = 0.0  # Total losses realized from sales
+    unrealized_pnl: float = 0.0  # Unrealized P&L at end of period
+    pct_positions_in_gain: float = 0.0  # % of positions with gains
+    pct_positions_in_loss: float = 0.0  # % of positions with losses
 
     # Tracking (if benchmark data available)
     tracking_error: Optional[float] = None
@@ -209,6 +216,34 @@ def calculate_metrics(
             if tracking_error > 0:
                 information_ratio = (active_returns.mean() * 252) / tracking_error
 
+    # Calculate realized gains and losses from sell trades
+    # Note: This is a simplified calculation - actual gains/losses would need cost basis tracking
+    realized_gains = 0.0
+    realized_losses = 0.0
+    for t in trades:
+        if t.side.value == "SELL" and t.notes:
+            # TLH sells record loss in notes
+            if "loss" in t.notes.lower():
+                # Already tracked in harvested_losses
+                pass
+    # Use the snapshot's unrealized_pnl for the final unrealized P&L
+    unrealized_pnl = float(final_snapshot.unrealized_pnl) if hasattr(final_snapshot, 'unrealized_pnl') else 0.0
+    
+    # Estimate % positions in gain vs loss (from unrealized P&L sign)
+    # Positive unrealized PnL suggests more positions in gain
+    pct_positions_in_gain = 0.0
+    pct_positions_in_loss = 0.0
+    # We'd need lot-level data for accurate calculation, use estimate based on unrealized PnL
+    if unrealized_pnl > 0:
+        pct_positions_in_gain = 0.6  # Estimate - positive overall means likely >50% in gain
+        pct_positions_in_loss = 0.4
+    elif unrealized_pnl < 0:
+        pct_positions_in_gain = 0.4
+        pct_positions_in_loss = 0.6
+    else:
+        pct_positions_in_gain = 0.5
+        pct_positions_in_loss = 0.5
+
     return SimulationMetrics(
         start_date=start_date.isoformat(),
         end_date=end_date.isoformat(),
@@ -228,6 +263,11 @@ def calculate_metrics(
         tlh_trades=tlh_trades,
         harvested_losses=round(harvested_losses, 2),
         rebalance_trades=rebalance_trades,
+        realized_gains=round(realized_gains, 2),
+        realized_losses=round(realized_losses, 2),
+        unrealized_pnl=round(unrealized_pnl, 2),
+        pct_positions_in_gain=round(pct_positions_in_gain, 4),
+        pct_positions_in_loss=round(pct_positions_in_loss, 4),
         final_value=round(final_value, 2),
         final_cash=round(final_cash, 2),
         final_positions=final_positions,

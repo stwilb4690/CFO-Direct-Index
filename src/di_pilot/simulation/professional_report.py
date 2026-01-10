@@ -26,6 +26,12 @@ from di_pilot.simulation.backtest import BacktestResult
 from di_pilot.simulation.forward import ForwardTestResult
 from di_pilot.simulation.metrics import SimulationMetrics, calculate_metrics
 from di_pilot.simulation.engine import SimulationConfig, TradeReason, TradeSide
+from di_pilot.data.sectors import (
+    calculate_sector_weights, 
+    calculate_sector_drift, 
+    GICS_SECTORS,
+    SECTOR_MAPPINGS
+)
 
 
 # Tax rates (can be configured per client)
@@ -400,6 +406,12 @@ def generate_professional_html_report(
     
     # Generate analysis
     analysis_html = generate_analysis_section(result, benchmark_total_return)
+
+    # Generate sector analysis
+    if isinstance(result, BacktestResult):
+        sector_html = generate_sector_analysis_html(result)
+    else:
+        sector_html = ""
     
     html = f"""
 <!DOCTYPE html>
@@ -563,6 +575,51 @@ def generate_professional_html_report(
                 padding: 20px;
             }}
         }}
+        .tax-alpha-row {
+            background-color: #e3f2fd;
+        }
+        .sector-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+        .sector-table th, .sector-table td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .sector-table th {
+            font-weight: 600;
+            background: #f8f9fa;
+        }
+        .sector-table td:not(:first-child) {
+            text-align: right;
+        }
+        .sector-table th:not(:first-child) {
+            text-align: right;
+        }
+        .tax-alpha-row {
+            background-color: #e3f2fd;
+        }
+        .sector-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+        .sector-table th, .sector-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .sector-table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+        .sector-table td:not(:first-child), .sector-table th:not(:first-child) {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -713,6 +770,9 @@ def generate_professional_html_report(
             
             <!-- Analysis Section inserted here -->
             {analysis_html}
+            
+            <!-- Sector Analysis -->
+            {sector_html}
         </div>
     </div>
     
@@ -859,6 +919,87 @@ def generate_professional_html_report(
 """
     
     return html
+
+
+
+def generate_sector_analysis_html(
+    result: BacktestResult,
+) -> str:
+    """Generate HTML for sector allocation and drift analysis."""
+    
+    # Calculate Benchmark Sector Weights
+    benchmark_weights = {}
+    if result.constituents:
+        # Convert constituents to holdings-like dict for sector calc
+        # Assuming constituents list represents the target weights
+        bench_holdings = {c.symbol: Decimal(str(c.weight)) for c in result.constituents}
+        benchmark_weights = calculate_sector_weights(bench_holdings)
+    
+    # Get Current Portfolio Sector Weights (from final snapshot)
+    if result.snapshots and hasattr(result.snapshots[-1], 'sector_weights'):
+        portfolio_weights = result.snapshots[-1].sector_weights or {}
+    else:
+        portfolio_weights = {}
+        
+    # Calculate drift
+    drift = calculate_sector_drift(portfolio_weights, benchmark_weights)
+    
+    # Generate HTML Table
+    rows = []
+    
+    # Sort by absolute drift magnitude
+    sorted_sectors = sorted(
+        GICS_SECTORS, 
+        key=lambda s: abs(drift.get(s, 0.0)), 
+        reverse=True
+    )
+    
+    for sector in sorted_sectors:
+        port_w = portfolio_weights.get(sector, 0.0)
+        bench_w = benchmark_weights.get(sector, 0.0)
+        drift_w = drift.get(sector, 0.0)
+        
+        drift_cls = 'positive' if drift_w > 0 else 'negative' if drift_w < 0 else ''
+        drift_sign = "+" if drift_w > 0 else ""
+        
+        # Highlight significant drift (>1%)
+        row_style = "background-color: #fff3cd;" if abs(drift_w) > 0.01 else ""
+        
+        rows.append(f"""
+            <tr style="{row_style}">
+                <td>{sector}</td>
+                <td>{port_w:.2%}</td>
+                <td>{bench_w:.2%}</td>
+                <td class="{drift_cls}"><strong>{drift_sign}{drift_w:.2%}</strong></td>
+            </tr>
+        """)
+    
+    rows_html = "\n".join(rows)
+    
+    return f"""
+    <div class="section">
+        <h2>Sector Allocation & Drift</h2>
+        <p class="section-desc">Comparison of portfolio sector weights vs benchmark targets.</p>
+        
+        <table class="sector-table">
+            <thead>
+                <tr>
+                    <th>Sector</th>
+                    <th>Portfolio</th>
+                    <th>Benchmark</th>
+                    <th>Drift</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows_html}
+            </tbody>
+        </table>
+        <p style="font-size: 12px; color: #666; margin-top: 10px;">
+            * Drift > 1.0% highlighted. Positive drift means overweight, negative means underweight.
+            Drift allows for tax-loss harvesting while maintaining broad correlation.
+        </p>
+    </div>
+    """
 
 
 def generate_professional_report(

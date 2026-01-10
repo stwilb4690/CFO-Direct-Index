@@ -21,6 +21,7 @@ from di_pilot.simulation.engine import (
     SimulationTrade,
     DailySnapshot,
 )
+from di_pilot.models import BenchmarkConstituent
 
 
 class BacktestResult:
@@ -34,6 +35,7 @@ class BacktestResult:
         end_date: date,
         final_state: SimulationState,
         benchmark_prices: dict[date, Decimal] = None,
+        constituents: list[BenchmarkConstituent] = None,
     ):
         self.run_id = run_id
         self.config = config
@@ -41,6 +43,7 @@ class BacktestResult:
         self.end_date = end_date
         self.final_state = final_state
         self.benchmark_prices = benchmark_prices or {}
+        self.constituents = constituents or []
 
     @property
     def trades(self) -> list[SimulationTrade]:
@@ -364,6 +367,7 @@ def run_backtest(
         end_date=end_date,
         final_state=state,
         benchmark_prices=benchmark_prices,
+        constituents=constituents,
     )
 
 

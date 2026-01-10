@@ -22,6 +22,8 @@ from di_pilot.models import (
     GainType,
 )
 
+from di_pilot.data.sectors import calculate_sector_weights
+
 
 class TradeReason(Enum):
     """Reason for a simulated trade."""
@@ -85,6 +87,7 @@ class DailySnapshot:
     realized_pnl: Decimal
     daily_return: Decimal
     cumulative_return: Decimal
+    sector_weights: dict[str, float] = field(default_factory=dict)  # Added for sector drift tracking
 
 
 @dataclass
@@ -787,6 +790,14 @@ class SimulationEngine:
             daily_return = Decimal("0")
             cumulative_return = Decimal("0")
 
+        # Calculate sector weights
+        current_holdings = {
+            lot.symbol: lot.shares * prices[lot.symbol].close
+            for lot in state.lots
+            if lot.symbol in prices
+        }
+        sector_weights = calculate_sector_weights(current_holdings)
+
         snapshot = DailySnapshot(
             date=current_date,
             total_value=total_value,
@@ -798,6 +809,7 @@ class SimulationEngine:
             realized_pnl=state.realized_pnl,
             daily_return=daily_return,
             cumulative_return=cumulative_return,
+            sector_weights=sector_weights,
         )
         state.snapshots.append(snapshot)
 

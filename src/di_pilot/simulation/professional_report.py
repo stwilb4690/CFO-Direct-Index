@@ -195,6 +195,7 @@ def generate_performance_chart_html(
     initial_cash: float,
     tax_metrics: dict,
     benchmark_prices: dict[date, Decimal] = None,
+    synthetic_benchmark_prices: dict[date, Decimal] = None,
 ) -> str:
     """
     Generate HTML/JavaScript for performance chart using Plotly.
@@ -202,7 +203,8 @@ def generate_performance_chart_html(
     Shows:
     - Strategy performance (pre-tax)
     - Strategy performance + tax alpha (after-tax equivalent)
-    - Benchmark performance (e.g. S&P 500)
+    - Benchmark performance (e.g. S&P 500 ETF)
+    - Synthetic Benchmark (Theoretical Index)
     """
     if not snapshots:
         return "<p>No data available for chart</p>"
@@ -212,6 +214,7 @@ def generate_performance_chart_html(
     strategy_values = []
     strategy_indexed = []
     benchmark_indexed = []
+    synthetic_indexed = []
     
     # Build benchmark series
     bench_start_price = None
@@ -219,19 +222,33 @@ def generate_performance_chart_html(
         sorted_dates = sorted(benchmark_prices.keys())
         if sorted_dates:
             bench_start_price = float(benchmark_prices[sorted_dates[0]])
+            
+    # Build synthetic benchmark series
+    synth_start_price = None
+    if synthetic_benchmark_prices:
+        sorted_synth_dates = sorted(synthetic_benchmark_prices.keys())
+        if sorted_synth_dates:
+            synth_start_price = float(synthetic_benchmark_prices[sorted_synth_dates[0]])
 
     for snap in snapshots:
         dates.append(snap.date.isoformat())
         strategy_values.append(float(snap.total_value))
         
-        # Benchmark indexing
+        # Benchmark indexing (SPY)
         if bench_start_price and snap.date in benchmark_prices:
             curr_bench = float(benchmark_prices[snap.date])
             benchmark_indexed.append(100 * curr_bench / bench_start_price)
         else:
-            # Fallback if missing data: use last known or 100
             last_val = benchmark_indexed[-1] if benchmark_indexed else 100
             benchmark_indexed.append(last_val)
+            
+        # Synthetic Benchmark indexing (Constituents)
+        if synth_start_price and synthetic_benchmark_prices and snap.date in synthetic_benchmark_prices:
+            curr_synth = float(synthetic_benchmark_prices[snap.date])
+            synthetic_indexed.append(100 * curr_synth / synth_start_price)
+        else:
+            last_val = synthetic_indexed[-1] if synthetic_indexed else 100
+            synthetic_indexed.append(last_val)
     
     # Index to 100 at start
     base_value = strategy_values[0] if strategy_values else 1
@@ -248,13 +265,14 @@ def generate_performance_chart_html(
     
     # Generate Plotly chart
     chart_html = f"""
-    <div id="performance-chart" style="width:100%; height:400px;"></div>
+    <div id="performance-chart" style="width:100%; height:450px;"></div>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <script>
         var dates = {dates};
         var strategyValues = {strategy_indexed};
         var afterTaxValues = {after_tax_indexed};
         var benchmarkValues = {benchmark_indexed};
+        var syntheticValues = {synthetic_indexed};
         
         var strategyTrace = {{
             x: dates,
@@ -262,7 +280,7 @@ def generate_performance_chart_html(
             type: 'scatter',
             mode: 'lines',
             name: 'Strategy (Pre-Tax)',
-            line: {{color: '#2E86AB', width: 2}}
+            line: {{color: '#2E86AB', width: 2.5}}
         }};
         
         var afterTaxTrace = {{
@@ -274,25 +292,37 @@ def generate_performance_chart_html(
             line: {{color: '#28A745', width: 2, dash: 'dot'}}
         }};
         
+        var syntheticTrace = {{
+            x: dates,
+            y: syntheticValues,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Synthetic Index (Target)',
+            line: {{color: '#FF8800', width: 1.5}}
+        }};
+        
         var benchmarkTrace = {{
             x: dates,
             y: benchmarkValues,
             type: 'scatter',
             mode: 'lines',
-            name: 'S&P 500 (Benchmark)',
-            line: {{color: '#999999', width: 2, dash: 'dash'}}
+            name: 'SPY ETF (Reference)',
+            line: {{color: '#999999', width: 1.5, dash: 'dash'}}
         }};
         
         var layout = {{
-            title: 'Portfolio Performance (Indexed to 100)',
+            title: 'Portfolio Performance vs Benchmarks (Indexed to 100)',
             xaxis: {{title: 'Date'}},
             yaxis: {{title: 'Indexed Value'}},
-            legend: {{x: 0, y: 1, orientation: 'h'}},
+            legend: {{x: 0, y: 1.1, orientation: 'h'}},
             hovermode: 'x unified',
-            margin: {{t: 50, r: 50, b: 60, l: 60}}
+            margin: {{t: 60, r: 50, b: 60, l: 60}}
         }};
         
-        Plotly.newPlot('performance-chart', [strategyTrace, afterTaxTrace, benchmarkTrace], layout);
+        var traces = [strategyTrace, afterTaxTrace, syntheticTrace];
+        if (benchmarkValues.length > 0) traces.push(benchmarkTrace);
+        
+        Plotly.newPlot('performance-chart', traces, layout);
     </script>
     """
     
@@ -303,34 +333,50 @@ def generate_performance_chart_html(
 def generate_analysis_section(
     result: Union[BacktestResult, ForwardTestResult],
     benchmark_return: float,
+    synthetic_return: float = None,
 ) -> str:
     """Generate analysis section calling out specific issues or highlights."""
     issues = []
     highlights = []
     
-    # 1. Performance vs Benchmark
     strategy_return = float(result.total_return)
-    active_return = strategy_return - benchmark_return
     
-    if active_return < -0.02:  # Underperformed by > 2%
-        issues.append(f"Strategy significantly underperformed benchmark by {active_return*100:.2f}%.")
-    elif active_return > 0.02:
-        highlights.append(f"Strategy outperformed benchmark by {active_return*100:.2f}%.")
-        
-    # 2. Unwanted Gains
+    # 1. Tracking Error Assessment (Primary: vs Synthetic)
+    if synthetic_return is not None:
+        drift = abs(strategy_return - synthetic_return)
+        if drift > 0.005:  # > 50bps tracking error vs index
+            issues.append(f"Drift from synthetic index is {drift*100:.2f}% (target <0.5%). Review rebalancing execution or cash drag.")
+        else:
+            highlights.append(f"Excellent tracking: Strategy matches synthetic index within {drift*10000:.0f}bps.")
+            
+    # 2. Performance vs SPY (Secondary: Market Context)
+    active_return = strategy_return - benchmark_return
+    if synthetic_return is not None and abs(active_return) > 0.05:
+        # Large difference from SPY is expected if Synthetic differs from SPY
+        diff_from_synth = abs(strategy_return - synthetic_return)
+        if diff_from_synth < 0.005:
+            highlights.append(f"Strategy outperformed SPY by {active_return*100:.2f}%. This reflects the S&P 500 Index's true return vs ETF drag.")
+        else:
+            highlights.append(f"Active return vs SPY: {active_return*100:+.2f}%.")
+    elif active_return < -0.02:
+        issues.append(f"Strategy underperformed SPY by {abs(active_return)*100:.2f}%.")
+    elif active_return > 0.02 and synthetic_return is None:
+        highlights.append(f"Strategy outperformed SPY by {active_return*100:.2f}%.")
+
+    # 3. Unwanted Gains
     net_harvested = float(result.harvested_losses)
     if net_harvested < 0:  # Negative harvested means realized GAIN
         issues.append(f"Realized capital GAINS of ${abs(net_harvested):,.2f}. Ideally, the strategy should only harvest losses.")
         
-    # 3. Cash Drag
+    # 4. Cash Drag
     avg_cash = np.mean([float(s.cash) for s in result.snapshots])
     avg_cash_pct = avg_cash / float(result.config.initial_cash)
     if avg_cash_pct > 0.05:  # > 5% cash
         issues.append(f"High average cash balance ({avg_cash_pct*100:.1f}%) created cash drag.")
 
-    # 4. Turnover
+    # 5. Turnover
     trades_count = result.total_trades
-    if trades_count > 500: # High turnover check
+    if trades_count > 500 and result.config.rebalance_freq != "daily": # High turnover check (daily rebalance expects high)
         issues.append(f"High trading activity ({trades_count} trades). Ensure transaction costs are manageable.")
 
     html = '<div class="section"><h2>Analysis & Notes</h2>'
@@ -373,11 +419,20 @@ def generate_professional_html_report(
     
     # Calculate benchmark metrics
     benchmark_total_return = 0.0
+    synthetic_total_return = None
+    
     if is_backtest:
         benchmark_total_return = float(result.benchmark_return)
+        if hasattr(result, 'synthetic_benchmark_return'):
+            synthetic_total_return = float(result.synthetic_benchmark_return)
     
     strategy_total_return = float(result.total_return)
     active_return = strategy_total_return - benchmark_total_return
+    
+    # Tracking error vs synthetic
+    tracking_drift = None
+    if synthetic_total_return is not None:
+        tracking_drift = strategy_total_return - synthetic_total_return
     
     # Format helper
     def fmt_pct(val, decimals=2):
@@ -402,10 +457,11 @@ def generate_professional_html_report(
         float(result.config.initial_cash),
         tax_metrics,
         result.benchmark_prices if is_backtest else None,
+        result.synthetic_benchmark_prices if is_backtest and hasattr(result, 'synthetic_benchmark_prices') else None,
     )
     
     # Generate analysis
-    analysis_html = generate_analysis_section(result, benchmark_total_return)
+    analysis_html = generate_analysis_section(result, benchmark_total_return, synthetic_total_return)
 
     # Generate sector analysis
     if isinstance(result, BacktestResult):
@@ -653,17 +709,23 @@ def generate_professional_html_report(
             <h2>Benchmark Comparison</h2>
             <table>
                 <tr>
-                    <th>Metric</th>
-                    <th>Strategy</th>
-                    <th>S&P 500</th>
-                    <th>Difference</th>
+                    <th>Benchmark</th>
+                    <th>Strategy Return</th>
+                    <th>Benchmark Return</th>
+                    <th>Difference (Drift)</th>
                 </tr>
                 <tr>
-                    <td>Total Return</td>
+                    <td>S&P 500 ETF (SPY)</td>
                     <td>{fmt_pct(strategy_total_return)}</td>
                     <td>{fmt_pct(benchmark_total_return)}</td>
                     <td class="{color_cls(active_return)}">{fmt_pct(active_return)}</td>
                 </tr>
+                {f'''<tr>
+                    <td>Synthetic Index (Target)</td>
+                    <td>{fmt_pct(strategy_total_return)}</td>
+                    <td>{fmt_pct(synthetic_total_return)}</td>
+                    <td class="{color_cls(tracking_drift, invert=True)}">{fmt_pct(tracking_drift)}</td>
+                </tr>''' if synthetic_total_return is not None else ''}
                 <tr>
                     <td>Initial Value</td>
                     <td>{fmt_money(result.initial_value)}</td>

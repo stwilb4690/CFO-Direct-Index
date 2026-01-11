@@ -32,6 +32,7 @@ class TradeReason(Enum):
     REBALANCE_SELL = "REBALANCE_SELL"
     TLH_SELL = "TLH_SELL"
     TLH_REPLACEMENT_BUY = "TLH_REPLACEMENT_BUY"
+    DIVIDEND = "DIVIDEND"
 
 
 @dataclass
@@ -322,11 +323,66 @@ class SimulationEngine:
 
         return weights
 
+    def calculate_target_weights(
+        self,
+        constituents: list[BenchmarkConstituent],
+        prices: dict[str, PriceData],
+        base_prices: dict[str, PriceData],
+    ) -> dict[str, Decimal]:
+        """
+        Calculate price-adjusted target weights for market-cap tracking.
+        
+        This mimics how SPY's weights change daily as prices move:
+        - Stocks that go up get higher weights
+        - Stocks that go down get lower weights
+        
+        The formula assumes shares outstanding are constant, so:
+        new_weight = old_weight × (new_price / old_price) / normalization_factor
+        
+        Args:
+            constituents: Base constituent weights (from Day 1)
+            prices: Current prices
+            base_prices: Prices from the initial date
+            
+        Returns:
+            Dictionary of price-adjusted target weights
+        """
+        adjusted_weights = {}
+        total_adjusted = Decimal("0")
+        
+        for c in constituents:
+            symbol = c.symbol
+            if symbol not in prices or symbol not in base_prices:
+                continue
+            
+            current_price = prices[symbol].close
+            initial_price = base_prices[symbol].close
+            
+            if initial_price <= 0:
+                continue
+            
+            # Adjust weight by price change ratio
+            # This approximates market-cap weighting assuming constant shares outstanding
+            price_ratio = current_price / initial_price
+            adjusted_weight = c.weight * price_ratio
+            adjusted_weights[symbol] = adjusted_weight
+            total_adjusted += adjusted_weight
+        
+        # Normalize to sum to 1.0
+        if total_adjusted > 0:
+            adjusted_weights = {
+                s: w / total_adjusted for s, w in adjusted_weights.items()
+            }
+        
+        return adjusted_weights
+
+
     def calculate_drift(
         self,
         state: SimulationState,
         constituents: list[BenchmarkConstituent],
         prices: dict[str, PriceData],
+        base_prices: dict[str, PriceData] = None,
     ) -> dict[str, Decimal]:
         """
         Calculate drift from target weights.
@@ -335,12 +391,19 @@ class SimulationEngine:
             state: Current simulation state
             constituents: Target benchmark weights
             prices: Current prices
+            base_prices: Optional initial prices for price-adjusted weighting.
+                         When provided, uses dynamic market-cap-style weights.
 
         Returns:
             Dictionary mapping symbol to drift (current - target)
         """
         current_weights = self.calculate_weights(state, prices)
-        target_weights = {c.symbol: c.weight for c in constituents}
+        
+        # Use price-adjusted weights if base_prices provided (professional mode)
+        if base_prices:
+            target_weights = self.calculate_target_weights(constituents, prices, base_prices)
+        else:
+            target_weights = {c.symbol: c.weight for c in constituents}
 
         # Normalize target weights to constituents we hold
         held_symbols = set(current_weights.keys())
@@ -408,6 +471,7 @@ class SimulationEngine:
         constituents: list[BenchmarkConstituent],
         prices: dict[str, PriceData],
         current_date: date,
+        base_prices: dict[str, PriceData] = None,
     ) -> SimulationState:
         """
         Execute rebalancing trades.
@@ -417,11 +481,12 @@ class SimulationEngine:
             constituents: Target benchmark weights
             prices: Current prices
             current_date: Current date
+            base_prices: Optional initial prices for price-adjusted weighting
 
         Returns:
             Updated simulation state
         """
-        drift = self.calculate_drift(state, constituents, prices)
+        drift = self.calculate_drift(state, constituents, prices, base_prices)
         total_value = self.value_portfolio(state, prices)
         max_trade_value = total_value * self.config.max_turnover_pct
 
@@ -870,7 +935,22 @@ class SimulationEngine:
         if current_date.month not in [3, 6, 9, 12]:
             return state
         
-        # Only process on last week of the quarter
+        # Pay on the 20th or next available trading day
+        # To avoid paying multiple times in a month (the bug we found),
+        # we check if a dividend trade has already been recorded this month
+        
+        # Check if already paid this month
+        month_start = date(current_date.year, current_date.month, 1)
+        already_paid = False
+        for trade in reversed(state.trades):
+            if trade.reason == TradeReason.DIVIDEND and trade.timestamp.date() >= month_start:
+                already_paid = True
+                break
+        
+        if already_paid:
+            return state
+            
+        # Only process on or after the 20th
         if current_date.day < 20:
             return state
         
@@ -879,15 +959,33 @@ class SimulationEngine:
         
         # Calculate total dividend across all holdings
         total_dividend = Decimal("0")
+        portfolio_value = Decimal("0")
+        
         for lot in state.lots:
             if lot.symbol in prices:
                 lot_value = lot.shares * prices[lot.symbol].close
                 dividend = lot_value * quarterly_yield
                 total_dividend += dividend
+                portfolio_value += lot_value
         
         if total_dividend > Decimal("0"):
             # Add dividend to cash
             state.cash += total_dividend
+            
+            # Record dividend "trade" for tracking
+            # We use a special trade entry
+            trade = SimulationTrade.create(
+                timestamp=datetime.combine(current_date, datetime.min.time()),
+                symbol="CASH",
+                side=TradeSide.BUY, # Cash inflow
+                shares=Decimal("0"),
+                price=Decimal("1"),
+                reason=TradeReason.DIVIDEND,
+                notes=f"Quarterly Dividend ({quarterly_yield*100:.2f}%) on ${portfolio_value:,.2f}",
+            )
+            # Override value calculation for dividend
+            trade.value = total_dividend
+            state.trades.append(trade)
         
         return state
 

@@ -89,10 +89,18 @@ def _generate_markdown_report(
 
     # Calculate benchmark comparison
     benchmark_return = None
+    synthetic_return = None
     active_return = None
-    if is_backtest and hasattr(result, 'benchmark_return') and result.benchmark_return is not None:
-        benchmark_return = float(result.benchmark_return)
-        active_return = metrics.total_return - benchmark_return
+    drift = None
+
+    if is_backtest:
+        if hasattr(result, 'benchmark_return') and result.benchmark_return is not None:
+            benchmark_return = float(result.benchmark_return)
+            active_return = metrics.total_return - benchmark_return
+        
+        if hasattr(result, 'synthetic_benchmark_return') and result.synthetic_benchmark_return is not None:
+            synthetic_return = float(result.synthetic_benchmark_return)
+            drift = metrics.total_return - synthetic_return
 
     lines = [
         f"# Direct Indexing {sim_type} Report",
@@ -123,20 +131,33 @@ def _generate_markdown_report(
             "",
             "## Benchmark Comparison",
             "",
-            f"| Metric | Strategy | S&P 500 | Difference |",
-            f"|--------|----------|---------|------------|",
-            f"| Total Return | {metrics.total_return:.2%} | {benchmark_return:.2%} | {active_return:+.2%} |",
-            "",
+            f"| Metric | Strategy | Benchmark | Difference (Drift) |",
+            f"|--------|----------|-----------|--------------------|",
+            f"| vs S&P 500 ETF (SPY) | {metrics.total_return:.2%} | {benchmark_return:.2%} | {active_return:+.2%} |",
         ])
+        
+        if synthetic_return is not None:
+            lines.append(f"| vs Synthetic Index | {metrics.total_return:.2%} | {synthetic_return:.2%} | {drift:+.2%} |")
+            
+        lines.append("")
 
         # Add analysis section
         issues = []
         highlights = []
 
+        if synthetic_return is not None:
+             if abs(drift) > 0.005:
+                 issues.append(f"Drift from synthetic index is {drift:.2%} (target <0.5%)")
+             else:
+                 highlights.append(f"Strategy tracking synthetic index within {drift*10000:.0f}bps")
+        
         if active_return < -0.02:
-            issues.append(f"Strategy underperformed benchmark by {abs(active_return):.2%}")
+            issues.append(f"Strategy underperformed SPY by {abs(active_return):.2%}")
+        elif active_return > 0.01 and synthetic_return is not None and abs(drift) < 0.005:
+            # Explained outperformance
+            pass
         elif active_return > 0.01:
-            highlights.append(f"Strategy outperformed benchmark by {active_return:.2%}")
+            highlights.append(f"Strategy outperformed SPY by {active_return:.2%}")
 
         if metrics.harvested_losses < 0:
             issues.append(f"Realized capital GAINS of ${abs(metrics.harvested_losses):,.2f} (should only harvest losses)")
@@ -147,7 +168,7 @@ def _generate_markdown_report(
         if cash_pct > 0.05:
             issues.append(f"High cash balance ({cash_pct:.1%}) may create cash drag")
 
-        if metrics.total_trades > metrics.trading_days * 2:
+        if metrics.total_trades > metrics.trading_days * 2 and result.config.rebalance_freq != 'daily':
             issues.append(f"High trading activity ({metrics.total_trades} trades) - review transaction costs")
 
         if issues or highlights:
@@ -195,7 +216,7 @@ def _generate_markdown_report(
             "",
             f"| Metric | Value |",
             f"|--------|-------|",
-            f"| Tracking Error | {metrics.tracking_error:.2%} |",
+            f"| Tracking Error (SPY) | {metrics.tracking_error:.2%} |",
         ])
         if metrics.information_ratio is not None:
             lines.append(f"| Information Ratio | {metrics.information_ratio:.2f} |")
@@ -331,10 +352,18 @@ def generate_quick_summary(
 
     # Calculate benchmark return if available
     benchmark_return = None
+    synthetic_return = None
     active_return = None
-    if is_backtest and hasattr(result, 'benchmark_return') and result.benchmark_return is not None:
-        benchmark_return = float(result.benchmark_return)
-        active_return = metrics.total_return - benchmark_return
+    drift = None
+
+    if is_backtest:
+        if hasattr(result, 'benchmark_return') and result.benchmark_return is not None:
+            benchmark_return = float(result.benchmark_return)
+            active_return = metrics.total_return - benchmark_return
+        
+        if hasattr(result, 'synthetic_benchmark_return') and result.synthetic_benchmark_return is not None:
+            synthetic_return = float(result.synthetic_benchmark_return)
+            drift = metrics.total_return - synthetic_return
 
     lines = [
         f"\n{'='*60}",
@@ -353,6 +382,10 @@ def generate_quick_summary(
     if benchmark_return is not None:
         lines.append(f"  S&P 500:     {benchmark_return:>14.2%}")
         lines.append(f"  Active:      {active_return:>14.2%}")
+        
+    if synthetic_return is not None:
+        lines.append(f"  Synthetic:   {synthetic_return:>14.2%}")
+        lines.append(f"  Drift:       {drift:>14.2%}")
 
     lines.extend([
         f"  CAGR:        {metrics.cagr:>14.2%}",
@@ -371,24 +404,33 @@ def generate_quick_summary(
 
     # Add analysis/issues section
     issues = []
-    if active_return is not None and active_return < -0.02:
+    
+    if drift is not None:
+        if abs(drift) > 0.005:
+            issues.append(f"  [!] High drift from index: {drift:.2%} (target <0.5%)")
+    elif active_return is not None and active_return < -0.02:
         issues.append(f"  [!] Underperformed benchmark by {abs(active_return):.2%}")
+        
     if metrics.harvested_losses < 0:  # Positive harvested_losses means gains taken
         issues.append(f"  [!] Realized capital GAINS (should only harvest losses)")
     cash_pct = metrics.final_cash / metrics.final_value if metrics.final_value > 0 else 0
     if cash_pct > 0.05:
         issues.append(f"  [!] High cash balance ({cash_pct:.1%}) - potential cash drag")
-    if metrics.total_trades > metrics.trading_days * 2:
+    if metrics.total_trades > metrics.trading_days * 2 and result.config.rebalance_freq != 'daily':
         issues.append(f"  [!] High trading activity ({metrics.total_trades} trades)")
 
     if issues:
         lines.append("")
         lines.append("  ISSUES DETECTED:")
         lines.extend(issues)
-
-    if active_return is not None and active_return >= 0:
+    elif drift is not None and abs(drift) < 0.005:
         lines.append("")
-        lines.append(f"  [OK] Strategy matched or outperformed benchmark")
+        lines.append(f"  [OK] Excellent tracking (<50bps)")
+
+    if active_return is not None and active_return >= 0 and not issues:
+        if drift is None: # Only say OK if we haven't already said it
+            lines.append("")
+            lines.append(f"  [OK] Strategy matched or outperformed benchmark")
 
     lines.append(f"{'='*60}\n")
 

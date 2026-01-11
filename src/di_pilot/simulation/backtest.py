@@ -36,14 +36,19 @@ class BacktestResult:
         final_state: SimulationState,
         benchmark_prices: dict[date, Decimal] = None,
         constituents: list[BenchmarkConstituent] = None,
+        synthetic_benchmark_prices: dict[date, Decimal] = None,
+        base_prices: dict = None,
     ):
         self.run_id = run_id
         self.config = config
         self.start_date = start_date
         self.end_date = end_date
         self.final_state = final_state
-        self.benchmark_prices = benchmark_prices or {}
+        self.benchmark_prices = benchmark_prices or {}  # SPY prices
         self.constituents = constituents or []
+        # Synthetic benchmark = weighted constituent return (what pros use)
+        self.synthetic_benchmark_prices = synthetic_benchmark_prices or {}
+        self.base_prices = base_prices or {}  # Day 1 prices for weight calculation
 
     @property
     def trades(self) -> list[SimulationTrade]:
@@ -85,6 +90,30 @@ class BacktestResult:
             return Decimal("0")
             
         return (end_price - start_price) / start_price
+
+    @property
+    def synthetic_benchmark_return(self) -> Decimal:
+        """
+        Calculate return of the synthetic benchmark (weighted constituent return).
+        
+        This is what professional direct indexers compare against, not SPY.
+        It represents the theoretical return of holding the index constituents
+        with the exact weights from the data provider.
+        """
+        if not self.synthetic_benchmark_prices:
+            return Decimal("0")
+        
+        dates = sorted(self.synthetic_benchmark_prices.keys())
+        if len(dates) < 2:
+            return Decimal("0")
+            
+        start_value = self.synthetic_benchmark_prices[dates[0]]
+        end_value = self.synthetic_benchmark_prices[dates[-1]]
+        
+        if start_value == 0:
+            return Decimal("0")
+            
+        return (end_value - start_value) / start_value
 
     @property
     def total_trades(self) -> int:
@@ -268,7 +297,7 @@ def run_backtest(
     if progress_callback:
         progress_callback(f"Found {len(trading_days)} trading days ({actual_first} to {actual_last})")
 
-    # Fetch BENCHMARK prices (SPY)
+    # Fetch BENCHMARK prices (SPY) for comparison
     if progress_callback:
         progress_callback("Fetching benchmark (SPY) data...")
     
@@ -323,6 +352,35 @@ def run_backtest(
 
     # Track last rebalance date
     last_rebalance = first_day
+    
+    # Store base prices for price-adjusted weighting (professional mode)
+    # This enables tracking SPY's dynamic market-cap weighting
+    base_prices = price_by_date[first_day]
+    
+    # Calculate synthetic benchmark - weighted constituent return
+    # This is what professional direct indexers compare against (not SPY)
+    synthetic_benchmark_prices = {}
+    
+    def calculate_synthetic_value(prices_dict, constits, base_value=Decimal("1000000")):
+        """Calculate theoreticalweighted portfolio value from constituent weights."""
+        total = Decimal("0")
+        weight_sum = Decimal("0")
+        for c in constits:
+            if c.symbol in prices_dict and c.symbol in base_prices:
+                # Use base prices to determine "shares" (simulates buying at start)
+                base_px = base_prices[c.symbol].close
+                curr_px = prices_dict[c.symbol].close
+                if base_px > 0:
+                    allocated = base_value * c.weight
+                    shares = allocated / base_px
+                    total += shares * curr_px
+                    weight_sum += c.weight
+        return total if weight_sum > 0 else Decimal("0")
+    
+    # Record initial synthetic benchmark value
+    synthetic_benchmark_prices[first_day] = calculate_synthetic_value(
+        base_prices, constituents
+    )
 
     # Simulate each trading day
     total_days = len(trading_days)
@@ -350,12 +408,23 @@ def run_backtest(
             # Execute TLH first (on rebalance days)
             state = engine.execute_tlh(state, prices, current_date)
 
-            # Then rebalance
-            state = engine.execute_rebalance(state, constituents, prices, current_date)
+            # Professional direct indexing: Use price-adjusted weights
+            # This matches how SPY tracks the index - weights change with prices
+            # Stocks that go up get higher weights, stocks that go down get lower weights
+            
+            # Rebalance to price-adjusted weights (matches SPY's dynamic weighting)
+            state = engine.execute_rebalance(
+                state, constituents, prices, current_date, base_prices
+            )
             last_rebalance = current_date
 
         # Record daily snapshot
         state = engine.record_snapshot(state, prices, current_date)
+        
+        # Record synthetic benchmark value for this day
+        synthetic_benchmark_prices[current_date] = calculate_synthetic_value(
+            prices, constituents
+        )
 
     if progress_callback:
         progress_callback("Progress: 100% - Backtest complete!")
@@ -368,6 +437,8 @@ def run_backtest(
         final_state=state,
         benchmark_prices=benchmark_prices,
         constituents=constituents,
+        synthetic_benchmark_prices=synthetic_benchmark_prices,
+        base_prices=base_prices,
     )
 
 

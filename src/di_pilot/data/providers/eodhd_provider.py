@@ -312,12 +312,10 @@ class EODHDProvider(DataProvider):
         as_of_date: Optional[date] = None,
     ) -> list[BenchmarkConstituent]:
         """
-        Get S&P 500 constituents with weights from EODHD.
+        Get S&P 500 constituents with weights from EODHD S&P Global Marketplace.
 
-        For historical dates, uses:
-        https://eodhd.com/api/fundamentals/GSPC.INDX?api_token={key}&historical=1&from={date}&to={date}
-
-        Parses the "Components" or "HistoricalComponents" field.
+        Uses the premium S&P Global indices dataset for accurate constituent weights:
+        https://eodhd.com/api/mp/unicornbay/spglobal/comp/GSPC.INDX
 
         Args:
             as_of_date: Date for constituents (default: current)
@@ -326,57 +324,74 @@ class EODHDProvider(DataProvider):
             List of BenchmarkConstituent objects with symbol, weight, as_of_date
         """
         effective_date = as_of_date or date.today()
-        url = f"{self.BASE_URL}/fundamentals/GSPC.INDX"
+        
+        # Use S&P Global Marketplace API for accurate constituent weights
+        url = f"{self.BASE_URL}/mp/unicornbay/spglobal/comp/GSPC.INDX"
 
         params = {
             "api_token": self._api_key,
+            "fmt": "json",
         }
-
-        # For historical data, add date parameters
-        if as_of_date:
-            params["historical"] = "1"
-            params["from"] = as_of_date.isoformat()
-            params["to"] = as_of_date.isoformat()
 
         response = self._make_request(url, params, expect_list=False)
 
         if not isinstance(response, dict):
-            raise DataProviderError("Invalid response format from EODHD fundamentals API")
+            raise DataProviderError("Invalid response format from S&P Global API")
 
-        # Try to extract components from various response structures
-        components = self._extract_components(response, as_of_date)
+        # Extract components from S&P Global response
+        components = response.get("Components", {})
+        historical = response.get("HistoricalTickerComponents", {})
 
         if not components:
             raise DataProviderError(
-                f"Could not parse S&P 500 constituents from EODHD for date {effective_date}"
+                f"Could not parse S&P 500 constituents from S&P Global for date {effective_date}"
             )
 
+        # Build set of symbols that were constituents on the target date
+        # using HistoricalTickerComponents
+        active_on_date = set()
+        if as_of_date and historical:
+            for key, comp in historical.items():
+                symbol = comp.get("Code", "").upper()
+                start_str = comp.get("StartDate")
+                end_str = comp.get("EndDate")
+                
+                try:
+                    start = date.fromisoformat(start_str) if start_str else date.min
+                    end = date.fromisoformat(end_str) if end_str else date.max
+                    
+                    if start <= as_of_date <= end:
+                        active_on_date.add(symbol)
+                except:
+                    continue
+        
         # Convert to BenchmarkConstituent objects
         constituents = []
         total_weight = Decimal("0")
 
         for key, component_info in components.items():
-            # EODHD returns components with numeric keys (0, 1, 2...)
-            # The actual symbol is in the 'Code' field of the value
             if isinstance(component_info, dict):
                 symbol = component_info.get("Code") or component_info.get("code")
                 weight = component_info.get("Weight") or component_info.get("weight", 0)
             else:
-                # Fallback: key is symbol, value is weight
                 symbol = key
                 weight = component_info
 
             if not symbol:
                 continue
+            
+            clean_symbol = str(symbol).split(".")[0].upper()
+            
+            # For historical dates, check if this symbol was active
+            if as_of_date and historical and active_on_date:
+                if clean_symbol not in active_on_date:
+                    continue
 
             try:
                 weight_decimal = Decimal(str(weight)) if weight else Decimal("0")
-                # EODHD weights may be percentages or decimals
+                # Weights may be percentages or decimals
                 if weight_decimal > 1:
                     weight_decimal = weight_decimal / Decimal("100")
-
-                # Clean symbol (remove exchange suffix if present)
-                clean_symbol = str(symbol).split(".")[0].upper()
 
                 constituents.append(
                     BenchmarkConstituent(

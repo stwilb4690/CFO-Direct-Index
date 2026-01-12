@@ -1,0 +1,736 @@
+{
+  "lastUpdated": "2026-01-11T23:56:54.950785",
+  "inceptionDate": "2026-01-09",
+  "portfolioValue": 10000000.0,
+  "initialValue": 10000000.0,
+  "cashBalance": 100000.0537230502,
+  "harvestedLosses": 0.0,
+  "realizedPnl": 0.0,
+  "positions": 498,
+  "lots": 498,
+  "ytdReturn": 0.0,
+  "dailyReturn": 0,
+  "dailyChange": 0,
+  "topHoldings": [
+    {
+      "symbol": "NVDA",
+      "value": 667834.50099834,
+      "weight": 0.066783450099834,
+      "benchmarkWeight": 0.066783450099834,
+      "drift": 0.0,
+      "shares": 3612.650119,
+      "pnl": 0
+    },
+    {
+      "symbol": "GOOG",
+      "value": 590350.93415172,
+      "weight": 0.059035093415172005,
+      "benchmarkWeight": 0.059035093415172005,
+      "drift": 0.0,
+      "shares": 1793.616498,
+      "pnl": 0
+    },
+    {
+      "symbol": "GOOGL",
+      "value": 589328.57274786,
+      "weight": 0.058932857274786,
+      "benchmarkWeight": 0.058932857274786,
+      "drift": 0.0,
+      "shares": 1793.616498,
+      "pnl": 0
+    },
+    {
+      "symbol": "AAPL",
+      "value": 569662.03506711,
+      "weight": 0.056966203506711,
+      "benchmarkWeight": 0.056966203506711,
+      "drift": 0.0,
+      "shares": 2196.329703,
+      "pnl": 0
+    },
+    {
+      "symbol": "MSFT",
+      "value": 529477.3117188,
+      "weight": 0.05294773117188,
+      "benchmarkWeight": 0.05294773117188,
+      "drift": 0.0,
+      "shares": 1104.734835,
+      "pnl": 0
+    },
+    {
+      "symbol": "AMZN",
+      "value": 393080.35793964,
+      "weight": 0.039308035793964,
+      "benchmarkWeight": 0.039308035793964,
+      "drift": 0.0,
+      "shares": 1588.973878,
+      "pnl": 0
+    },
+    {
+      "symbol": "META",
+      "value": 244666.67398382,
+      "weight": 0.024466667398382,
+      "benchmarkWeight": 0.024466667398382,
+      "drift": 0.0,
+      "shares": 374.646547,
+      "pnl": 0
+    },
+    {
+      "symbol": "AVGO",
+      "value": 243112.13731071,
+      "weight": 0.024311213731071,
+      "benchmarkWeight": 0.024311213731071,
+      "drift": 0.0,
+      "shares": 704.734143,
+      "pnl": 0
+    },
+    {
+      "symbol": "TSLA",
+      "value": 219987.84410097,
+      "weight": 0.021998784410097,
+      "benchmarkWeight": 0.021998784410097,
+      "drift": 0.0,
+      "shares": 494.343597,
+      "pnl": 0
+    },
+    {
+      "symbol": "BRK-B",
+      "value": 160042.5179948,
+      "weight": 0.01600425179948,
+      "benchmarkWeight": 0.01600425179948,
+      "drift": 0.0,
+      "shares": 320.662228,
+      "pnl": 0
+    }
+  ],
+  "topDrift": [
+    {
+      "symbol": "NVDA",
+      "value": 667834.50099834,
+      "weight": 0.066783450099834,
+      "benchmarkWeight": 0.066783450099834,
+      "drift": 0.0,
+      "shares": 3612.650119,
+      "pnl": 0
+    },
+    {
+      "symbol": "GOOG",
+      "value": 590350.93415172,
+      "weight": 0.059035093415172005,
+      "benchmarkWeight": 0.059035093415172005,
+      "drift": 0.0,
+      "shares": 1793.616498,
+      "pnl": 0
+    },
+    {
+      "symbol": "GOOGL",
+      "value": 589328.57274786,
+      "weight": 0.058932857274786,
+      "benchmarkWeight": 0.058932857274786,
+      "drift": 0.0,
+      "shares": 1793.616498,
+      "pnl": 0
+    },
+    {
+      "symbol": "AAPL",
+      "value": 569662.03506711,
+      "weight": 0.056966203506711,
+      "benchmarkWeight": 0.056966203506711,
+      "drift": 0.0,
+      "shares": 2196.329703,
+      "pnl": 0
+    },
+    {
+      "symbol": "MSFT",
+      "value": 529477.3117188,
+      "weight": 0.05294773117188,
+      "benchmarkWeight": 0.05294773117188,
+      "drift": 0.0,
+      "shares": 1104.734835,
+      "pnl": 0
+    },
+    {
+      "symbol": "AMZN",
+      "value": 393080.35793964,
+      "weight": 0.039308035793964,
+      "benchmarkWeight": 0.039308035793964,
+      "drift": 0.0,
+      "shares": 1588.973878,
+      "pnl": 0
+    },
+    {
+      "symbol": "META",
+      "value": 244666.67398382,
+      "weight": 0.024466667398382,
+      "benchmarkWeight": 0.024466667398382,
+      "drift": 0.0,
+      "shares": 374.646547,
+      "pnl": 0
+    },
+    {
+      "symbol": "AVGO",
+      "value": 243112.13731071,
+      "weight": 0.024311213731071,
+      "benchmarkWeight": 0.024311213731071,
+      "drift": 0.0,
+      "shares": 704.734143,
+      "pnl": 0
+    },
+    {
+      "symbol": "TSLA",
+      "value": 219987.84410097,
+      "weight": 0.021998784410097,
+      "benchmarkWeight": 0.021998784410097,
+      "drift": 0.0,
+      "shares": 494.343597,
+      "pnl": 0
+    },
+    {
+      "symbol": "BRK-B",
+      "value": 160042.5179948,
+      "weight": 0.01600425179948,
+      "benchmarkWeight": 0.01600425179948,
+      "drift": 0.0,
+      "shares": 320.662228,
+      "pnl": 0
+    }
+  ],
+  "holdings": [
+    {
+      "symbol": "NVDA",
+      "value": 667834.50099834,
+      "weight": 0.066783450099834,
+      "benchmarkWeight": 0.066783450099834,
+      "drift": 0.0,
+      "shares": 3612.650119,
+      "pnl": 0
+    },
+    {
+      "symbol": "GOOG",
+      "value": 590350.93415172,
+      "weight": 0.059035093415172005,
+      "benchmarkWeight": 0.059035093415172005,
+      "drift": 0.0,
+      "shares": 1793.616498,
+      "pnl": 0
+    },
+    {
+      "symbol": "GOOGL",
+      "value": 589328.57274786,
+      "weight": 0.058932857274786,
+      "benchmarkWeight": 0.058932857274786,
+      "drift": 0.0,
+      "shares": 1793.616498,
+      "pnl": 0
+    },
+    {
+      "symbol": "AAPL",
+      "value": 569662.03506711,
+      "weight": 0.056966203506711,
+      "benchmarkWeight": 0.056966203506711,
+      "drift": 0.0,
+      "shares": 2196.329703,
+      "pnl": 0
+    },
+    {
+      "symbol": "MSFT",
+      "value": 529477.3117188,
+      "weight": 0.05294773117188,
+      "benchmarkWeight": 0.05294773117188,
+      "drift": 0.0,
+      "shares": 1104.734835,
+      "pnl": 0
+    },
+    {
+      "symbol": "AMZN",
+      "value": 393080.35793964,
+      "weight": 0.039308035793964,
+      "benchmarkWeight": 0.039308035793964,
+      "drift": 0.0,
+      "shares": 1588.973878,
+      "pnl": 0
+    },
+    {
+      "symbol": "META",
+      "value": 244666.67398382,
+      "weight": 0.024466667398382,
+      "benchmarkWeight": 0.024466667398382,
+      "drift": 0.0,
+      "shares": 374.646547,
+      "pnl": 0
+    },
+    {
+      "symbol": "AVGO",
+      "value": 243112.13731071,
+      "weight": 0.024311213731071,
+      "benchmarkWeight": 0.024311213731071,
+      "drift": 0.0,
+      "shares": 704.734143,
+      "pnl": 0
+    },
+    {
+      "symbol": "TSLA",
+      "value": 219987.84410097,
+      "weight": 0.021998784410097,
+      "benchmarkWeight": 0.021998784410097,
+      "drift": 0.0,
+      "shares": 494.343597,
+      "pnl": 0
+    },
+    {
+      "symbol": "BRK-B",
+      "value": 160042.5179948,
+      "weight": 0.01600425179948,
+      "benchmarkWeight": 0.01600425179948,
+      "drift": 0.0,
+      "shares": 320.662228,
+      "pnl": 0
+    },
+    {
+      "symbol": "LLY",
+      "value": 141489.57084504,
+      "weight": 0.014148957084504,
+      "benchmarkWeight": 0.014148957084504,
+      "drift": 0.0,
+      "shares": 133.033934,
+      "pnl": 0
+    },
+    {
+      "symbol": "WMT",
+      "value": 135680.3513052,
+      "weight": 0.013568035130519998,
+      "benchmarkWeight": 0.013568035130519998,
+      "drift": 0.0,
+      "shares": 1184.67084,
+      "pnl": 0
+    },
+    {
+      "symbol": "JPM",
+      "value": 133200.81433461,
+      "weight": 0.013320081433461,
+      "benchmarkWeight": 0.013320081433461,
+      "drift": 0.0,
+      "shares": 404.632019,
+      "pnl": 0
+    },
+    {
+      "symbol": "V",
+      "value": 100237.1670471,
+      "weight": 0.010023716704709999,
+      "benchmarkWeight": 0.010023716704709999,
+      "drift": 0.0,
+      "shares": 286.58023,
+      "pnl": 0
+    },
+    {
+      "symbol": "ORCL",
+      "value": 84779.29886328,
+      "weight": 0.008477929886328,
+      "benchmarkWeight": 0.008477929886328,
+      "drift": 0.0,
+      "shares": 427.056714,
+      "pnl": 0
+    },
+    {
+      "symbol": "XOM",
+      "value": 78109.49464792,
+      "weight": 0.007810949464792,
+      "benchmarkWeight": 0.007810949464792,
+      "drift": 0.0,
+      "shares": 626.831672,
+      "pnl": 0
+    },
+    {
+      "symbol": "MA",
+      "value": 76821.0245222,
+      "weight": 0.007682102452219999,
+      "benchmarkWeight": 0.007682102452219999,
+      "drift": 0.0,
+      "shares": 133.47643,
+      "pnl": 0
+    },
+    {
+      "symbol": "JNJ",
+      "value": 73194.74754606,
+      "weight": 0.0073194747546059995,
+      "benchmarkWeight": 0.0073194747546059995,
+      "drift": 0.0,
+      "shares": 358.113154,
+      "pnl": 0
+    },
+    {
+      "symbol": "PLTR",
+      "value": 62879.3024295,
+      "weight": 0.00628793024295,
+      "benchmarkWeight": 0.00628793024295,
+      "drift": 0.0,
+      "shares": 354.26955,
+      "pnl": 0
+    },
+    {
+      "symbol": "COST",
+      "value": 61019.81258912,
+      "weight": 0.006101981258912001,
+      "benchmarkWeight": 0.006101981258912001,
+      "drift": 0.0,
+      "shares": 65.975924,
+      "pnl": 0
+    },
+    {
+      "symbol": "BAC",
+      "value": 60621.23204585,
+      "weight": 0.006062123204585,
+      "benchmarkWeight": 0.006062123204585,
+      "drift": 0.0,
+      "shares": 1085.429401,
+      "pnl": 0
+    },
+    {
+      "symbol": "ABBV",
+      "value": 57815.18502144,
+      "weight": 0.005781518502143999,
+      "benchmarkWeight": 0.005781518502143999,
+      "drift": 0.0,
+      "shares": 262.700768,
+      "pnl": 0
+    },
+    {
+      "symbol": "MU",
+      "value": 57731.35325526,
+      "weight": 0.005773135325526,
+      "benchmarkWeight": 0.005773135325526,
+      "drift": 0.0,
+      "shares": 167.293614,
+      "pnl": 0
+    },
+    {
+      "symbol": "NFLX",
+      "value": 56344.40178696,
+      "weight": 0.005634440178696,
+      "benchmarkWeight": 0.005634440178696,
+      "drift": 0.0,
+      "shares": 629.827876,
+      "pnl": 0
+    },
+    {
+      "symbol": "HD",
+      "value": 55435.84869648,
+      "weight": 0.005543584869648,
+      "benchmarkWeight": 0.005543584869648,
+      "drift": 0.0,
+      "shares": 147.970982,
+      "pnl": 0
+    },
+    {
+      "symbol": "GE",
+      "value": 50420.67499379,
+      "weight": 0.005042067499379,
+      "benchmarkWeight": 0.005042067499379,
+      "drift": 0.0,
+      "shares": 156.785581,
+      "pnl": 0
+    },
+    {
+      "symbol": "PG",
+      "value": 49275.38548071,
+      "weight": 0.004927538548071,
+      "benchmarkWeight": 0.004927538548071,
+      "drift": 0.0,
+      "shares": 347.327733,
+      "pnl": 0
+    },
+    {
+      "symbol": "AMD",
+      "value": 49164.91894556,
+      "weight": 0.004916491894556,
+      "benchmarkWeight": 0.004916491894556,
+      "drift": 0.0,
+      "shares": 241.989068,
+      "pnl": 0
+    },
+    {
+      "symbol": "CVX",
+      "value": 48175.8838431,
+      "weight": 0.00481758838431,
+      "benchmarkWeight": 0.00481758838431,
+      "drift": 0.0,
+      "shares": 297.18021,
+      "pnl": 0
+    },
+    {
+      "symbol": "UNH",
+      "value": 46314.21329262,
+      "weight": 0.004631421329262,
+      "benchmarkWeight": 0.004631421329262,
+      "drift": 0.0,
+      "shares": 134.642169,
+      "pnl": 0
+    },
+    {
+      "symbol": "KO",
+      "value": 45082.90611803,
+      "weight": 0.004508290611803,
+      "benchmarkWeight": 0.004508290611803,
+      "drift": 0.0,
+      "shares": 639.383153,
+      "pnl": 0
+    },
+    {
+      "symbol": "WFC",
+      "value": 44769.08952715,
+      "weight": 0.004476908952715,
+      "benchmarkWeight": 0.004476908952715,
+      "drift": 0.0,
+      "shares": 466.587697,
+      "pnl": 0
+    },
+    {
+      "symbol": "MS",
+      "value": 44014.74363152,
+      "weight": 0.0044014743631520005,
+      "benchmarkWeight": 0.0044014743631520005,
+      "drift": 0.0,
+      "shares": 236.231986,
+      "pnl": 0
+    },
+    {
+      "symbol": "CSCO",
+      "value": 43388.49552336,
+      "weight": 0.0043388495523359995,
+      "benchmarkWeight": 0.0043388495523359995,
+      "drift": 0.0,
+      "shares": 587.283372,
+      "pnl": 0
+    },
+    {
+      "symbol": "CAT",
+      "value": 42961.41188678,
+      "weight": 0.004296141188678,
+      "benchmarkWeight": 0.004296141188678,
+      "drift": 0.0,
+      "shares": 69.559619,
+      "pnl": 0
+    },
+    {
+      "symbol": "IBM",
+      "value": 42267.50723132,
+      "weight": 0.004226750723132,
+      "benchmarkWeight": 0.004226750723132,
+      "drift": 0.0,
+      "shares": 138.937306,
+      "pnl": 0
+    },
+    {
+      "symbol": "GS",
+      "value": 41860.4936687,
+      "weight": 0.00418604936687,
+      "benchmarkWeight": 0.00418604936687,
+      "drift": 0.0,
+      "shares": 44.580815,
+      "pnl": 0
+    },
+    {
+      "symbol": "MRK",
+      "value": 40777.0835066,
+      "weight": 0.00407770835066,
+      "benchmarkWeight": 0.00407770835066,
+      "drift": 0.0,
+      "shares": 368.92322,
+      "pnl": 0
+    },
+    {
+      "symbol": "LRCX",
+      "value": 40766.49507084,
+      "weight": 0.004076649507084,
+      "benchmarkWeight": 0.004076649507084,
+      "drift": 0.0,
+      "shares": 186.693969,
+      "pnl": 0
+    },
+    {
+      "symbol": "AXP",
+      "value": 38458.57230479,
+      "weight": 0.0038458572304790003,
+      "benchmarkWeight": 0.0038458572304790003,
+      "drift": 0.0,
+      "shares": 102.389639,
+      "pnl": 0
+    },
+    {
+      "symbol": "PM",
+      "value": 37624.03331029,
+      "weight": 0.003762403331029,
+      "benchmarkWeight": 0.003762403331029,
+      "drift": 0.0,
+      "shares": 231.375889,
+      "pnl": 0
+    },
+    {
+      "symbol": "RTX",
+      "value": 37566.136348,
+      "weight": 0.0037566136348,
+      "benchmarkWeight": 0.0037566136348,
+      "drift": 0.0,
+      "shares": 199.289848,
+      "pnl": 0
+    },
+    {
+      "symbol": "CRM",
+      "value": 36202.86848348,
+      "weight": 0.0036202868483480003,
+      "benchmarkWeight": 0.0036202868483480003,
+      "drift": 0.0,
+      "shares": 139.273942,
+      "pnl": 0
+    },
+    {
+      "symbol": "AMAT",
+      "value": 35497.56753048,
+      "weight": 0.003549756753048,
+      "benchmarkWeight": 0.003549756753048,
+      "drift": 0.0,
+      "shares": 117.861636,
+      "pnl": 0
+    },
+    {
+      "symbol": "TMO",
+      "value": 34559.9613073,
+      "weight": 0.00345599613073,
+      "benchmarkWeight": 0.00345599613073,
+      "drift": 0.0,
+      "shares": 55.844555,
+      "pnl": 0
+    },
+    {
+      "symbol": "TMUS",
+      "value": 33343.65073776,
+      "weight": 0.003334365073776,
+      "benchmarkWeight": 0.003334365073776,
+      "drift": 0.0,
+      "shares": 166.252746,
+      "pnl": 0
+    },
+    {
+      "symbol": "ABT",
+      "value": 32545.62230256,
+      "weight": 0.003254562230256,
+      "benchmarkWeight": 0.003254562230256,
+      "drift": 0.0,
+      "shares": 258.462693,
+      "pnl": 0
+    },
+    {
+      "symbol": "APP",
+      "value": 32536.92135088,
+      "weight": 0.0032536921350879997,
+      "benchmarkWeight": 0.0032536921350879997,
+      "drift": 0.0,
+      "shares": 50.233004,
+      "pnl": 0
+    },
+    {
+      "symbol": "MCD",
+      "value": 32530.83892188,
+      "weight": 0.003253083892188,
+      "benchmarkWeight": 0.003253083892188,
+      "drift": 0.0,
+      "shares": 105.853309,
+      "pnl": 0
+    },
+    {
+      "symbol": "INTC",
+      "value": 32295.1300136,
+      "weight": 0.00322951300136,
+      "benchmarkWeight": 0.00322951300136,
+      "drift": 0.0,
+      "shares": 709.003952,
+      "pnl": 0
+    }
+  ],
+  "sectorComparison": [
+    {
+      "sector": "Other",
+      "portfolioWeight": 48.29183097418225,
+      "benchmarkWeight": 0,
+      "drift": 48.29183097418225
+    },
+    {
+      "sector": "Technology",
+      "portfolioWeight": 20.1008598509496,
+      "benchmarkWeight": 32.0,
+      "drift": -11.8991401490504
+    },
+    {
+      "sector": "Communication Services",
+      "portfolioWeight": 14.243461808834,
+      "benchmarkWeight": 8.5,
+      "drift": 5.743461808834001
+    },
+    {
+      "sector": "Consumer Cyclical",
+      "portfolioWeight": 6.6850405073709,
+      "benchmarkWeight": 10.5,
+      "drift": -3.8149594926291
+    },
+    {
+      "sector": "Financial Services",
+      "portfolioWeight": 4.7030152389871,
+      "benchmarkWeight": 13.0,
+      "drift": -8.2969847610129
+    },
+    {
+      "sector": "Healthcare",
+      "portfolioWeight": 2.6099853168372,
+      "benchmarkWeight": 12.5,
+      "drift": -9.8900146831628
+    },
+    {
+      "sector": "Energy",
+      "portfolioWeight": 1.2628537849102,
+      "benchmarkWeight": 4.0,
+      "drift": -2.7371462150898003
+    },
+    {
+      "sector": "Consumer Defensive",
+      "portfolioWeight": 1.1029519806983,
+      "benchmarkWeight": 6.0,
+      "drift": -4.8970480193017
+    },
+    {
+      "sector": "Industrials",
+      "portfolioWeight": 0,
+      "benchmarkWeight": 8.5,
+      "drift": -8.5
+    },
+    {
+      "sector": "Basic Materials",
+      "portfolioWeight": 0,
+      "benchmarkWeight": 2.5,
+      "drift": -2.5
+    },
+    {
+      "sector": "Real Estate",
+      "portfolioWeight": 0,
+      "benchmarkWeight": 2.0,
+      "drift": -2.0
+    },
+    {
+      "sector": "Utilities",
+      "portfolioWeight": 0,
+      "benchmarkWeight": 2.5,
+      "drift": -2.5
+    }
+  ],
+  "sectors": {
+    "Other": 48.29183097418225,
+    "Technology": 20.1008598509496,
+    "Communication Services": 14.243461808834,
+    "Consumer Cyclical": 6.6850405073709,
+    "Financial Services": 4.7030152389871,
+    "Healthcare": 2.6099853168372,
+    "Energy": 1.2628537849102,
+    "Consumer Defensive": 1.1029519806983
+  },
+  "trades": [],
+  "snapshots": []
+}

@@ -307,6 +307,55 @@ class EODHDProvider(DataProvider):
 
         return result
 
+    def get_historical_market_cap(
+        self,
+        symbol: str,
+        as_of_date: date,
+    ) -> Optional[Decimal]:
+        """
+        Fetch historical market cap for a symbol on a specific date.
+        
+        Endpoint: /historical-market-cap/{symbol}.US
+        """
+        url = f"{self.BASE_URL}/historical-market-cap/{symbol}.US"
+        # Fetch a small windows around the date to ensure we get a value
+        start_date = as_of_date - timedelta(days=5)
+        end_date = as_of_date + timedelta(days=1)
+        
+        params = {
+            "api_token": self._api_key,
+            "fmt": "json",
+            "from": start_date.isoformat(),
+            "to": end_date.isoformat(),
+        }
+
+        try:
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            
+            if not isinstance(data, dict):
+                return None
+            
+            # Data format: {"2024-01-01": 123456, ...}
+            # Find closest date on or before as_of_date
+            closest_date = None
+            closest_cap = None
+            
+            target_str = as_of_date.isoformat()
+            
+            # Sort dates descending
+            sorted_dates = sorted(data.keys(), reverse=True)
+            
+            for date_str in sorted_dates:
+                if date_str <= target_str:
+                    return Decimal(str(data[date_str]))
+                    
+            return None
+            
+        except Exception:
+            return None
+
     def get_constituents(
         self,
         as_of_date: Optional[date] = None,

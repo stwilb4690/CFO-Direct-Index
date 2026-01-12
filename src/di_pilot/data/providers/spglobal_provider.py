@@ -217,6 +217,11 @@ class SPGlobalProvider:
                 for c in constituents
             ]
         
+        if as_of_date and as_of_date < date.today():
+             # If historical, recalculate weights based on market cap to avoid look-ahead bias
+             # because the API returns *current* weights even for historical component lists.
+             constituents = self._calculate_weights_from_market_cap(constituents, as_of_date)
+        
         # Sort by weight descending
         constituents.sort(key=lambda c: c.weight, reverse=True)
         
@@ -255,6 +260,108 @@ class SPGlobalProvider:
         # assume it's currently active
         return True
 
+
+    def _calculate_weights_from_market_cap(
+        self,
+        constituents: list[BenchmarkConstituent],
+        as_of_date: date,
+    ) -> list[BenchmarkConstituent]:
+        """
+        Calculate weights based on historical market caps.
+        
+        Fetches daily market cap for each constituent and normalizes.
+        """
+        # We need an EODHD provider instance for this
+        # To avoid circular imports, we'll implement a lightweight fetch here
+        # utilizing the existing API key
+        
+        weighted_constituents = []
+        total_market_cap = Decimal("0")
+        
+        print(f"Calculating historical market-cap weights for {len(constituents)} constituents on {as_of_date}...")
+        
+        # Batch fetching would be better, but EODHD market cap is per-symbol
+        # We'll rely on the cache in EODHD provider if we used it, but here we are in SPGlobalProvider
+        # Let's verify we can access the market cap endpoint
+        
+        valid_caps = {}
+        
+        for i, c in enumerate(constituents):
+            symbol = c.symbol
+            # Add delay to avoid rate limits
+            time.sleep(0.2)
+            cap = self._fetch_historical_market_cap(symbol, as_of_date)
+            
+            if cap and cap > 0:
+                valid_caps[symbol] = cap
+                total_market_cap += cap
+            else:
+                # Fallback: keep original weight if we can't find cap?
+                # No, that mixes look-ahead bias. Better to exclude or equal weight?
+                # Let's try to assume it's small if missing.
+                print(f"Warning: No market cap found for {symbol} on {as_of_date}")
+                
+        if total_market_cap == 0:
+            print("Error: Total market cap is 0. Returning original weights.")
+            return constituents
+            
+        # Re-build constituent list with new weights
+        for c in constituents:
+            if c.symbol in valid_caps:
+                new_weight = valid_caps[c.symbol] / total_market_cap
+                weighted_constituents.append(
+                    BenchmarkConstituent(
+                        symbol=c.symbol,
+                        weight=new_weight,
+                        as_of_date=as_of_date
+                    )
+                )
+        
+        # Sort by weight descending
+        weighted_constituents.sort(key=lambda x: x.weight, reverse=True)
+        return weighted_constituents
+
+    def _fetch_historical_market_cap(self, symbol: str, as_of_date: date) -> Optional[Decimal]:
+        """Fetch market cap for a single symbol."""
+        url = f"https://eodhd.com/api/historical-market-cap/{symbol}.US"
+        start_date = as_of_date - timedelta(days=5)
+        end_date = as_of_date + timedelta(days=1)
+        
+        params = {
+            "api_token": self._api_key,
+            "fmt": "json",
+            "from": start_date.isoformat(),
+            "to": end_date.isoformat(),
+        }
+        
+        try:
+            # Short timeout to fail fast
+            response = requests.get(url, params=params, timeout=5)
+            if response.status_code != 200:
+                return None
+                
+            data = response.json()
+            if not isinstance(data, dict):
+                return None
+                
+            target_str = as_of_date.isoformat()
+            sorted_dates = sorted(data.keys(), reverse=True)
+            
+            for date_str in sorted_dates:
+                if date_str <= target_str:
+                    entry = data[date_str]
+                    if entry is not None:
+                        # Value might be directly the number or a dict with 'value' key
+                        # Based on debug output: {'date': '...', 'value': ...}
+                        val = entry.get('value') if isinstance(entry, dict) else entry
+                        
+                        if val is not None:
+                            clean_val = str(val).replace(',', '').replace('$', '').strip()
+                            return Decimal(clean_val)
+            return None
+        except Exception as e:
+            print(f"Error fetching market cap for {symbol}: {type(e)} {e}. Value was: {data.get(date_str) if 'date_str' in locals() else 'unknown'}")
+            return None
 
 def get_spglobal_provider(
     cache_dir: str = "data/cache",

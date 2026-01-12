@@ -1,0 +1,4005 @@
+{
+  "portfolio_id": "forward_10mm",
+  "current_date": "2026-01-09",
+  "cash": "100000.0537230502",
+  "realized_pnl": "0",
+  "harvested_losses": "0",
+  "lots": [
+    {
+      "lot_id": "2bea1249-4de3-49f8-863a-5e7646646ded",
+      "symbol": "NVDA",
+      "shares": "3612.650119",
+      "cost_basis": "184.86",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "bfbcfd07-7e25-4a0b-8692-133a89cf5d20",
+      "symbol": "GOOG",
+      "shares": "1793.616498",
+      "cost_basis": "329.14",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d26c7648-e3cc-4c6a-863d-4d57611a785a",
+      "symbol": "GOOGL",
+      "shares": "1793.616498",
+      "cost_basis": "328.57",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3e35c054-04a1-4810-8093-a22717104dd5",
+      "symbol": "AAPL",
+      "shares": "2196.329703",
+      "cost_basis": "259.37",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "bd51651d-6542-4bda-8656-921c672c5b26",
+      "symbol": "MSFT",
+      "shares": "1104.734835",
+      "cost_basis": "479.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "04e4db6a-3df0-4dd9-ae36-91df5a05b85e",
+      "symbol": "AMZN",
+      "shares": "1588.973878",
+      "cost_basis": "247.38",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1ae19449-a6af-4db1-8e6a-79fb89652a4a",
+      "symbol": "META",
+      "shares": "374.646547",
+      "cost_basis": "653.06",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f708e9d9-df0a-4190-8d49-09f66193e20c",
+      "symbol": "AVGO",
+      "shares": "704.734143",
+      "cost_basis": "344.97",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a64ac310-f5b4-421a-8810-fe5b2106eadf",
+      "symbol": "TSLA",
+      "shares": "494.343597",
+      "cost_basis": "445.01",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "150b43b7-5e23-49d6-b76a-001486d40e0d",
+      "symbol": "BRK-B",
+      "shares": "320.662228",
+      "cost_basis": "499.1",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a10ede2d-26c5-45a0-8b75-8143a898cd79",
+      "symbol": "LLY",
+      "shares": "133.033934",
+      "cost_basis": "1063.56",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f6ac8e8d-9357-466d-8151-390f9e703487",
+      "symbol": "WMT",
+      "shares": "1184.670840",
+      "cost_basis": "114.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f3417c0e-1f4f-495c-a0f7-263ecf3f5a35",
+      "symbol": "JPM",
+      "shares": "404.632019",
+      "cost_basis": "329.19",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3647faa4-dbda-4dec-86d6-33e24736d7e9",
+      "symbol": "V",
+      "shares": "286.580230",
+      "cost_basis": "349.77",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9f4072c0-ce75-4d65-89fe-97fdb57de1a0",
+      "symbol": "ORCL",
+      "shares": "427.056714",
+      "cost_basis": "198.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8f509a1c-49f3-42ad-8a49-6742555ffc8b",
+      "symbol": "XOM",
+      "shares": "626.831672",
+      "cost_basis": "124.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e460c6f9-8247-47d4-a2a2-596c583cc5b5",
+      "symbol": "MA",
+      "shares": "133.476430",
+      "cost_basis": "575.54",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e02953c4-25ab-4e33-8c81-5c3f53ad0eca",
+      "symbol": "JNJ",
+      "shares": "358.113154",
+      "cost_basis": "204.39",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c66fc2c9-b59e-4a22-b001-061ae9cc5cff",
+      "symbol": "PLTR",
+      "shares": "354.269550",
+      "cost_basis": "177.49",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5dbca8ce-f333-4569-ac9e-165dfbec4ca7",
+      "symbol": "COST",
+      "shares": "65.975924",
+      "cost_basis": "924.88",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0ae80363-3a4c-4005-b812-a9de39ba4b47",
+      "symbol": "BAC",
+      "shares": "1085.429401",
+      "cost_basis": "55.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0c5595f5-f4b3-4643-bfb8-cf54334e8511",
+      "symbol": "ABBV",
+      "shares": "262.700768",
+      "cost_basis": "220.08",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7ee457b0-59cf-47b9-b05d-bb93a086020c",
+      "symbol": "MU",
+      "shares": "167.293614",
+      "cost_basis": "345.09",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "18677ea1-75c2-47ca-8578-ea8c8004efd5",
+      "symbol": "NFLX",
+      "shares": "629.827876",
+      "cost_basis": "89.46",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0eb55eae-cdc4-4bba-839c-d00fa488330a",
+      "symbol": "HD",
+      "shares": "147.970982",
+      "cost_basis": "374.64",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ba4aa782-4000-427f-b44c-2ab4ed59a1d6",
+      "symbol": "GE",
+      "shares": "156.785581",
+      "cost_basis": "321.59",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "949dfa81-f41d-4a76-a4e2-c0f75d2f791b",
+      "symbol": "PG",
+      "shares": "347.327733",
+      "cost_basis": "141.87",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "16d82ab4-4bed-48e2-9483-4b77141386d9",
+      "symbol": "AMD",
+      "shares": "241.989068",
+      "cost_basis": "203.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "59fe2201-ae2d-4aca-98f0-0a579b0a536c",
+      "symbol": "CVX",
+      "shares": "297.180210",
+      "cost_basis": "162.11",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fe42949b-4bfb-46d8-8124-6d556a7798cd",
+      "symbol": "UNH",
+      "shares": "134.642169",
+      "cost_basis": "343.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fa86529b-94d1-4c2f-ba06-12227eae97a5",
+      "symbol": "KO",
+      "shares": "639.383153",
+      "cost_basis": "70.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0df6dd03-86f8-460e-b63d-616765151e75",
+      "symbol": "WFC",
+      "shares": "466.587697",
+      "cost_basis": "95.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "36075d73-49a9-418f-a950-5a874ec71fce",
+      "symbol": "MS",
+      "shares": "236.231986",
+      "cost_basis": "186.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d3297eff-bf87-42f2-8f07-37894bd3178b",
+      "symbol": "CSCO",
+      "shares": "587.283372",
+      "cost_basis": "73.88",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "39add832-a76f-42c8-a46b-7a734c23a551",
+      "symbol": "CAT",
+      "shares": "69.559619",
+      "cost_basis": "617.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c60c4452-e612-4a7d-a245-991016d63211",
+      "symbol": "IBM",
+      "shares": "138.937306",
+      "cost_basis": "304.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5a3db24d-832b-4c3e-84c4-cd57957bbc4f",
+      "symbol": "GS",
+      "shares": "44.580815",
+      "cost_basis": "938.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1850c9c5-fa49-44a2-8621-84687f3c9ece",
+      "symbol": "MRK",
+      "shares": "368.923220",
+      "cost_basis": "110.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d1ef280c-a92c-4f09-99ca-26953be940ab",
+      "symbol": "LRCX",
+      "shares": "186.693969",
+      "cost_basis": "218.36",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4b0de5b0-b41c-4d7e-a48f-a6568f0f9239",
+      "symbol": "AXP",
+      "shares": "102.389639",
+      "cost_basis": "375.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7b24a859-d3ed-4f54-8421-d9188278241b",
+      "symbol": "PM",
+      "shares": "231.375889",
+      "cost_basis": "162.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "441f07cb-34e5-4044-a408-a06b06aa080b",
+      "symbol": "RTX",
+      "shares": "199.289848",
+      "cost_basis": "188.5",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a79b7e3e-55a2-4c09-a305-e521593d9ad6",
+      "symbol": "CRM",
+      "shares": "139.273942",
+      "cost_basis": "259.94",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "feb169e4-cd34-4851-af52-15e618fcecdd",
+      "symbol": "AMAT",
+      "shares": "117.861636",
+      "cost_basis": "301.18",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "21a0d33e-5f51-4192-9b26-d6b6ba02709c",
+      "symbol": "TMO",
+      "shares": "55.844555",
+      "cost_basis": "618.86",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4cf7725b-3776-477d-9059-e1a78c09de5a",
+      "symbol": "TMUS",
+      "shares": "166.252746",
+      "cost_basis": "200.56",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e96905fc-f64e-4ce1-bbd3-59dafb4b79ca",
+      "symbol": "ABT",
+      "shares": "258.462693",
+      "cost_basis": "125.92",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8aa324bd-89c0-45b2-a9d5-98dd2af960d9",
+      "symbol": "APP",
+      "shares": "50.233004",
+      "cost_basis": "647.72",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "12ff745b-8b65-4606-a5da-7021d9c20d63",
+      "symbol": "MCD",
+      "shares": "105.853309",
+      "cost_basis": "307.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "567a8112-8d7f-48b6-9766-9ae1dd8661cd",
+      "symbol": "INTC",
+      "shares": "709.003952",
+      "cost_basis": "45.55",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a4a15b0e-469c-43e9-8b61-e6d2d329678b",
+      "symbol": "C",
+      "shares": "265.953209",
+      "cost_basis": "121.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a7b1a408-3298-4141-9534-de65dea7f90b",
+      "symbol": "SHOP",
+      "shares": "193.503514",
+      "cost_basis": "164.48",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "76410afd-2de9-4d27-bfa7-7e84a707c390",
+      "symbol": "ISRG",
+      "shares": "52.691642",
+      "cost_basis": "586.24",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5ad04267-7d63-44b0-9f28-589c764d1c5b",
+      "symbol": "LIN",
+      "shares": "69.406418",
+      "cost_basis": "444.08",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "307b2c3b-8971-464c-8dac-2df36e1e02b7",
+      "symbol": "DIS",
+      "shares": "265.362015",
+      "cost_basis": "115.88",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cb51c26a-a1b8-4ebf-83e1-126f4f563025",
+      "symbol": "PEP",
+      "shares": "203.238896",
+      "cost_basis": "139.91",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "941d21e8-35d1-467d-868a-f19b475e4015",
+      "symbol": "QCOM",
+      "shares": "159.191453",
+      "cost_basis": "177.78",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9e5ad34f-8e34-411a-9381-a30a8b60ebf8",
+      "symbol": "KLAC",
+      "shares": "19.529907",
+      "cost_basis": "1400.0",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e2517f54-29f0-4886-8be5-4738e1c2dced",
+      "symbol": "BA",
+      "shares": "116.394265",
+      "cost_basis": "234.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "79ff610c-cc9a-4653-b240-70515081821c",
+      "symbol": "GEV",
+      "shares": "43.051178",
+      "cost_basis": "622.5",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "44425e75-3283-4079-a1b2-5d0122f81b3f",
+      "symbol": "INTU",
+      "shares": "41.362146",
+      "cost_basis": "646.9",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b17eb28a-420d-402a-9330-7b0ad3430380",
+      "symbol": "SCHW",
+      "shares": "264.120590",
+      "cost_basis": "100.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "36e30ae5-2c91-4e86-81b3-8278b39921f9",
+      "symbol": "UBER",
+      "shares": "308.844856",
+      "cost_basis": "85.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a9496239-89d2-4620-9dd7-c9814ab0ed23",
+      "symbol": "BKNG",
+      "shares": "4.791172",
+      "cost_basis": "5492.1099",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e0369ede-84c6-4c71-913d-3e06e5d84994",
+      "symbol": "AMGN",
+      "shares": "80.038772",
+      "cost_basis": "326.1",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c7c59c49-e246-4f29-9d45-fea7892681a1",
+      "symbol": "TJX",
+      "shares": "165.057770",
+      "cost_basis": "157.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "048bcff6-8ced-4f32-98b4-190e964b8ffa",
+      "symbol": "TXN",
+      "shares": "135.056037",
+      "cost_basis": "190.31",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3a183c7e-f484-414d-a977-509373aa4423",
+      "symbol": "ACN",
+      "shares": "91.477146",
+      "cost_basis": "280.67",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "908a6b9e-cc95-4d99-b942-6f664fc68c25",
+      "symbol": "APH",
+      "shares": "181.941339",
+      "cost_basis": "140.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "37e63eeb-b852-43db-9cf4-e2769513b48b",
+      "symbol": "VZ",
+      "shares": "626.721665",
+      "cost_basis": "40.46",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4f3aafe2-a546-4f75-9869-18c550b3bcb7",
+      "symbol": "T",
+      "shares": "1053.762624",
+      "cost_basis": "23.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c11063c4-2dda-4265-8ed2-fcc166b782cb",
+      "symbol": "DHR",
+      "shares": "104.990494",
+      "cost_basis": "238.37",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5298728f-8440-457b-bfec-657a4457ada5",
+      "symbol": "BLK",
+      "shares": "23.061342",
+      "cost_basis": "1085.1",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8d6f7c1a-772b-431d-98e8-beac0e490b2a",
+      "symbol": "NEE",
+      "shares": "309.555242",
+      "cost_basis": "79.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a3d77aae-3bcf-4dca-bf0d-58ffabf018d8",
+      "symbol": "SPGI",
+      "shares": "45.007630",
+      "cost_basis": "541.94",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ca39a9d8-2205-458a-94ce-b1b873fd887f",
+      "symbol": "COF",
+      "shares": "94.494263",
+      "cost_basis": "249.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "43b4ad14-5c68-4c5c-adc8-9510ea407d83",
+      "symbol": "ANET",
+      "shares": "187.177801",
+      "cost_basis": "122.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "15de4fd8-41f3-415b-9237-56d219dce93f",
+      "symbol": "GILD",
+      "shares": "184.412314",
+      "cost_basis": "121.1",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5de044b3-3b5f-4953-8736-d96d6e4494d8",
+      "symbol": "LOW",
+      "shares": "83.378790",
+      "cost_basis": "267.21",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5ce25f96-274f-4271-bf6f-f4b505091e92",
+      "symbol": "ADI",
+      "shares": "72.781277",
+      "cost_basis": "300.93",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d73ef9d1-cad3-4f45-9f2b-1704f69c1691",
+      "symbol": "NOW",
+      "shares": "154.344467",
+      "cost_basis": "141.8",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f974063d-c35d-411d-a84f-2314b20df331",
+      "symbol": "PFE",
+      "shares": "845.113031",
+      "cost_basis": "25.48",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fbb9e62c-3240-47dd-a489-c27fd4c3479b",
+      "symbol": "BSX",
+      "shares": "220.347429",
+      "cost_basis": "97.64",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e343177d-f3a1-473c-9afd-f62827a9f3e9",
+      "symbol": "SYK",
+      "shares": "56.842734",
+      "cost_basis": "367.54",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d71d9ecd-fa90-408a-8d2f-7be5a6f51d10",
+      "symbol": "ADBE",
+      "shares": "62.219927",
+      "cost_basis": "333.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e8fb6390-f187-48d9-81ff-afabff3cee8e",
+      "symbol": "UNP",
+      "shares": "88.166336",
+      "cost_basis": "228.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7df9ef46-8262-49f6-bdd3-0dfac5118e88",
+      "symbol": "DE",
+      "shares": "40.198502",
+      "cost_basis": "488.08",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "30a263a9-9c96-4784-8286-bcc52307a1ee",
+      "symbol": "PANW",
+      "shares": "103.600787",
+      "cost_basis": "189.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6d6d0c62-f88d-4942-b433-517fe2b05825",
+      "symbol": "HON",
+      "shares": "94.368455",
+      "cost_basis": "207.38",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "379bfe58-2435-4dbc-ac64-687a9aef450d",
+      "symbol": "WELL",
+      "shares": "102.014520",
+      "cost_basis": "186.08",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "de0afbd6-4063-4398-9c66-f8b4220a829e",
+      "symbol": "PGR",
+      "shares": "87.131680",
+      "cost_basis": "215.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3dfecea6-c88b-4a01-b186-903f198bb8da",
+      "symbol": "ETN",
+      "shares": "57.731055",
+      "cost_basis": "324.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "232d61b4-bcc2-4eac-bf95-9f5698a112af",
+      "symbol": "LMT",
+      "shares": "34.394539",
+      "cost_basis": "542.92",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a45964e4-8dab-4e75-90b3-9e712bfd5b6e",
+      "symbol": "MDT",
+      "shares": "190.556212",
+      "cost_basis": "97.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ef4d00e3-809b-401e-8a98-86f68d34536f",
+      "symbol": "BX",
+      "shares": "114.951777",
+      "cost_basis": "157.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ba301ee4-8088-43a9-adec-fe91e0751c89",
+      "symbol": "CB",
+      "shares": "58.496675",
+      "cost_basis": "306.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dd61b532-d5a7-4c8d-b1f8-f4dc31beaf1a",
+      "symbol": "COP",
+      "shares": "183.674876",
+      "cost_basis": "97.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "674a866d-36d0-425c-8ec4-54ad2d584f37",
+      "symbol": "PLD",
+      "shares": "138.065068",
+      "cost_basis": "129.4",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5f8b6c3f-4cb2-4916-a01e-5c79e481028f",
+      "symbol": "KKR",
+      "shares": "132.489116",
+      "cost_basis": "134.65",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "59dc75bb-f658-4953-ac51-422beea569b6",
+      "symbol": "NEM",
+      "shares": "162.203308",
+      "cost_basis": "108.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "10038d06-87d4-41da-b383-8d3a256c5d4e",
+      "symbol": "CRWD",
+      "shares": "37.471438",
+      "cost_basis": "470.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c0ef45d6-e39f-4b2e-9ffc-319ca24b3524",
+      "symbol": "VRTX",
+      "shares": "37.712291",
+      "cost_basis": "463.86",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9db7f32d-39c1-4b84-ac94-fbaf014a1ea7",
+      "symbol": "PH",
+      "shares": "18.756157",
+      "cost_basis": "920.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "438fac08-8f93-43b7-94bf-79dae0be75b7",
+      "symbol": "BMY",
+      "shares": "302.590550",
+      "cost_basis": "55.86",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "562282c3-d99d-42b7-97f7-a556bb810d51",
+      "symbol": "HCA",
+      "shares": "33.918318",
+      "cost_basis": "472.07",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6799f238-d1d0-4fc4-95ee-1a7c102523f2",
+      "symbol": "ADP",
+      "shares": "60.116504",
+      "cost_basis": "266.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7a6bee8e-2381-4e86-9b80-ab31697d6db6",
+      "symbol": "CEG",
+      "shares": "46.418221",
+      "cost_basis": "342.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "34849e8b-3b3c-4f91-b617-8d8e6ff8f78f",
+      "symbol": "HOOD",
+      "shares": "133.653770",
+      "cost_basis": "115.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "20050ad3-186e-456e-a701-04c6d4ef7920",
+      "symbol": "CMCSA",
+      "shares": "541.621720",
+      "cost_basis": "28.37",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b8ddf151-a689-454a-898d-0116a54367a0",
+      "symbol": "CVS",
+      "shares": "188.686092",
+      "cost_basis": "80.3",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dd58df40-c13f-4a94-9142-07af51167ca1",
+      "symbol": "SBUX",
+      "shares": "169.016434",
+      "cost_basis": "88.88",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "aadb0d8d-ff0c-4aa5-8bb5-6df285e57eb1",
+      "symbol": "MCK",
+      "shares": "18.345915",
+      "cost_basis": "816.06",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f45ece26-8128-4418-882c-50fa3b4e2b6c",
+      "symbol": "SNPS",
+      "shares": "28.437182",
+      "cost_basis": "525.18",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d917a903-a596-4808-a67c-3d57734c3f24",
+      "symbol": "ENB",
+      "shares": "324.477071",
+      "cost_basis": "45.63",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2d056a55-4578-4814-bce4-9dc73f0dc677",
+      "symbol": "NKE",
+      "shares": "220.041442",
+      "cost_basis": "65.92",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e026aa33-dc95-453d-9661-0de80aa79a01",
+      "symbol": "MO",
+      "shares": "249.514632",
+      "cost_basis": "57.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9dbf6a76-4b51-47c1-8121-e20b8f964620",
+      "symbol": "SO",
+      "shares": "163.666175",
+      "cost_basis": "87.01",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "348864bb-02bc-47fa-a8b5-30a32db620f4",
+      "symbol": "GD",
+      "shares": "40.150195",
+      "cost_basis": "353.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a92670df-c1aa-46e2-a9d1-a214727d431e",
+      "symbol": "MCO",
+      "shares": "26.517045",
+      "cost_basis": "531.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a9ac8c6e-36bb-4987-a262-21bbe82a6e14",
+      "symbol": "CME",
+      "shares": "53.598885",
+      "cost_basis": "262.45",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ace8dea9-ff3e-41f2-aea7-75710d5b3720",
+      "symbol": "ICE",
+      "shares": "84.750289",
+      "cost_basis": "165.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ecaee301-d595-48f6-8e38-d94a3d8feda9",
+      "symbol": "DASH",
+      "shares": "64.062817",
+      "cost_basis": "215.56",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2213aba4-6df0-43d7-aa8c-247241b729b4",
+      "symbol": "UPS",
+      "shares": "126.102461",
+      "cost_basis": "108.06",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "31dbfe07-95e1-48a5-8d4d-40e2016e24ac",
+      "symbol": "MMC",
+      "shares": "72.819269",
+      "cost_basis": "186.01",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3771e7eb-2882-4c36-a94d-b2ae50bf50d8",
+      "symbol": "DUK",
+      "shares": "115.590118",
+      "cost_basis": "116.8",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cbfe5e8b-0dd4-42fe-88a2-4c866a8fd407",
+      "symbol": "CDNS",
+      "shares": "40.459451",
+      "cost_basis": "327.31",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ca6377d1-0971-4916-9b53-30e66fd5d28d",
+      "symbol": "WM",
+      "shares": "59.881418",
+      "cost_basis": "220.91",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "02e59f0f-5484-471b-a3ec-f6a679699cc2",
+      "symbol": "NOC",
+      "shares": "21.213650",
+      "cost_basis": "618.82",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "17071cc4-d50d-473e-8ad4-fb32357c68c3",
+      "symbol": "MAR",
+      "shares": "39.887313",
+      "cost_basis": "328.18",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "11a05199-f839-4c23-a224-024f78996564",
+      "symbol": "HWM",
+      "shares": "59.826853",
+      "cost_basis": "218.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b85bf1bd-ac20-41ff-beab-40c14484cf56",
+      "symbol": "MMM",
+      "shares": "78.960298",
+      "cost_basis": "165.24",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2df61497-3f3e-4cbf-a32f-2f0736b9e217",
+      "symbol": "SHW",
+      "shares": "36.846430",
+      "cost_basis": "353.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f19b00f0-61b1-4f7a-821e-e8e67583acf8",
+      "symbol": "USB",
+      "shares": "231.048201",
+      "cost_basis": "55.21",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5831abf1-dda4-4c8e-a285-b6c496f4afa9",
+      "symbol": "PNC",
+      "shares": "58.289712",
+      "cost_basis": "217.55",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "39fa351b-9fcd-4bfc-bf8b-782cf568d103",
+      "symbol": "RCL",
+      "shares": "40.535554",
+      "cost_basis": "311.5",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "62364d5b-1e0f-426d-83a5-ab33a9779096",
+      "symbol": "TT",
+      "shares": "32.958873",
+      "cost_basis": "381.7",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "06d9aba7-184c-43f6-bfd3-0b4407106b88",
+      "symbol": "ABNB",
+      "shares": "90.126709",
+      "cost_basis": "139.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4782abbf-deee-4c34-babe-7e4bf3b7f054",
+      "symbol": "REGN",
+      "shares": "15.621794",
+      "cost_basis": "796.55",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "79d437d4-229f-4d6b-b44e-bf489618b844",
+      "symbol": "BK",
+      "shares": "103.652676",
+      "cost_basis": "119.04",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "74a372d3-1304-438f-9f72-575128d83544",
+      "symbol": "ELV",
+      "shares": "33.033163",
+      "cost_basis": "372.83",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a29de7ab-cced-41a9-a462-0f845c93b777",
+      "symbol": "FCX",
+      "shares": "213.434076",
+      "cost_basis": "56.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d9da1a0b-0648-4211-94db-14db16fc3576",
+      "symbol": "EMR",
+      "shares": "83.504909",
+      "cost_basis": "144.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6f42147a-f4bd-44f5-824e-f9170d764394",
+      "symbol": "DELL",
+      "shares": "98.500953",
+      "cost_basis": "120.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c2d4562c-4221-4a12-90b2-4f26a0ddcaf3",
+      "symbol": "ORLY",
+      "shares": "125.466067",
+      "cost_basis": "93.8",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e1b4be3c-aa63-47b4-8fe4-6f2195b15f3e",
+      "symbol": "AMT",
+      "shares": "69.584442",
+      "cost_basis": "168.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c98ebcee-9ec3-4bc2-a5f9-5e326a814dbe",
+      "symbol": "EQIX",
+      "shares": "14.594199",
+      "cost_basis": "800.35",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "afcc796a-dd1c-48ea-93f1-a1510f14b43b",
+      "symbol": "TDG",
+      "shares": "8.371092",
+      "cost_basis": "1392.09",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dda9346b-6654-4b70-a043-1c40afa98c1c",
+      "symbol": "CTAS",
+      "shares": "59.893443",
+      "cost_basis": "193.12",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "aacbbf12-082e-44c8-98aa-0aa18dc5ef1b",
+      "symbol": "GM",
+      "shares": "138.658773",
+      "cost_basis": "82.87",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c7211c20-e1c9-4b4d-9467-610a40ccd16e",
+      "symbol": "ECL",
+      "shares": "42.099629",
+      "cost_basis": "271.73",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a1970e5b-2fb3-4fda-b00b-61f5f6640d48",
+      "symbol": "CMI",
+      "shares": "20.517459",
+      "cost_basis": "552.09",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ffed7513-31b2-4037-8c15-c737d3afbb36",
+      "symbol": "MNST",
+      "shares": "145.222619",
+      "cost_basis": "77.34",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e5588fa6-58cd-491a-a97f-71b986b4957e",
+      "symbol": "AON",
+      "shares": "31.947584",
+      "cost_basis": "350.8",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3f1321a6-992c-401a-af1b-f0060eadfc21",
+      "symbol": "CI",
+      "shares": "39.705083",
+      "cost_basis": "278.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3fa73c38-ed70-4d54-8fe5-d6c39be096c1",
+      "symbol": "ITW",
+      "shares": "43.119925",
+      "cost_basis": "255.12",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9cd41445-9c63-4dee-97bd-2c9061ecd150",
+      "symbol": "WMB",
+      "shares": "181.519712",
+      "cost_basis": "60.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "79550adf-479d-4a8c-bcac-42d013cef1d6",
+      "symbol": "FDX",
+      "shares": "34.948216",
+      "cost_basis": "312.36",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "20685379-b2b6-4b66-8c67-b0310fe8f621",
+      "symbol": "GLW",
+      "shares": "127.436459",
+      "cost_basis": "85.23",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "acad6f2f-5114-4234-a036-843cfc9dbc6a",
+      "symbol": "WBD",
+      "shares": "368.257787",
+      "cost_basis": "28.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ccc8cc11-fec0-4632-afb7-8013e2596c4f",
+      "symbol": "MDLZ",
+      "shares": "191.796494",
+      "cost_basis": "55.09",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a1818dc7-76a5-448a-b483-0035d63f0a5b",
+      "symbol": "HLT",
+      "shares": "34.548737",
+      "cost_basis": "300.36",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5940ff07-18cc-4420-8d58-db5bdd0edb40",
+      "symbol": "WDC",
+      "shares": "50.819277",
+      "cost_basis": "200.46",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d92e7447-7e63-4026-9f9e-c46ef4a1dc52",
+      "symbol": "TEL",
+      "shares": "43.727737",
+      "cost_basis": "231.6",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b7135b36-dc14-41ed-90c8-553605135a22",
+      "symbol": "AJG",
+      "shares": "38.171018",
+      "cost_basis": "264.59",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5fdc8fd3-218a-4b4e-afb1-3aea2d8e5ae0",
+      "symbol": "JCI",
+      "shares": "90.838076",
+      "cost_basis": "110.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5ea2fa39-23fa-4b89-9503-5ddcef383229",
+      "symbol": "SLB",
+      "shares": "222.054032",
+      "cost_basis": "45.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f8bb6da3-b041-4211-9bbb-fe7c1546a923",
+      "symbol": "RSG",
+      "shares": "46.012959",
+      "cost_basis": "212.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e10e9166-10c2-4437-96c3-b7c549524b72",
+      "symbol": "CL",
+      "shares": "119.811991",
+      "cost_basis": "81.48",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6ddcf92f-4ec4-4c50-8e9c-a66252e250e4",
+      "symbol": "CSX",
+      "shares": "276.784589",
+      "cost_basis": "35.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "10a81ab7-8e2b-44ca-ad96-33666e5e9e43",
+      "symbol": "COR",
+      "shares": "28.834819",
+      "cost_basis": "335.69",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ec416f71-f26b-465a-b0be-3f57c8a9a97b",
+      "symbol": "STX",
+      "shares": "31.742879",
+      "cost_basis": "304.01",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "72841566-4f03-46ad-9ab4-0605ad32ea7c",
+      "symbol": "TFC",
+      "shares": "190.144797",
+      "cost_basis": "50.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "642acd70-7f9a-4194-80d7-47554a5ff557",
+      "symbol": "NSC",
+      "shares": "33.352408",
+      "cost_basis": "287.21",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3c3a14f8-a270-432d-b8a8-61146aa90618",
+      "symbol": "MSI",
+      "shares": "24.756426",
+      "cost_basis": "383.14",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f1f06fac-d482-4cf6-a396-9882e39d31fd",
+      "symbol": "PWR",
+      "shares": "22.164310",
+      "cost_basis": "422.57",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "af4c8247-d6f7-4867-8cfb-70276ae7feda",
+      "symbol": "TRV",
+      "shares": "33.155730",
+      "cost_basis": "281.96",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "73eb4179-0845-4e1f-a4bf-68ccba37473e",
+      "symbol": "LHX",
+      "shares": "27.803181",
+      "cost_basis": "335.77",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0e86d4a6-1100-4ec3-97b9-4f0450d85485",
+      "symbol": "AEP",
+      "shares": "79.560885",
+      "cost_basis": "116.91",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9071d0df-dbb8-4e54-a0f4-7398c9710369",
+      "symbol": "PCAR",
+      "shares": "78.065407",
+      "cost_basis": "118.8",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dc5ec34d-cde9-4b0d-9936-4ff6f2ef807e",
+      "symbol": "ROST",
+      "shares": "48.076250",
+      "cost_basis": "191.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c19239d2-177f-4f68-a140-9888ce8da559",
+      "symbol": "NXPI",
+      "shares": "37.408430",
+      "cost_basis": "241.15",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3a4df0b8-5be9-4c54-85ca-67f84b5220e8",
+      "symbol": "KMI",
+      "shares": "330.684259",
+      "cost_basis": "27.12",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f86af683-7c7c-48b8-b509-50ad57039f54",
+      "symbol": "SPG",
+      "shares": "48.525910",
+      "cost_basis": "184.69",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e37d60b9-08aa-43b1-91a6-a35c9cd93081",
+      "symbol": "URI",
+      "shares": "9.457860",
+      "cost_basis": "938.79",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5a3ef036-982d-4cfe-96f7-53664ea42c2d",
+      "symbol": "FTNT",
+      "shares": "110.534474",
+      "cost_basis": "79.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f5be7ae1-679b-4ee9-b533-bb7d9d0755be",
+      "symbol": "APD",
+      "shares": "33.085394",
+      "cost_basis": "263.72",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "253c0f28-993b-43c7-8a9d-e374aeb54cbd",
+      "symbol": "ADSK",
+      "shares": "31.511286",
+      "cost_basis": "276.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4847f407-f282-4034-99f1-8a7be61dec44",
+      "symbol": "SRE",
+      "shares": "97.013367",
+      "cost_basis": "88.82",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c4dd2289-5c4b-45db-9542-36b8df25a3e5",
+      "symbol": "BDX",
+      "shares": "42.424091",
+      "cost_basis": "202.75",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "95a58612-a2a1-425d-8380-3ee492399442",
+      "symbol": "PSX",
+      "shares": "59.889445",
+      "cost_basis": "142.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6d2249e4-f944-47f5-8295-112b603aa2d2",
+      "symbol": "AFL",
+      "shares": "77.903317",
+      "cost_basis": "109.24",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4756539f-7874-4aaf-b7fd-15d6174db613",
+      "symbol": "IDXX",
+      "shares": "11.868949",
+      "cost_basis": "713.35",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e57b20bb-36ab-440b-beb0-b24d8771c55d",
+      "symbol": "EOG",
+      "shares": "80.650834",
+      "cost_basis": "104.92",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "90eee645-a723-4915-a7ec-2e17e08a5f3f",
+      "symbol": "AZO",
+      "shares": "2.462607",
+      "cost_basis": "3421.1699",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f29033dd-d624-45e5-be98-ec65cc2b81d2",
+      "symbol": "F",
+      "shares": "592.248481",
+      "cost_basis": "14.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "bd1095d2-4c64-44b5-8c5c-360d345a14ce",
+      "symbol": "VLO",
+      "shares": "45.336046",
+      "cost_basis": "185.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ab847153-3c2f-47cc-8078-b9e4f9fdf896",
+      "symbol": "NDAQ",
+      "shares": "84.871697",
+      "cost_basis": "98.24",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8d93b7ce-3784-4c75-bfa3-f19c9cf2d800",
+      "symbol": "ZTS",
+      "shares": "65.503819",
+      "cost_basis": "127.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d7224408-7d7a-4eb6-b373-17258a0f2f6c",
+      "symbol": "ALL",
+      "shares": "38.895882",
+      "cost_basis": "212.21",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ea2bb1c2-56b1-47be-9ca8-bec8d0961dbd",
+      "symbol": "DLR",
+      "shares": "51.057440",
+      "cost_basis": "158.55",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cfffce38-eb5b-43fb-93ba-d0b0ec87d431",
+      "symbol": "PYPL",
+      "shares": "139.073577",
+      "cost_basis": "57.66",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "513b1a9a-05a1-4d28-aa49-0c1accd17d59",
+      "symbol": "O",
+      "shares": "136.733091",
+      "cost_basis": "58.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e5268a29-9a91-41cb-a52e-7e8db090d104",
+      "symbol": "CMG",
+      "shares": "196.540949",
+      "cost_basis": "40.11",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f76b5b3a-fd9f-4ee3-9e31-fbac0db9bd32",
+      "symbol": "MPC",
+      "shares": "44.680998",
+      "cost_basis": "176.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "624384af-f4f4-47b3-99ad-69d9d63da0d6",
+      "symbol": "MET",
+      "shares": "97.936440",
+      "cost_basis": "79.41",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0306defc-3dac-42b3-9edb-fdfeb99c1510",
+      "symbol": "EA",
+      "shares": "37.071037",
+      "cost_basis": "204.1",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2fc35a8f-892e-4cbd-a6e0-47dff25a97cb",
+      "symbol": "AXON",
+      "shares": "11.729110",
+      "cost_basis": "631.69",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4bb7c03c-a6bb-42f6-97cb-bb03cf52351c",
+      "symbol": "D",
+      "shares": "126.924089",
+      "cost_basis": "57.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6fd75adc-de5b-446b-9c28-2046a090ef54",
+      "symbol": "EW",
+      "shares": "86.254715",
+      "cost_basis": "85.13",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f70a2638-e5f5-4376-a9bb-19e43333b7cc",
+      "symbol": "BKR",
+      "shares": "146.672242",
+      "cost_basis": "49.97",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1c06ec7a-517c-40be-a136-35545272f80d",
+      "symbol": "CBRE",
+      "shares": "44.233671",
+      "cost_basis": "165.46",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0909e7c5-4da6-4a1e-8ff5-73c6c2ac1e2c",
+      "symbol": "GWW",
+      "shares": "7.067640",
+      "cost_basis": "1029.8199",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ff6225d1-265e-44d2-9c60-81773a897de7",
+      "symbol": "PSA",
+      "shares": "26.080494",
+      "cost_basis": "278.15",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cd7a04d8-19bb-49b0-9aea-3a95321a90b0",
+      "symbol": "AME",
+      "shares": "34.217080",
+      "cost_basis": "210.64",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3f3c740d-fdda-4ec6-b01b-d3189910b2ec",
+      "symbol": "FAST",
+      "shares": "170.582575",
+      "cost_basis": "41.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "690edae0-2562-4f30-acda-2767a200e001",
+      "symbol": "CAH",
+      "shares": "35.315680",
+      "cost_basis": "201.11",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "35753429-1ad7-4df0-9e01-630e96dace5e",
+      "symbol": "TGT",
+      "shares": "67.304303",
+      "cost_basis": "105.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ac18a2bd-ec5a-4e7d-a823-e425a2bcd77f",
+      "symbol": "CARR",
+      "shares": "125.184502",
+      "cost_basis": "56.25",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "18fb8c72-6575-4042-8fe5-3af1a0203b7d",
+      "symbol": "DAL",
+      "shares": "97.055179",
+      "cost_basis": "72.31",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cc1e71d4-1da5-4385-a740-5437b183511c",
+      "symbol": "AMP",
+      "shares": "13.809330",
+      "cost_basis": "507.76",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a3337fc2-39a1-400c-bf0a-bfdd1eedf8fd",
+      "symbol": "ROP",
+      "shares": "15.999023",
+      "cost_basis": "434.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "98cfe2d9-24ea-470e-8369-3ebd0258ea33",
+      "symbol": "CTVA",
+      "shares": "100.439551",
+      "cost_basis": "68.65",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7ca84822-b18c-468b-bdb0-9f42efdc7f71",
+      "symbol": "TTWO",
+      "shares": "27.465178",
+      "cost_basis": "250.71",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cb796bf5-43cb-443d-bb71-344ea482cf22",
+      "symbol": "ROK",
+      "shares": "16.688139",
+      "cost_basis": "410.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2a8ae5dd-daaa-44dc-ae0f-01cac8b37b52",
+      "symbol": "MPWR",
+      "shares": "7.120807",
+      "cost_basis": "958.97",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c00c9c1f-eae6-480b-b5a9-3d03dbb7ea9e",
+      "symbol": "DHI",
+      "shares": "43.411330",
+      "cost_basis": "157.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "346aad20-c8d9-49d7-8034-0e383d37edcc",
+      "symbol": "OKE",
+      "shares": "93.527817",
+      "cost_basis": "72.7",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "84ac6dae-99ac-4895-ba29-63b8ecfede5f",
+      "symbol": "XEL",
+      "shares": "87.925378",
+      "cost_basis": "74.26",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f5baf86c-7128-4dde-acc1-f44c7fffc49d",
+      "symbol": "MSCI",
+      "shares": "11.168595",
+      "cost_basis": "581.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2b300d13-d236-47aa-94ea-6f41c411dfe7",
+      "symbol": "EXC",
+      "shares": "149.870400",
+      "cost_basis": "43.3",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c97c3ff5-a87d-4522-aa91-0b7f708b7047",
+      "symbol": "YUM",
+      "shares": "41.269797",
+      "cost_basis": "155.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6108c3fd-7857-4197-822c-07000e45bc22",
+      "symbol": "FANG",
+      "shares": "42.588633",
+      "cost_basis": "147.41",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "775ccf29-20ed-4e78-b07b-43c64de94fd3",
+      "symbol": "OXY",
+      "shares": "146.439846",
+      "cost_basis": "42.86",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0d175c8f-bd7f-4a3e-aa16-08d82ff38f3d",
+      "symbol": "CCL",
+      "shares": "195.013246",
+      "cost_basis": "32.13",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "bffd85d1-ee1a-4363-b7c3-df6a8ad21ea7",
+      "symbol": "A",
+      "shares": "42.138750",
+      "cost_basis": "148.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "71fd9b34-03c5-4803-a943-833f123b13b0",
+      "symbol": "ETR",
+      "shares": "66.381334",
+      "cost_basis": "93.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "37f7b97d-0045-4bd5-9124-45615146a663",
+      "symbol": "PRU",
+      "shares": "52.011697",
+      "cost_basis": "118.08",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "135c07dc-90e8-4a77-adaf-9c21f1c68925",
+      "symbol": "IQV",
+      "shares": "25.313076",
+      "cost_basis": "242.41",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2ea443ad-9838-4fda-b568-ed93e1cdf799",
+      "symbol": "VMC",
+      "shares": "19.639691",
+      "cost_basis": "311.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d0a9c09c-374e-415d-a7c1-aff4f7683f0b",
+      "symbol": "CTSH",
+      "shares": "71.739680",
+      "cost_basis": "85.26",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a4f7488f-7891-44ab-a622-e6993607a2d8",
+      "symbol": "EBAY",
+      "shares": "67.184441",
+      "cost_basis": "90.91",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "79cdfb59-aebf-47a3-935b-d9529931fa62",
+      "symbol": "EL",
+      "shares": "53.563271",
+      "cost_basis": "113.73",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b2172a47-a780-4a2d-a25b-22d65f503440",
+      "symbol": "PAYX",
+      "shares": "53.356263",
+      "cost_basis": "113.77",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "34cc0363-a199-4823-be23-fd83be8c392a",
+      "symbol": "GRMN",
+      "shares": "28.588287",
+      "cost_basis": "212.25",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "41b123dc-5b30-4ca1-b1a8-5a36c2c6ad99",
+      "symbol": "AIG",
+      "shares": "80.201590",
+      "cost_basis": "75.43",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "32d95d48-9555-489f-846a-23fa70461075",
+      "symbol": "MCHP",
+      "shares": "80.331009",
+      "cost_basis": "75.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "288edcb3-d365-4b39-be06-062fbf900f88",
+      "symbol": "MLM",
+      "shares": "8.963935",
+      "cost_basis": "666.67",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "562dd20b-9833-4fb1-b1f5-3a202022cf22",
+      "symbol": "LVS",
+      "shares": "100.499378",
+      "cost_basis": "58.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "57e8d683-d5d0-4fb8-b461-332535b3f724",
+      "symbol": "GEHC",
+      "shares": "67.707885",
+      "cost_basis": "87.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ba4b9f4c-74c3-4e70-ba5e-df1796471896",
+      "symbol": "FICO",
+      "shares": "3.524061",
+      "cost_basis": "1665.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "04ae2ada-2a46-4592-a1d7-cc2dfd75fbba",
+      "symbol": "PEG",
+      "shares": "74.193324",
+      "cost_basis": "78.68",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f16d6f04-1f9a-4f24-8e64-afa60b42b3df",
+      "symbol": "CPRT",
+      "shares": "143.884355",
+      "cost_basis": "39.83",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "715c2332-91cd-4874-aae7-8bbe99fdaf21",
+      "symbol": "WAB",
+      "shares": "25.410761",
+      "cost_basis": "224.42",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a7375927-92aa-4903-a8f8-551869dac958",
+      "symbol": "HSY",
+      "shares": "30.141601",
+      "cost_basis": "189.07",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "71e7d750-e381-4bf1-a5fb-fd0dd0f365a0",
+      "symbol": "HIG",
+      "shares": "41.455223",
+      "cost_basis": "136.26",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1bc13a5c-7902-4199-89c4-22a944ab1a90",
+      "symbol": "UAL",
+      "shares": "48.119815",
+      "cost_basis": "117.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e08b981e-af37-4c27-b56e-401959e10024",
+      "symbol": "TRGP",
+      "shares": "31.906456",
+      "cost_basis": "176.86",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "70619a4d-639c-4537-8730-690003816d8d",
+      "symbol": "KDP",
+      "shares": "201.937271",
+      "cost_basis": "27.79",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dded25f9-f866-4e21-a343-f58327ad8e90",
+      "symbol": "KR",
+      "shares": "94.065531",
+      "cost_basis": "59.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "74448900-af5b-4a42-bc71-583825b10388",
+      "symbol": "FISV",
+      "shares": "79.945308",
+      "cost_basis": "69.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "609b99ec-5ab2-4080-ab67-73e99c92a70a",
+      "symbol": "NUE",
+      "shares": "34.017132",
+      "cost_basis": "163.77",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "497ac224-f3d2-435a-8810-d4d74105532f",
+      "symbol": "STT",
+      "shares": "41.516477",
+      "cost_basis": "132.57",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fbc9c668-2253-4e90-bd3e-d55a6c559c01",
+      "symbol": "RMD",
+      "shares": "21.696160",
+      "cost_basis": "252.47",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "64c1d89a-27db-42fe-9aa1-5b30805d1382",
+      "symbol": "CCI",
+      "shares": "64.728790",
+      "cost_basis": "83.67",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e48ac793-81a1-470c-b963-807eef0309d3",
+      "symbol": "EXPE",
+      "shares": "18.213003",
+      "cost_basis": "296.33",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "37bf25d8-4e56-4067-a25d-139b722d4bd8",
+      "symbol": "ODFL",
+      "shares": "31.079998",
+      "cost_basis": "173.13",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f6009c00-194e-483d-9a3f-2d2167e58ab9",
+      "symbol": "ED",
+      "shares": "53.648798",
+      "cost_basis": "99.21",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "333fd3ba-bb2a-4d9c-8b4b-196be4c3669f",
+      "symbol": "KEYS",
+      "shares": "25.538575",
+      "cost_basis": "207.3",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5513e142-1b98-4c98-b6c7-fa4ff2a2d349",
+      "symbol": "SYY",
+      "shares": "71.177025",
+      "cost_basis": "74.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cc552249-d042-407e-8dc3-796e849aa8ea",
+      "symbol": "VTR",
+      "shares": "69.820212",
+      "cost_basis": "74.9",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "052ebad2-0548-47f7-b89d-245d363ecd5f",
+      "symbol": "OTIS",
+      "shares": "57.926648",
+      "cost_basis": "90.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c32ee110-efc3-40f1-b367-b2be214f1d09",
+      "symbol": "PCG",
+      "shares": "326.693324",
+      "cost_basis": "15.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8bb99d0d-f1b8-40df-a466-d3c0ec673029",
+      "symbol": "FIS",
+      "shares": "76.972382",
+      "cost_basis": "66.84",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4e9c7bae-8013-402e-b69a-7328c6468357",
+      "symbol": "ACGL",
+      "shares": "53.900041",
+      "cost_basis": "95.18",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ac0e0c70-1205-438c-b938-80e530658063",
+      "symbol": "WEC",
+      "shares": "48.351141",
+      "cost_basis": "104.65",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5f452eea-67c2-407b-9f53-49d00b712f74",
+      "symbol": "TER",
+      "shares": "23.277967",
+      "cost_basis": "217.26",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f0387632-7568-4517-b726-800c46f86c28",
+      "symbol": "XYL",
+      "shares": "36.188795",
+      "cost_basis": "139.69",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "08de1ac4-b4a1-4945-ac9e-dcf3ecedf065",
+      "symbol": "LYV",
+      "shares": "34.515144",
+      "cost_basis": "146.07",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "05eb15f6-8455-45de-b5f9-da0f3ee2ef61",
+      "symbol": "IR",
+      "shares": "58.728477",
+      "cost_basis": "85.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "17c523be-ffc0-4337-9f71-d0a8ba6e83b0",
+      "symbol": "HUM",
+      "shares": "17.877170",
+      "cost_basis": "276.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fd69bad8-c9b9-4547-9408-a5d9e71d35a3",
+      "symbol": "RJF",
+      "shares": "29.233243",
+      "cost_basis": "167.71",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d56b6a70-0eec-46b6-9b5d-dc2382b54cad",
+      "symbol": "FOXA",
+      "shares": "65.986819",
+      "cost_basis": "73.68",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d38b3bf2-ecc4-4584-9f3e-7a7c30a477ee",
+      "symbol": "FITB",
+      "shares": "98.257201",
+      "cost_basis": "49.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "61c3d6f7-e398-4461-9b58-41515fad498e",
+      "symbol": "MTB",
+      "shares": "22.844315",
+      "cost_basis": "211.68",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "58b783a7-15fb-4e66-8df9-228228c05dbb",
+      "symbol": "KMB",
+      "shares": "49.326817",
+      "cost_basis": "97.92",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1fe25be2-65cd-4081-a1b8-a21e3a646507",
+      "symbol": "KVUE",
+      "shares": "284.761285",
+      "cost_basis": "16.83",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cf878259-39b1-4ff4-afe7-0ba9a3dd44d0",
+      "symbol": "EQT",
+      "shares": "92.760726",
+      "cost_basis": "51.09",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "13b51a2a-8e59-4fa0-a4a5-f64396148ffa",
+      "symbol": "WTW",
+      "shares": "14.231894",
+      "cost_basis": "330.26",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "78ca15bf-6ab8-4707-b61d-bac980cfac0b",
+      "symbol": "DG",
+      "shares": "32.718065",
+      "cost_basis": "142.74",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6fcdf671-4bf4-4bc5-879d-faf6ac71124d",
+      "symbol": "IBKR",
+      "shares": "66.198093",
+      "cost_basis": "70.47",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "bc9a4005-ecaa-44c3-a050-cc2587e0c0c9",
+      "symbol": "VRSK",
+      "shares": "20.716084",
+      "cost_basis": "224.87",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1d003388-0373-41e7-8589-eadd347e753d",
+      "symbol": "SYF",
+      "shares": "53.535164",
+      "cost_basis": "86.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2625a3da-3839-472b-ae3a-d4ff1ac934d9",
+      "symbol": "MTD",
+      "shares": "3.036439",
+      "cost_basis": "1485.12",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e3e46a06-1118-4026-8ff4-557637700628",
+      "symbol": "ADM",
+      "shares": "71.430988",
+      "cost_basis": "61.94",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8b145a72-f958-41e6-aeeb-758165614d26",
+      "symbol": "VICI",
+      "shares": "158.866144",
+      "cost_basis": "27.76",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dace8daf-ab7d-4246-8558-2528cf4b53fd",
+      "symbol": "HPE",
+      "shares": "198.362539",
+      "cost_basis": "22.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4dd95dc1-2ee8-420a-8783-7c03a8e17393",
+      "symbol": "ULTA",
+      "shares": "6.593915",
+      "cost_basis": "666.18",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "04d96763-f438-45c1-9cf7-203017e98184",
+      "symbol": "EXR",
+      "shares": "31.548089",
+      "cost_basis": "139.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ec2af98e-f430-4323-9d24-5c31904f47d6",
+      "symbol": "FOX",
+      "shares": "65.986819",
+      "cost_basis": "66.42",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3280838e-0cf6-4c29-86b4-3188bba70ba1",
+      "symbol": "LEN",
+      "shares": "36.709296",
+      "cost_basis": "119.25",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d9034311-58e3-415f-a4ec-acd8a9eef3cf",
+      "symbol": "ROL",
+      "shares": "72.034325",
+      "cost_basis": "60.68",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f558befc-323d-4fa9-acf7-3c48a1beffb9",
+      "symbol": "HBAN",
+      "shares": "234.075827",
+      "cost_basis": "18.24",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "67fb4ba1-edc0-4f51-9d8e-d873bb82c5ca",
+      "symbol": "NRG",
+      "shares": "28.484924",
+      "cost_basis": "149.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5410cd4d-5732-4120-9f30-5733222c9d74",
+      "symbol": "EFX",
+      "shares": "18.192417",
+      "cost_basis": "226.96",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5714b2dc-b95e-47e6-8793-7a8a897368ce",
+      "symbol": "KHC",
+      "shares": "175.936373",
+      "cost_basis": "23.42",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "daab147e-cf1a-4c15-8bf1-2693c6842208",
+      "symbol": "DOV",
+      "shares": "20.386197",
+      "cost_basis": "201.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "655f177a-5f02-4b6e-aee3-932c619f2e9e",
+      "symbol": "NTRS",
+      "shares": "28.110059",
+      "cost_basis": "145.74",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7d619065-3f40-4c6b-a655-9c9ceabd1443",
+      "symbol": "BRO",
+      "shares": "50.748154",
+      "cost_basis": "80.64",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "537a9b54-7c06-46d6-83d1-feac308b817e",
+      "symbol": "BIIB",
+      "shares": "21.805557",
+      "cost_basis": "187.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6c3b109f-1ff6-4181-8da8-4060764813e5",
+      "symbol": "TPR",
+      "shares": "30.418766",
+      "cost_basis": "134.35",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9c65c4c5-1f59-44fb-9c45-8a616d564842",
+      "symbol": "HAL",
+      "shares": "125.097816",
+      "cost_basis": "32.63",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5195c885-7d8e-4c20-8cbd-a3ff3f22a759",
+      "symbol": "CBOE",
+      "shares": "15.554164",
+      "cost_basis": "260.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f469a26a-3f58-4f8f-81c7-3a182e9245cc",
+      "symbol": "CHTR",
+      "shares": "19.235173",
+      "cost_basis": "210.59",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5b1c50ea-3f91-4f56-820d-0b30a5d95b22",
+      "symbol": "TSCO",
+      "shares": "78.540930",
+      "cost_basis": "51.51",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5f7798a0-719c-4f1f-9b64-629e81244651",
+      "symbol": "AEE",
+      "shares": "40.205860",
+      "cost_basis": "99.91",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4498b5b3-a28b-4644-96fa-2c512b72203c",
+      "symbol": "ATO",
+      "shares": "24.041922",
+      "cost_basis": "166.78",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "37fbcd4a-1be1-4522-987f-716c4963283c",
+      "symbol": "DTE",
+      "shares": "30.869615",
+      "cost_basis": "129.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "032a45ff-3bdf-4e81-a6a2-ba9e52245d29",
+      "symbol": "IRM",
+      "shares": "43.935875",
+      "cost_basis": "89.19",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ef438d18-f5c5-474c-a799-0d9eb69caed6",
+      "symbol": "DLTR",
+      "shares": "29.557170",
+      "cost_basis": "132.38",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5dda1bfc-d281-499b-be6e-845fb0870c28",
+      "symbol": "DXCM",
+      "shares": "57.971299",
+      "cost_basis": "67.4",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "561ffb13-72fb-4a28-b168-a501c11a8f53",
+      "symbol": "BR",
+      "shares": "17.350173",
+      "cost_basis": "223.36",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "bc5926c3-240c-4ce3-82c3-69587d42ea1f",
+      "symbol": "WRB",
+      "shares": "56.485646",
+      "cost_basis": "68.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0f487f57-3429-4ea6-9049-114cd5ea1700",
+      "symbol": "CFG",
+      "shares": "63.838032",
+      "cost_basis": "60.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "81d14640-708a-4965-8317-9e14756443dd",
+      "symbol": "FE",
+      "shares": "85.863143",
+      "cost_basis": "44.65",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9523372c-4078-4c94-a9f8-0b61ce8f3314",
+      "symbol": "TDY",
+      "shares": "6.978709",
+      "cost_basis": "549.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "df08b86c-3880-4efe-8351-5e3b69fc0e00",
+      "symbol": "PHM",
+      "shares": "28.972086",
+      "cost_basis": "132.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b799d976-f5e3-4118-8bf8-7bbc30d82889",
+      "symbol": "FSLR",
+      "shares": "15.950076",
+      "cost_basis": "238.66",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6313a7fa-f4d9-49c5-a9bb-f477cd66fe41",
+      "symbol": "PPL",
+      "shares": "109.953462",
+      "cost_basis": "34.59",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "88c483e5-0eda-45a2-94ab-e1383969e3b2",
+      "symbol": "STZ",
+      "shares": "25.775459",
+      "cost_basis": "147.0",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5fba72f6-149d-4525-962e-d2fb9d84cf86",
+      "symbol": "ES",
+      "shares": "55.767411",
+      "cost_basis": "67.79",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b69b9332-6596-480c-8de7-fe7a5b8e4471",
+      "symbol": "CINF",
+      "shares": "23.190300",
+      "cost_basis": "162.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "570f10bc-c51a-4b35-a5e9-e82a623b4c6d",
+      "symbol": "AVB",
+      "shares": "21.046403",
+      "cost_basis": "179.37",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f5d663c1-65a6-4a84-a25a-36bc4dbfce28",
+      "symbol": "LDOS",
+      "shares": "19.004159",
+      "cost_basis": "198.34",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c44b97a4-16f3-4c9e-8b7c-d43caf0070da",
+      "symbol": "STE",
+      "shares": "14.588388",
+      "cost_basis": "256.82",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cde9addc-164f-4b47-9233-1e21a0dbb2d3",
+      "symbol": "ON",
+      "shares": "59.808778",
+      "cost_basis": "62.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f8be54ee-f555-41cb-a5ae-02ad1118b1d2",
+      "symbol": "RF",
+      "shares": "130.337296",
+      "cost_basis": "28.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6a97a5a6-bf44-4ea9-bcf2-459e155dce3a",
+      "symbol": "HUBB",
+      "shares": "7.899344",
+      "cost_basis": "470.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "933a8a25-e952-4e4d-aef2-7008c8863dd2",
+      "symbol": "AWK",
+      "shares": "29.002809",
+      "cost_basis": "127.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0b8a3af4-ae6a-4aac-b797-176b38f9dc9e",
+      "symbol": "VLTO",
+      "shares": "36.037048",
+      "cost_basis": "102.73",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "da6ea2d7-51a6-4395-8c11-733e27605470",
+      "symbol": "CSGP",
+      "shares": "62.996234",
+      "cost_basis": "58.49",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "aa2b9670-a771-4732-a80c-a24251c77d4f",
+      "symbol": "CNP",
+      "shares": "97.041133",
+      "cost_basis": "37.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4c917b6f-5578-45d2-95d8-a50df808763d",
+      "symbol": "STLD",
+      "shares": "21.706356",
+      "cost_basis": "169.27",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "82a0260f-3d50-4bdf-b11e-67251cb8779c",
+      "symbol": "JBL",
+      "shares": "15.877972",
+      "cost_basis": "226.15",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5bb1edad-a733-4a21-8690-270cf2f10ad1",
+      "symbol": "PPG",
+      "shares": "33.354399",
+      "cost_basis": "107.41",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "50a14af8-7053-4262-966b-97c3776de6d1",
+      "symbol": "LULU",
+      "shares": "17.436146",
+      "cost_basis": "203.9",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "51647f0a-9900-403e-ac69-f59ba3e0b00b",
+      "symbol": "GIS",
+      "shares": "79.310653",
+      "cost_basis": "44.6",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "43d2f451-53d7-4116-8899-8476976118b9",
+      "symbol": "WAT",
+      "shares": "8.849127",
+      "cost_basis": "396.75",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dff9a2fe-2a90-4023-83cc-9696a98d6b18",
+      "symbol": "EIX",
+      "shares": "57.194040",
+      "cost_basis": "60.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "2f8a79db-a06a-4766-8e28-e4e16ff45209",
+      "symbol": "TROW",
+      "shares": "32.438342",
+      "cost_basis": "107.31",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "12faea93-98be-4e7e-a747-78e7fc5318ff",
+      "symbol": "DRI",
+      "shares": "17.114077",
+      "cost_basis": "202.36",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6154cf2d-5145-412d-988c-cd76b17240ee",
+      "symbol": "CPAY",
+      "shares": "10.398442",
+      "cost_basis": "331.5",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "82bab1f2-599a-4f1f-b6bf-751ce7d37860",
+      "symbol": "KEY",
+      "shares": "162.449542",
+      "cost_basis": "21.19",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a1b21c9f-4d82-4c03-a460-500d9aeaaf8b",
+      "symbol": "VRSN",
+      "shares": "13.778756",
+      "cost_basis": "248.94",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fdec9458-7d62-4427-bf5f-d0fc92145645",
+      "symbol": "LUV",
+      "shares": "76.868975",
+      "cost_basis": "44.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9a103ff7-7167-4634-b20a-79596e90807e",
+      "symbol": "EQR",
+      "shares": "56.553053",
+      "cost_basis": "60.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "89c82106-3caa-433a-9c62-77dc43329e39",
+      "symbol": "CNC",
+      "shares": "73.058323",
+      "cost_basis": "46.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d86eda4a-b898-4da9-8f44-364f136c48d5",
+      "symbol": "IP",
+      "shares": "78.486633",
+      "cost_basis": "43.34",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cff9c1a6-a1fe-45b4-9a4e-115feddd550a",
+      "symbol": "DVN",
+      "shares": "93.240708",
+      "cost_basis": "35.76",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "969ca4e3-cc1e-44f7-a1f1-785727ffeb3a",
+      "symbol": "RL",
+      "shares": "9.013521",
+      "cost_basis": "369.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e5481022-17c2-405b-8601-d2ad805d6953",
+      "symbol": "L",
+      "shares": "30.717499",
+      "cost_basis": "104.58",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5e597d95-ae6d-48d1-b221-511d456baab8",
+      "symbol": "CMS",
+      "shares": "45.233530",
+      "cost_basis": "69.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "864ee7a5-0521-4cbb-ad3e-b197b63b57c6",
+      "symbol": "EXPD",
+      "shares": "19.920617",
+      "cost_basis": "158.89",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a45fff00-eb51-4b03-b31e-2c45351261fc",
+      "symbol": "INCY",
+      "shares": "29.181041",
+      "cost_basis": "106.87",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3070466c-c08d-41ba-a874-d6146ae8f804",
+      "symbol": "LH",
+      "shares": "12.322102",
+      "cost_basis": "251.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b1d61259-c66f-423f-8bb1-9de15de289f8",
+      "symbol": "NTAP",
+      "shares": "29.439315",
+      "cost_basis": "105.39",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1caea762-f828-432f-a3ec-a856ef43b862",
+      "symbol": "NVR",
+      "shares": "0.406183",
+      "cost_basis": "7581.6699",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "45a52ef5-261d-42a8-8a6c-c422a5fbcff5",
+      "symbol": "CHD",
+      "shares": "35.692492",
+      "cost_basis": "85.78",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "11ee373a-1b86-4818-9860-59586f4d36af",
+      "symbol": "TSN",
+      "shares": "52.477306",
+      "cost_basis": "58.03",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "afba92b1-5bd9-467e-81cf-f4b24c0a8e3d",
+      "symbol": "PTC",
+      "shares": "17.676003",
+      "cost_basis": "171.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "277b3b0b-a6c2-41b0-96f9-1b4778b8b8c8",
+      "symbol": "PODD",
+      "shares": "10.456232",
+      "cost_basis": "289.04",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "115b23b5-93ee-41c1-85a9-12bdb3f0048b",
+      "symbol": "CHRW",
+      "shares": "17.559694",
+      "cost_basis": "170.77",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5b1c2454-75a6-44ab-b2bf-9bdfdd80fe55",
+      "symbol": "AMCR",
+      "shares": "343.110333",
+      "cost_basis": "8.65",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7a4027ae-c5d0-4750-81b0-e3a173c6ce1c",
+      "symbol": "NI",
+      "shares": "70.340401",
+      "cost_basis": "42.03",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1ddb71c1-ceae-4d3c-969e-781c65f7e112",
+      "symbol": "PFG",
+      "shares": "32.654878",
+      "cost_basis": "90.29",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8d242267-45dc-4346-9aca-ba9d22ae98f9",
+      "symbol": "WST",
+      "shares": "10.693533",
+      "cost_basis": "275.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "eb29e954-109a-4be3-9244-cd8521f3fffa",
+      "symbol": "PKG",
+      "shares": "13.374029",
+      "cost_basis": "219.35",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8c484060-9c79-4065-a3ac-5c0bf121bc0a",
+      "symbol": "HPQ",
+      "shares": "136.447513",
+      "cost_basis": "21.47",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "68dc3134-4b56-4394-b65c-280de103e5d1",
+      "symbol": "JBHT",
+      "shares": "14.153071",
+      "cost_basis": "206.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f0a31f57-cb50-4615-b2b2-3b5c8442595c",
+      "symbol": "DGX",
+      "shares": "16.534864",
+      "cost_basis": "174.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c0f0d5c8-afcb-4c67-ab09-22932fc80b68",
+      "symbol": "BG",
+      "shares": "28.740820",
+      "cost_basis": "99.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3c3d4203-3b54-43de-a379-e9c629f703f2",
+      "symbol": "SBAC",
+      "shares": "15.839326",
+      "cost_basis": "181.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "373bd580-3bfa-49fb-9e4e-c0026b7e7c3c",
+      "symbol": "TYL",
+      "shares": "6.395557",
+      "cost_basis": "448.37",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7da4aa7d-72fa-421e-bf7f-23f3c47076bc",
+      "symbol": "TRMB",
+      "shares": "35.364136",
+      "cost_basis": "80.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c94bfcdd-90dd-4443-8e6b-6038a4cc342d",
+      "symbol": "APTV",
+      "shares": "32.117641",
+      "cost_basis": "88.67",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8b39ff23-cbdf-40be-a380-689f43f703f4",
+      "symbol": "ALB",
+      "shares": "17.494338",
+      "cost_basis": "161.29",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f71d5c3b-5f1f-4ae7-98f8-34f9e5e84c39",
+      "symbol": "CTRA",
+      "shares": "113.169754",
+      "cost_basis": "24.82",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "66e7ee05-63d0-4f96-b000-fadbfdf35068",
+      "symbol": "SNA",
+      "shares": "7.730313",
+      "cost_basis": "362.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3442a8d8-5b0d-4c40-9297-0bd8733a6b0e",
+      "symbol": "GPN",
+      "shares": "35.189144",
+      "cost_basis": "79.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e753b83f-a572-4c74-81e5-9f4b2de790d6",
+      "symbol": "DOW",
+      "shares": "105.647147",
+      "cost_basis": "26.33",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5f1c1631-883c-4617-aa9b-85fecce66419",
+      "symbol": "WY",
+      "shares": "107.147441",
+      "cost_basis": "25.73",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8989355a-1291-43ff-a849-5c7c7e6f6047",
+      "symbol": "ZBH",
+      "shares": "29.457345",
+      "cost_basis": "92.85",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "21b496ad-db0d-4e41-aa9d-c4a961fa6fcd",
+      "symbol": "DD",
+      "shares": "62.275711",
+      "cost_basis": "43.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7adb6912-c921-4dd0-a570-8bc2928673ad",
+      "symbol": "MKC",
+      "shares": "39.890866",
+      "cost_basis": "67.72",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "45e67248-3581-427e-848e-1dcc14e739f1",
+      "symbol": "SMCI",
+      "shares": "88.732677",
+      "cost_basis": "30.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "20d3576e-d075-4c82-ba03-d6c47101e8de",
+      "symbol": "IT",
+      "shares": "10.713406",
+      "cost_basis": "248.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "afc6c9bc-a3aa-437f-aef2-b997da5f4353",
+      "symbol": "GPC",
+      "shares": "20.677126",
+      "cost_basis": "128.34",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7aedc068-8314-45a0-a8e2-c27e6af88d4b",
+      "symbol": "IFF",
+      "shares": "38.065693",
+      "cost_basis": "69.1",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fb7c42ed-2793-4218-8ecf-c1a430068786",
+      "symbol": "FTV",
+      "shares": "47.209199",
+      "cost_basis": "55.0",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "57f90bf7-35b2-487d-9e4d-d7fc556840fb",
+      "symbol": "CDW",
+      "shares": "19.351750",
+      "cost_basis": "133.49",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3912ca01-2442-490c-b0c2-98144c755ed1",
+      "symbol": "NWS",
+      "shares": "83.102799",
+      "cost_basis": "30.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "7e7dc3e7-979b-4b80-8a83-ad29547449eb",
+      "symbol": "PNR",
+      "shares": "24.323428",
+      "cost_basis": "103.06",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e727ceda-129f-4c48-a94b-2bdb3ed10eac",
+      "symbol": "EVRG",
+      "shares": "34.218596",
+      "cost_basis": "72.82",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "40798728-a006-44b9-b19f-c81b7a2bc166",
+      "symbol": "LNT",
+      "shares": "38.207985",
+      "cost_basis": "65.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e8cb3b25-1e67-4360-ae9a-6b20b4b75815",
+      "symbol": "HOLX",
+      "shares": "33.132215",
+      "cost_basis": "74.87",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e2834ea2-34e8-4609-9bf1-2a06949d7844",
+      "symbol": "GEN",
+      "shares": "91.667537",
+      "cost_basis": "26.96",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c7d33ae7-0d0e-4357-a47a-0c6948814386",
+      "symbol": "TXT",
+      "shares": "26.193623",
+      "cost_basis": "93.83",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c4acbbfa-4e8e-4c78-a1a3-f124876449b1",
+      "symbol": "J",
+      "shares": "17.552425",
+      "cost_basis": "139.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a555d01c-438c-4248-95c4-635105f71426",
+      "symbol": "COO",
+      "shares": "29.129806",
+      "cost_basis": "83.45",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "264efa66-de4b-49c9-92f4-1d5ee5eae354",
+      "symbol": "INVH",
+      "shares": "91.118244",
+      "cost_basis": "26.5",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "77c9bddb-b603-4dfd-a384-cf7633352234",
+      "symbol": "ESS",
+      "shares": "9.572891",
+      "cost_basis": "251.02",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e346f840-e08c-4ec1-8602-ddfa2cbf10ba",
+      "symbol": "MAA",
+      "shares": "17.402806",
+      "cost_basis": "135.9",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d3b9de82-02fd-47f3-b14c-fe640b266fdc",
+      "symbol": "LYB",
+      "shares": "47.842605",
+      "cost_basis": "48.71",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "11413647-33c6-40c2-abdb-a79748f5e34a",
+      "symbol": "FFIV",
+      "shares": "8.634330",
+      "cost_basis": "269.31",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b934f090-45cd-479a-8aab-ee29f69035d4",
+      "symbol": "GDDY",
+      "shares": "20.087196",
+      "cost_basis": "113.54",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "85682d58-efaa-46f1-b024-b57f3f380382",
+      "symbol": "OMC",
+      "shares": "28.684724",
+      "cost_basis": "79.08",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6154239a-b96e-487a-9ed6-78e45d6455c9",
+      "symbol": "HII",
+      "shares": "5.832768",
+      "cost_basis": "386.99",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "df9d5be9-1646-4eb8-b5fb-a10907e6b82a",
+      "symbol": "DECK",
+      "shares": "21.663236",
+      "cost_basis": "103.76",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5f4de726-eaae-441e-afad-893c39a03606",
+      "symbol": "BALL",
+      "shares": "39.833120",
+      "cost_basis": "55.62",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "4c7c6c6a-cf71-422e-b8bd-120d2080277b",
+      "symbol": "NWSA",
+      "shares": "83.102799",
+      "cost_basis": "26.47",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "10fa1df8-9222-464a-9226-c05f199db3bd",
+      "symbol": "BBY",
+      "shares": "31.144908",
+      "cost_basis": "70.61",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "de9aa93a-2379-4cad-a652-002561aeeab6",
+      "symbol": "VTRS",
+      "shares": "171.196941",
+      "cost_basis": "12.76",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "403063f6-7150-4123-a104-4fce866dd2b0",
+      "symbol": "ERIE",
+      "shares": "7.772273",
+      "cost_basis": "280.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "895106c8-6a23-402b-b7fa-304fc425c821",
+      "symbol": "SOLV",
+      "shares": "25.212276",
+      "cost_basis": "86.14",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5b020b67-d076-47f5-9882-3577a93ec8f8",
+      "symbol": "NDSN",
+      "shares": "8.297501",
+      "cost_basis": "261.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6723b8ff-d881-474b-9504-a9edb20b3dda",
+      "symbol": "AVY",
+      "shares": "11.489044",
+      "cost_basis": "188.4",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8f0a3a28-e591-4293-99b2-f1c066a929c9",
+      "symbol": "MAS",
+      "shares": "30.871488",
+      "cost_basis": "69.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6f7c4dee-56e2-4efb-9593-d48383ba0bb6",
+      "symbol": "ALLE",
+      "shares": "12.787636",
+      "cost_basis": "162.69",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "818b4157-e382-4c65-ad44-871d9caf87b3",
+      "symbol": "EG",
+      "shares": "6.239546",
+      "cost_basis": "333.18",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "14d85445-d9a5-4655-8db8-64f6cd83688f",
+      "symbol": "IEX",
+      "shares": "11.125476",
+      "cost_basis": "184.71",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d6688fc0-2bbd-4af8-9a63-b96b5a2084f6",
+      "symbol": "KIM",
+      "shares": "100.656875",
+      "cost_basis": "20.41",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ec2492f1-c33a-4492-a072-6cbf78e4131e",
+      "symbol": "BLDR",
+      "shares": "16.436495",
+      "cost_basis": "124.66",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "336aa933-ddb3-46ac-a816-3f7b900528a5",
+      "symbol": "JKHY",
+      "shares": "10.757997",
+      "cost_basis": "189.16",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3ab54ff8-bb25-424a-9e02-02effcc5bae1",
+      "symbol": "DPZ",
+      "shares": "5.021918",
+      "cost_basis": "405.09",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "68d699c6-d10c-416b-b525-2969eaac9b77",
+      "symbol": "MRNA",
+      "shares": "58.077917",
+      "cost_basis": "34.3",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f95b2917-2c42-4e08-bdb9-fcda518e1917",
+      "symbol": "BEN",
+      "shares": "77.436103",
+      "cost_basis": "25.66",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "db273933-b0f6-4041-957f-fa2f26b111de",
+      "symbol": "PSKY",
+      "shares": "163.972711",
+      "cost_basis": "12.06",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c5181eeb-5eff-480e-94a8-3f5120a97032",
+      "symbol": "ZBRA",
+      "shares": "7.530038",
+      "cost_basis": "259.48",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "29734aed-0557-4b55-9edf-93129a976585",
+      "symbol": "CLX",
+      "shares": "18.130940",
+      "cost_basis": "106.19",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "70d69ce7-bc4a-426a-954e-1e827c4dbb8e",
+      "symbol": "UHS",
+      "shares": "9.287282",
+      "cost_basis": "207.03",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "cecc1871-1632-462e-a243-e9149cb4efc9",
+      "symbol": "CF",
+      "shares": "23.183775",
+      "cost_basis": "82.6",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "1388023f-fc02-4ae4-8547-fad0e247931a",
+      "symbol": "HRL",
+      "shares": "81.766928",
+      "cost_basis": "23.23",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "72cb418c-617a-4928-a57d-c071c9de7714",
+      "symbol": "SWK",
+      "shares": "23.021819",
+      "cost_basis": "82.35",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3c3f9810-264a-4f2f-a5ae-84ffe441929f",
+      "symbol": "REG",
+      "shares": "27.186065",
+      "cost_basis": "69.72",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f34f0fcb-0399-401a-b3fb-e933f9a30ee8",
+      "symbol": "IVZ",
+      "shares": "66.157783",
+      "cost_basis": "28.57",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3500b305-92f8-4067-88d8-88ad93900609",
+      "symbol": "HST",
+      "shares": "102.216891",
+      "cost_basis": "18.44",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3e373885-1053-4f07-b456-38d8a7c08ec6",
+      "symbol": "AKAM",
+      "shares": "21.383856",
+      "cost_basis": "88.12",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d8bfc262-5cb0-4b87-a5d4-d4f078fc902a",
+      "symbol": "ALGN",
+      "shares": "10.664786",
+      "cost_basis": "172.79",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e5e7790b-275c-41df-8ff0-e7529c07aaae",
+      "symbol": "WYNN",
+      "shares": "15.454576",
+      "cost_basis": "117.83",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3cf0bcaa-6443-4cd9-81d9-180b73dae223",
+      "symbol": "HAS",
+      "shares": "20.859431",
+      "cost_basis": "86.72",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "17717b80-b9d3-4746-9611-c28ae5034f83",
+      "symbol": "UDR",
+      "shares": "49.123286",
+      "cost_basis": "36.82",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5955f99e-9f29-4859-b0b8-a3c2f9729696",
+      "symbol": "BF-B",
+      "shares": "68.850600",
+      "cost_basis": "25.96",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "a225d0d7-8d06-4a00-ad83-2059ad2f9dd6",
+      "symbol": "AIZ",
+      "shares": "7.443961",
+      "cost_basis": "238.0",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "936520c8-b66c-4b0c-90e5-7350c8837e5a",
+      "symbol": "RVTY",
+      "shares": "16.851938",
+      "cost_basis": "104.43",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d8eb1784-86e0-43f2-b761-b6661a7c1e9e",
+      "symbol": "EPAM",
+      "shares": "8.211157",
+      "cost_basis": "211.93",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "78613bd8-b522-45a7-8f45-c4b550ffc980",
+      "symbol": "DOC",
+      "shares": "103.296049",
+      "cost_basis": "16.71",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "341387ab-b3a6-436b-b159-dd86650ecf80",
+      "symbol": "CPT",
+      "shares": "15.814399",
+      "cost_basis": "108.8",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "33ab9aa5-18f7-4856-8d6c-5455f3d9eded",
+      "symbol": "GL",
+      "shares": "11.832458",
+      "cost_basis": "141.95",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0ca74007-6e55-4a6c-92a8-5af61b635b34",
+      "symbol": "NCLH",
+      "shares": "67.668630",
+      "cost_basis": "24.53",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9725d000-84da-494a-83a6-37b128fde4ab",
+      "symbol": "DAY",
+      "shares": "23.787305",
+      "cost_basis": "69.42",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "c8bd461d-139e-43ca-99fd-17394003dfb1",
+      "symbol": "FDS",
+      "shares": "5.514371",
+      "cost_basis": "294.45",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "30fae8c2-df4f-48a0-b5f3-9a9658a9f299",
+      "symbol": "CRL",
+      "shares": "7.315300",
+      "cost_basis": "220.91",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9ab7265d-48a4-4c80-917f-e08b49934cdf",
+      "symbol": "BAX",
+      "shares": "76.408300",
+      "cost_basis": "21.07",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "47b0e756-3ce8-4d17-b258-2ec636cf978b",
+      "symbol": "BXP",
+      "shares": "23.554493",
+      "cost_basis": "67.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "772bb067-554f-4dce-a6fc-76594cca25d1",
+      "symbol": "SJM",
+      "shares": "15.858842",
+      "cost_basis": "100.58",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ce15387a-fd1c-4cc9-87ca-a47f5a62160b",
+      "symbol": "PNW",
+      "shares": "17.790559",
+      "cost_basis": "89.07",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0e6a33e6-1f09-46e5-bbef-24765b4ecdc6",
+      "symbol": "TECH",
+      "shares": "23.159710",
+      "cost_basis": "65.7",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "5479511f-a3d1-43a5-bc93-aea72ac49145",
+      "symbol": "BWA",
+      "shares": "31.797875",
+      "cost_basis": "47.67",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d283b450-1728-4053-8e82-aa688da357f1",
+      "symbol": "AES",
+      "shares": "105.848329",
+      "cost_basis": "14.32",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "33ea6bb9-6688-4b07-8a9a-a3d1e9527dfe",
+      "symbol": "AOS",
+      "shares": "20.696048",
+      "cost_basis": "70.52",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "91941c02-5831-4de9-8448-4ffe4d2f84af",
+      "symbol": "TAP",
+      "shares": "29.375921",
+      "cost_basis": "48.13",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "006f0af5-4847-4112-a9fd-7b86cb5e691b",
+      "symbol": "MGM",
+      "shares": "40.653484",
+      "cost_basis": "34.45",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "0ab970a6-ed5f-4f2d-bc08-3c50cacd557c",
+      "symbol": "POOL",
+      "shares": "5.536696",
+      "cost_basis": "252.28",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "26cfad74-0c64-4f64-b3d0-13e73f97fb78",
+      "symbol": "MOH",
+      "shares": "7.640000",
+      "cost_basis": "181.5",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "41e6f911-5c38-4794-9ed8-a49f4027b41f",
+      "symbol": "ARE",
+      "shares": "25.688402",
+      "cost_basis": "53.97",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "03733d97-8cb6-4b43-b30f-e0a790abf5ce",
+      "symbol": "HSIC",
+      "shares": "17.498395",
+      "cost_basis": "77.64",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "13e7bad0-5196-4925-994d-7804603f858e",
+      "symbol": "GNRC",
+      "shares": "8.722695",
+      "cost_basis": "152.78",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ffe459ca-bb1b-4a53-8b60-f81b9dd9981d",
+      "symbol": "SWKS",
+      "shares": "22.099489",
+      "cost_basis": "60.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "26f74793-907e-4edd-a11e-aee21b9174b1",
+      "symbol": "APA",
+      "shares": "52.717387",
+      "cost_basis": "25.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "630a4992-1804-470c-9a2d-d6d354b896ff",
+      "symbol": "FRT",
+      "shares": "12.823012",
+      "cost_basis": "101.64",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b3b70c82-a58e-4a34-9870-a22012367930",
+      "symbol": "PAYC",
+      "shares": "8.161140",
+      "cost_basis": "157.17",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "24aa674c-ca81-4b8f-be6c-fc6dfcf848bd",
+      "symbol": "LKQ",
+      "shares": "38.046311",
+      "cost_basis": "33.4",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "dbaee0c7-15ac-46bd-b959-dc10a592485f",
+      "symbol": "MOS",
+      "shares": "47.178921",
+      "cost_basis": "25.98",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "05e37e97-0894-4efd-b083-25292bae9ad0",
+      "symbol": "CAG",
+      "shares": "71.103954",
+      "cost_basis": "16.94",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "d48869fe-7500-4d95-9b7c-c30f4069cfc2",
+      "symbol": "CPB",
+      "shares": "44.314114",
+      "cost_basis": "26.43",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "143b6c09-e08c-49db-9ad9-abc81c383a82",
+      "symbol": "DVA",
+      "shares": "10.493853",
+      "cost_basis": "111.45",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e23f56df-822a-4154-bab6-84faae4b7dfd",
+      "symbol": "EMN",
+      "shares": "16.955123",
+      "cost_basis": "68.76",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6226c36e-48cf-426e-a7c1-44e9c4f5402e",
+      "symbol": "MTCH",
+      "shares": "35.089036",
+      "cost_basis": "32.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "3ea79941-b5ae-42d4-b484-808ea06b9c3f",
+      "symbol": "AMTM",
+      "shares": "33.580913",
+      "cost_basis": "33.63",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "9105abd6-88e3-4121-a115-12c9b2084d91",
+      "symbol": "QRVO",
+      "shares": "13.733703",
+      "cost_basis": "81.78",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "18ee4f05-bdd0-4373-9173-bb46b94fb685",
+      "symbol": "MHK",
+      "shares": "9.189018",
+      "cost_basis": "118.72",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "f583a028-663a-42b3-807c-f0b582d59fa4",
+      "symbol": "KMX",
+      "shares": "21.076383",
+      "cost_basis": "45.23",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "8b34826b-5fac-442f-9e5f-fa590936392a",
+      "symbol": "MKTX",
+      "shares": "5.525102",
+      "cost_basis": "168.77",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "e5d30167-0eb5-49b9-bafd-5729553f4d4d",
+      "symbol": "LW",
+      "shares": "20.642850",
+      "cost_basis": "41.37",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "555ea843-fd42-4694-b664-2c33e98e62a8",
+      "symbol": "CZR",
+      "shares": "30.338219",
+      "cost_basis": "24.63",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "b6b8b188-8ff2-4e70-bdeb-b8b430f58853",
+      "symbol": "CE",
+      "shares": "16.276605",
+      "cost_basis": "45.57",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "fed2198a-46ed-43dd-8496-9a5769373a52",
+      "symbol": "TFX",
+      "shares": "6.568973",
+      "cost_basis": "112.81",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "6e8124c5-354a-498c-8e08-cdc656d51479",
+      "symbol": "ENPH",
+      "shares": "19.450742",
+      "cost_basis": "35.22",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    },
+    {
+      "lot_id": "ed3db124-f6be-4966-aca2-04b369c4ae6c",
+      "symbol": "FMC",
+      "shares": "18.567891",
+      "cost_basis": "15.2",
+      "acquisition_date": "2026-01-09",
+      "portfolio_id": "forward_10mm"
+    }
+  ],
+  "wash_sale_symbols": {},
+  "config": {
+    "initial_cash": "10000000",
+    "cash_buffer_pct": "0.01",
+    "min_trade_value": "100",
+    "max_turnover_pct": "0.10",
+    "rebalance_band_pct": "0.02",
+    "tlh_loss_threshold": "0.03",
+    "tlh_wash_sale_days": 30,
+    "rebalance_freq": "monthly"
+  },
+  "last_updated": "2026-01-11T23:36:39.475279"
+}

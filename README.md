@@ -20,10 +20,24 @@ This repository is for research, simulation, and evaluation purposes only.
 | v0.1 | Portfolio init, holdings tracking, TLH detection, drift analysis, trade proposals |
 | v0.2 | Backtest engine, forward test engine, data providers, metrics calculation, reports |
 | v0.3 | Web-based GUI for running simulations without code |
+| v0.4 | Synthetic benchmark, professional HTML reports, S&P Global data integration |
+
+## v0.4 Features (NEW)
+
+### Professional Direct Indexing Engine
+
+- **Synthetic Benchmark Tracking**: Calculates tracking error against a daily weighted constituent index (mimicking professional standards) to distinguish true tracking issues from ETF drift.
+- **Professional Reports**: Institutional-grade HTML reports with:
+  - Interactive performance charts (Strategy vs Synthetic vs SPY)
+  - Tax alpha analysis
+  - Detailed drift analysis
+  - Sector allocation breakdown
+- **S&P Global Data Integration**: Support for official S&P Global constituent weights for precise market-cap weighting.
+- **Price-Adjusted Weighting**: Dynamic target weight calculation to match index behavior.
 
 ---
 
-## v0.3 Features (NEW)
+## v0.3 Features
 
 ### Web-Based GUI
 
@@ -326,7 +340,9 @@ CFO-Direct-Index/
 │       │   └── providers/         # v0.2: Data provider layer
 │       │       ├── base.py        # Abstract provider interface
 │       │       ├── cache.py       # File-based caching
-│       │       └── yfinance_provider.py  # Yahoo Finance impl
+│       │       ├── yfinance_provider.py  # Yahoo Finance impl
+│       │       ├── eodhd_provider.py     # EODHD / S&P Global impl
+│       │       └── spglobal_provider.py  # S&P Global Direct impl
 │       ├── portfolio/
 │       │   ├── initialize.py      # Cash → holdings
 │       │   ├── holdings.py        # Lot tracking
@@ -408,6 +424,12 @@ pytest --cov=di_pilot --cov-report=term-missing
 - Trade analysis with visualizations
 - Results browser for historical runs
 - No code required for basic operations
+
+**v0.4** - Professional Grade Simulation.
+
+- **Synthetic Benchmark**: <50bps tracking error target vs theoretical index.
+- **Data Providers**: S&P Global & EODHD integration for institutional-quality data.
+- **Reporting**: Comprehensive HTML reports analyzing tax alpha and drift.
 
 **v0.2** - Simulation capabilities.
 

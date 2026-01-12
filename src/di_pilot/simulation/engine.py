@@ -445,6 +445,9 @@ class SimulationEngine:
             List of lots with losses exceeding threshold
         """
         candidates = []
+        
+        # Calculate look-back date for backward wash sale check
+        thirty_days_ago = current_date - timedelta(days=30)
 
         for lot in state.lots:
             if lot.symbol not in prices:
@@ -456,6 +459,23 @@ class SimulationEngine:
 
             # Check if loss exceeds threshold
             if pnl_pct < -self.config.tlh_loss_threshold:
+                # CRITICAL FIX: Backward Wash Sale Check
+                # IRS Wash Sale rule is symmetric: Cannot claim loss if you bought
+                # "substantially identical" securities 30 days BEFORE the sale.
+                # This prevents harvesting losses on stocks we recently purchased
+                # (e.g., from dividend reinvestment or rebalance buys).
+                recent_buys = [
+                    t for t in state.trades 
+                    if t.symbol == lot.symbol 
+                    and t.side == TradeSide.BUY 
+                    and t.timestamp.date() >= thirty_days_ago
+                    and t.timestamp.date() < current_date  # Exclude same-day
+                ]
+                
+                if recent_buys:
+                    # Skip this lot - harvesting would trigger backward wash sale
+                    continue
+                    
                 candidates.append(lot)
 
         # Sort by loss magnitude (most negative first)
@@ -517,10 +537,16 @@ class SimulationEngine:
             if shares_to_sell <= Decimal("0"):
                 continue
 
-            # Sell from lots (FIFO)
+            # Sell from lots (HIFO - Highest In, First Out)
             remaining = shares_to_sell
             lots_to_sell = state.get_lots_by_symbol(symbol)
-            lots_to_sell.sort(key=lambda l: l.acquisition_date)
+            
+            # OLD (Retail): FIFO - Sells oldest shares (often highest gain/tax)
+            # lots_to_sell.sort(key=lambda l: l.acquisition_date)
+
+            # NEW (Professional): HIFO - Sells highest cost basis first
+            # This minimizes realized gains and maximizes realized losses.
+            lots_to_sell.sort(key=lambda l: l.cost_basis, reverse=True)
 
             for lot in lots_to_sell:
                 if remaining <= Decimal("0"):
@@ -912,17 +938,21 @@ class SimulationEngine:
         state: SimulationState,
         prices: dict[str, PriceData],
         current_date: date,
+        dividend_data: dict[str, list[dict]] = None,
     ) -> SimulationState:
         """
         Process dividend payments for the portfolio.
         
-        Simulates quarterly dividends based on average yield estimate.
-        Dividends are paid to cash (matching Fidelity pattern).
+        Supports two modes:
+        1. Real data mode: Uses actual dividend data from EODHD (ex-dates and amounts)
+        2. Fallback mode: Uses per-symbol yield estimates when real data unavailable
         
         Args:
             state: Current simulation state
             prices: Current prices
             current_date: Current date
+            dividend_data: Optional dict mapping symbol to list of dividend records
+                           Each record: {"date": date, "symbol": str, "amount": Decimal}
             
         Returns:
             Updated state with dividend cash added
@@ -930,62 +960,109 @@ class SimulationEngine:
         if not self.config.enable_dividend_simulation:
             return state
         
-        # Simulate dividends on quarter-end months (Mar, Jun, Sep, Dec)
-        # Most S&P 500 dividends cluster around these dates
-        if current_date.month not in [3, 6, 9, 12]:
-            return state
-        
-        # Pay on the 20th or next available trading day
-        # To avoid paying multiple times in a month (the bug we found),
-        # we check if a dividend trade has already been recorded this month
-        
-        # Check if already paid this month
-        month_start = date(current_date.year, current_date.month, 1)
-        already_paid = False
-        for trade in reversed(state.trades):
-            if trade.reason == TradeReason.DIVIDEND and trade.timestamp.date() >= month_start:
-                already_paid = True
-                break
-        
-        if already_paid:
-            return state
-            
-        # Only process on or after the 20th
-        if current_date.day < 20:
-            return state
-        
-        # Calculate quarterly dividend (annual yield / 4)
-        quarterly_yield = self.config.average_dividend_yield / Decimal("4")
-        
-        # Calculate total dividend across all holdings
         total_dividend = Decimal("0")
-        portfolio_value = Decimal("0")
+        timestamp = datetime.combine(current_date, datetime.min.time())
         
-        for lot in state.lots:
-            if lot.symbol in prices:
-                lot_value = lot.shares * prices[lot.symbol].close
-                dividend = lot_value * quarterly_yield
-                total_dividend += dividend
-                portfolio_value += lot_value
+        # MODE 1: Real dividend data provided
+        if dividend_data:
+            for lot in state.lots:
+                symbol = lot.symbol
+                if symbol not in dividend_data:
+                    continue
+                
+                # Check if this symbol has a dividend on this date
+                for div_record in dividend_data.get(symbol, []):
+                    if div_record["date"] == current_date:
+                        # Calculate dividend: shares × amount per share
+                        div_amount = lot.shares * div_record["amount"]
+                        total_dividend += div_amount
+                        break
+        
+        # MODE 2: Fallback to yield-based estimates (quarterly)
+        else:
+            # Only process on quarter-end months
+            if current_date.month not in [3, 6, 9, 12]:
+                return state
+            
+            # Only process on or after the 20th
+            if current_date.day < 20:
+                return state
+            
+            # Check if already paid this month
+            month_start = date(current_date.year, current_date.month, 1)
+            for trade in reversed(state.trades):
+                if trade.reason == TradeReason.DIVIDEND and trade.timestamp.date() >= month_start:
+                    return state
+            
+            # Per-symbol yield estimates (more accurate than flat 1.5%)
+            # Based on typical sector yields as of 2024
+            SYMBOL_YIELDS = {
+                # High Yield (Energy, Utilities, Tobacco) - 3-5%
+                "XOM": Decimal("0.035"), "CVX": Decimal("0.040"), "COP": Decimal("0.035"),
+                "VZ": Decimal("0.065"), "T": Decimal("0.065"),
+                "MO": Decimal("0.085"), "PM": Decimal("0.055"),
+                "DUK": Decimal("0.040"), "SO": Decimal("0.040"), "NEE": Decimal("0.025"),
+                # Medium-High Yield (Financials, Healthcare, Consumer Staples) - 2-3%
+                "JPM": Decimal("0.025"), "BAC": Decimal("0.025"), "WFC": Decimal("0.025"),
+                "JNJ": Decimal("0.030"), "PFE": Decimal("0.055"), "ABBV": Decimal("0.035"),
+                "PG": Decimal("0.025"), "KO": Decimal("0.030"), "PEP": Decimal("0.028"),
+                "WMT": Decimal("0.013"), "COST": Decimal("0.006"),
+                # Medium Yield (Industrials, Materials) - 1.5-2.5%
+                "CAT": Decimal("0.017"), "HON": Decimal("0.020"), "MMM": Decimal("0.055"),
+                "LIN": Decimal("0.012"), "APD": Decimal("0.022"),
+                # Low Yield (Tech Large Cap) - 0.5-1%
+                "MSFT": Decimal("0.007"), "AAPL": Decimal("0.005"),
+                "AVGO": Decimal("0.018"), "QCOM": Decimal("0.020"),
+                "IBM": Decimal("0.040"), "CSCO": Decimal("0.028"),
+                # Very Low / No Yield (Growth Tech, Biotech)
+                "NVDA": Decimal("0.0003"), "AMD": Decimal("0.000"),
+                "AMZN": Decimal("0.000"), "GOOGL": Decimal("0.000"), "META": Decimal("0.004"),
+                "TSLA": Decimal("0.000"), "NFLX": Decimal("0.000"),
+            }
+            
+            # Sector-based fallback yields
+            SECTOR_FALLBACK_YIELD = {
+                # Map common sector patterns to yields
+                "default": Decimal("0.015"),  # S&P average ~1.5%
+            }
+            
+            portfolio_value = Decimal("0")
+            for lot in state.lots:
+                if lot.symbol in prices:
+                    lot_value = lot.shares * prices[lot.symbol].close
+                    portfolio_value += lot_value
+                    
+                    # Get symbol-specific yield or default
+                    annual_yield = SYMBOL_YIELDS.get(lot.symbol, self.config.average_dividend_yield)
+                    quarterly_yield = annual_yield / Decimal("4")
+                    
+                    dividend = lot_value * quarterly_yield
+                    total_dividend += dividend
         
         if total_dividend > Decimal("0"):
             # Add dividend to cash
             state.cash += total_dividend
             
+            # Track portfolio value for notes
+            portfolio_value = sum(
+                lot.shares * prices[lot.symbol].close
+                for lot in state.lots if lot.symbol in prices
+            )
+            
             # Record dividend "trade" for tracking
-            # We use a special trade entry
             trade = SimulationTrade.create(
-                timestamp=datetime.combine(current_date, datetime.min.time()),
+                timestamp=timestamp,
                 symbol="CASH",
-                side=TradeSide.BUY, # Cash inflow
+                side=TradeSide.BUY,  # Cash inflow
                 shares=Decimal("0"),
                 price=Decimal("1"),
                 reason=TradeReason.DIVIDEND,
-                notes=f"Quarterly Dividend ({quarterly_yield*100:.2f}%) on ${portfolio_value:,.2f}",
+                notes=f"Dividend payment: ${total_dividend:,.2f}",
             )
             # Override value calculation for dividend
             trade.value = total_dividend
             state.trades.append(trade)
         
         return state
+
 

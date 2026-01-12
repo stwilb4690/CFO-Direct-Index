@@ -307,6 +307,21 @@ def run_backtest(
         for _, row in benchmark_df.iterrows():
             benchmark_prices[row["date"]] = Decimal(str(row["close"]))
 
+    # Fetch dividend data if provider supports it (EODHD)
+    dividend_data = None
+    if hasattr(provider, 'get_batch_dividends'):
+        if progress_callback:
+            progress_callback(f"Fetching dividend data for {len(symbols)} symbols...")
+        try:
+            dividend_data = provider.get_batch_dividends(symbols, start_date, end_date)
+            if progress_callback:
+                div_count = sum(len(divs) for divs in dividend_data.values())
+                progress_callback(f"Found {div_count} dividend events across {len(dividend_data)} symbols")
+        except Exception as e:
+            if progress_callback:
+                progress_callback(f"Warning: Could not fetch dividend data, using estimates. Error: {e}")
+            dividend_data = None
+
     # Get all price data upfront
     if progress_callback:
         progress_callback(f"Fetching price data for {len(symbols)} symbols...")
@@ -401,7 +416,8 @@ def run_backtest(
         state.current_date = current_date
 
         # Process dividends (if enabled) - adds to cash balance
-        state = engine.process_dividends(state, prices, current_date)
+        # Uses real EODHD dividend data when available, or per-symbol yield fallbacks
+        state = engine.process_dividends(state, prices, current_date, dividend_data)
 
         # Check if rebalance day
         if engine.should_rebalance(current_date, last_rebalance):

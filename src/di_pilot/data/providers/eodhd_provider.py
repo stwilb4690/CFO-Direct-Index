@@ -153,19 +153,32 @@ class EODHDProvider(DataProvider):
         end_date: date,
     ) -> pd.DataFrame:
         """
-        Fetch prices for a batch of symbols.
-
-        EODHD requires individual requests per symbol, so we iterate.
+        Fetch prices using a thread pool to maximize throughput while respecting
+        EODHD's 1000 req/minute limit (~16 req/sec).
         """
-        records = []
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        import time
 
-        for symbol in symbols:
-            try:
-                symbol_data = self._fetch_symbol_prices(symbol, start_date, end_date)
-                records.extend(symbol_data)
-            except DataProviderError:
-                # Log and continue with other symbols
-                continue
+        records = []
+        
+        # max_workers=10 ensures we stick to ~10-15 req/sec
+        # preventing 429 errors while remaining much faster than serial.
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            future_to_symbol = {
+                executor.submit(self._fetch_symbol_prices, sym, start_date, end_date): sym 
+                for sym in symbols
+            }
+            
+            for future in as_completed(future_to_symbol):
+                sym = future_to_symbol[future]
+                try:
+                    data = future.result()
+                    records.extend(data)
+                except Exception as e:
+                    # Log error but don't crash the whole batch
+                    print(f"Failed to fetch {sym}: {e}")
+                    # Optional: slight backoff if we see issues
+                    time.sleep(0.1) 
 
         return pd.DataFrame(records, columns=["date", "symbol", "close"])
 
@@ -176,7 +189,10 @@ class EODHDProvider(DataProvider):
         end_date: date,
     ) -> list[tuple]:
         """Fetch prices for a single symbol from EODHD API."""
-        url = f"{self.BASE_URL}/eod/{symbol}.US"
+        # Ensure symbol is formatted for EODHD (e.g. BRK.B -> BRK-B.US)
+        api_symbol = symbol.replace(".", "-")
+        url = f"{self.BASE_URL}/eod/{api_symbol}.US"
+        
         params = {
             "from": start_date.isoformat(),
             "to": end_date.isoformat(),
@@ -189,13 +205,19 @@ class EODHDProvider(DataProvider):
 
         for item in response:
             try:
-                # Use adjusted_close if available, otherwise close
-                close_price = item.get("adjusted_close") or item.get("close")
-                if close_price is not None:
+                # CRITICAL FIX: Prefer raw 'close' for accurate cost basis tracking.
+                # 'adjusted_close' rewrites history and breaks TLH logic.
+                raw_close = item.get("close")
+                adj_close = item.get("adjusted_close")
+                
+                # Use raw close if available (Cost Basis), otherwise adjusted
+                price = float(raw_close) if raw_close is not None else float(adj_close)
+
+                if price is not None:
                     records.append((
                         date.fromisoformat(item["date"]),
-                        symbol,
-                        float(close_price),
+                        symbol, # Store with original internal symbol (e.g. BRK.B)
+                        price,
                     ))
             except (KeyError, ValueError, TypeError):
                 continue
@@ -356,6 +378,99 @@ class EODHDProvider(DataProvider):
         except Exception:
             return None
 
+    def get_dividends(
+        self,
+        symbol: str,
+        start_date: date,
+        end_date: date,
+    ) -> list[dict]:
+        """
+        Fetch historical dividend data for a symbol from EODHD API.
+        
+        Endpoint: /div/{symbol}.US
+        
+        Args:
+            symbol: Ticker symbol
+            start_date: Start date for dividend lookup
+            end_date: End date for dividend lookup
+            
+        Returns:
+            List of dividend records with keys: date, symbol, amount
+            Each record represents an ex-dividend date and the dividend per share.
+        """
+        # Format symbol for API (BRK.B -> BRK-B)
+        api_symbol = symbol.replace(".", "-")
+        url = f"{self.BASE_URL}/div/{api_symbol}.US"
+        
+        params = {
+            "api_token": self._api_key,
+            "fmt": "json",
+            "from": start_date.isoformat(),
+            "to": end_date.isoformat(),
+        }
+        
+        try:
+            response = self._make_request(url, params)
+            dividends = []
+            
+            for item in response:
+                try:
+                    ex_date = date.fromisoformat(item.get("date", ""))
+                    amount = Decimal(str(item.get("value", 0)))
+                    
+                    if amount > Decimal("0"):
+                        dividends.append({
+                            "date": ex_date,
+                            "symbol": symbol,  # Original symbol format
+                            "amount": amount,  # Per-share dividend
+                        })
+                except (ValueError, TypeError, KeyError):
+                    continue
+            
+            return dividends
+            
+        except Exception:
+            return []
+
+    def get_batch_dividends(
+        self,
+        symbols: list[str],
+        start_date: date,
+        end_date: date,
+    ) -> dict[str, list[dict]]:
+        """
+        Fetch dividends for multiple symbols using thread pool.
+        
+        Args:
+            symbols: List of ticker symbols
+            start_date: Start date
+            end_date: End date
+            
+        Returns:
+            Dictionary mapping symbol to list of dividend records
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        
+        results = {}
+        
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            future_to_symbol = {
+                executor.submit(self.get_dividends, sym, start_date, end_date): sym 
+                for sym in symbols
+            }
+            
+            for future in as_completed(future_to_symbol):
+                sym = future_to_symbol[future]
+                try:
+                    divs = future.result()
+                    if divs:
+                        results[sym] = divs
+                except Exception:
+                    continue
+        
+        return results
+
+
     def get_constituents(
         self,
         as_of_date: Optional[date] = None,
@@ -429,7 +544,10 @@ class EODHDProvider(DataProvider):
             if not symbol:
                 continue
             
-            clean_symbol = str(symbol).split(".")[0].upper()
+            # Standardize symbol format (e.g. BRK.B -> BRK-B for API consistency)
+            # We avoid blindly splitting on '.' which deletes share classes
+            raw_symbol = str(symbol).upper()
+            clean_symbol = raw_symbol.replace("-", ".") # Internal format uses dots
             
             # For historical dates, check if this symbol was active
             if as_of_date and historical and active_on_date:

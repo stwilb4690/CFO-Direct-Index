@@ -431,3 +431,43 @@ def get_sector_etf_fallback(symbol: str) -> str | None:
 def has_replacement_available(symbol: str) -> bool:
     """Check if a symbol has TLH replacement candidates defined."""
     return symbol.upper() in TLH_REPLACEMENT_PAIRS
+
+
+import pandas as pd
+
+def get_dynamic_replacement_candidate(
+    loss_symbol: str, 
+    sector_tickers: list[str], 
+    price_history: pd.DataFrame, 
+    excluded_symbols: set
+) -> str | None:
+    """
+    Find a replacement using real-time correlation (Professional Standard).
+    
+    Args:
+        loss_symbol: The stock we are harvesting loss on.
+        sector_tickers: List of other tickers in the same sector.
+        price_history: DataFrame of historical closes (columns=tickers, index=date).
+        excluded_symbols: Wash sale restricted symbols.
+        
+    Returns:
+        Symbol of the most correlated eligible stock, or None.
+    """
+    if loss_symbol not in price_history.columns:
+        return None
+        
+    # calculate correlation with target stock
+    # We only care about the last 60 days for recent correlation
+    recent_prices = price_history.tail(60)
+    correlations = recent_prices[sector_tickers].corrwith(recent_prices[loss_symbol])
+    
+    # Sort by highest correlation
+    candidates = correlations.sort_values(ascending=False)
+    
+    for symbol, corr in candidates.items():
+        # Must be highly correlated (>0.85) but not identical (1.0)
+        if symbol != loss_symbol and corr > 0.85 and corr < 0.99:
+            if symbol not in excluded_symbols:
+                return symbol
+                
+    return None

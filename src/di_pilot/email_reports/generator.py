@@ -106,7 +106,7 @@ def generate_daily_email(
 
 
 def _calculate_sector_allocation(holdings_list):
-    """Calculate sector allocation from holdings."""
+    """Calculate sector allocation with S&P 500 benchmark comparison."""
     # Sector mappings for major stocks
     SECTORS = {
         'AAPL': 'Technology', 'MSFT': 'Technology', 'NVDA': 'Technology', 
@@ -120,12 +120,35 @@ def _calculate_sector_allocation(holdings_list):
         'COST': 'Consumer Staples', 'CVX': 'Energy',
     }
     
-    sectors = {}
+    # S&P 500 sector weights (approximate Jan 2026)
+    SP500_SECTORS = {
+        'Technology': 32.0,
+        'Healthcare': 12.5,
+        'Financials': 13.0,
+        'Consumer Cyclical': 10.5,
+        'Communication': 8.5,
+        'Industrials': 8.5,
+        'Consumer Staples': 6.0,
+        'Energy': 4.0,
+        'Utilities': 2.5,
+        'Real Estate': 2.0,
+        'Materials': 2.5,
+        'Other': 0.0,
+    }
+    
+    portfolio_sectors = {}
     for h in holdings_list[:50]:
         sector = SECTORS.get(h['symbol'], 'Other')
-        sectors[sector] = sectors.get(sector, 0) + h['weight'] * 100
+        portfolio_sectors[sector] = portfolio_sectors.get(sector, 0) + h['weight'] * 100
     
-    return sorted(sectors.items(), key=lambda x: x[1], reverse=True)
+    # Build comparison list
+    result = []
+    for sector, weight in portfolio_sectors.items():
+        sp_weight = SP500_SECTORS.get(sector, 0)
+        drift = weight - sp_weight
+        result.append((sector, weight, sp_weight, drift))
+    
+    return sorted(result, key=lambda x: x[1], reverse=True)
 
 
 def _generate_enhanced_email_html(
@@ -170,13 +193,16 @@ def _generate_enhanced_email_html(
         </tr>
         """
 
-    # Generate sector allocation
+    # Generate sector allocation with S&P comparison
     sector_html = ""
-    for sector, weight in sector_allocation[:8]:
+    for sector, weight, sp_weight, drift in sector_allocation[:8]:
+        drift_color = "#3fb950" if drift >= 0 else "#f85149"
         sector_html += f"""
         <tr>
             <td style="padding: 8px; border-bottom: 1px solid #30363d; color: #f0f6fc;">{sector}</td>
-            <td style="padding: 8px; border-bottom: 1px solid #30363d; text-align: right; color: #8b949e;">{weight:.1f}%</td>
+            <td style="padding: 8px; border-bottom: 1px solid #30363d; text-align: right; color: #f0f6fc;">{weight:.1f}%</td>
+            <td style="padding: 8px; border-bottom: 1px solid #30363d; text-align: right; color: #8b949e;">{sp_weight:.1f}%</td>
+            <td style="padding: 8px; border-bottom: 1px solid #30363d; text-align: right; color: {drift_color};">{drift:+.1f}%</td>
         </tr>
         """
 
@@ -301,15 +327,25 @@ def _generate_enhanced_email_html(
         <!-- Two Column: Sectors + Recent Trades -->
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px;">
             <tr valign="top">
-                <td style="width: 50%; padding-right: 10px;">
+                <td style="width: 60%; padding-right: 10px;">
                     <div style="background: #161b22; border-radius: 12px; padding: 20px; border: 1px solid #30363d; height: 100%;">
-                        <h2 style="color: #f0f6fc; font-size: 14px; margin: 0 0 12px 0;">📊 Sector Allocation</h2>
+                        <h2 style="color: #f0f6fc; font-size: 14px; margin: 0 0 12px 0;">📊 Sector Allocation vs S&P 500</h2>
                         <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 6px; text-align: left; color: #8b949e; font-weight: 500;">Sector</th>
+                                    <th style="padding: 6px; text-align: right; color: #8b949e; font-weight: 500;">Port</th>
+                                    <th style="padding: 6px; text-align: right; color: #8b949e; font-weight: 500;">S&P</th>
+                                    <th style="padding: 6px; text-align: right; color: #8b949e; font-weight: 500;">Drift</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                             {sector_html}
+                            </tbody>
                         </table>
                     </div>
                 </td>
-                <td style="width: 50%; padding-left: 10px;">
+                <td style="width: 40%; padding-left: 10px;">
                     <div style="background: #161b22; border-radius: 12px; padding: 20px; border: 1px solid #30363d; height: 100%;">
                         <h2 style="color: #f0f6fc; font-size: 14px; margin: 0 0 12px 0;">📈 Recent Trades</h2>
                         <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 12px;">
@@ -329,6 +365,15 @@ def _generate_enhanced_email_html(
                 </td>
             </tr>
         </table>
+
+        <!-- Cash Reserve Note -->
+        <div style="background: #161b22; border-radius: 12px; padding: 16px; margin-bottom: 20px; border: 1px solid #30363d;">
+            <p style="color: #8b949e; font-size: 12px; margin: 0; line-height: 1.6;">
+                <strong style="color: #58a6ff;">💡 Why 1% Cash?</strong> The portfolio maintains approximately 1% in cash reserves for:
+                (1) covering transaction costs and fees, (2) facilitating tax-loss harvesting trades without forced sales,
+                and (3) handling fractional share rounding. This cash buffer ensures smooth rebalancing operations.
+            </p>
+        </div>
 
         <!-- Footer -->
         <div style="text-align: center; padding: 20px; border-top: 1px solid #30363d;">

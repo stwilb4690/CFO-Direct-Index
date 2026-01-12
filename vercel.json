@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "name": "cfo-direct-index-dashboard",
+    "builds": [
+        {
+            "src": "dashboard/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/dashboard/$1"
+        }
+    ],
+    "outputDirectory": "dashboard"
+}

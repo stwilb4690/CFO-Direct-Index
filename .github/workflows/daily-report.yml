@@ -1,0 +1,56 @@
+# Daily Forward Test Automation
+# Runs every weekday at 6 PM ET (23:00 UTC) after market close
+# Sends daily email report to configured recipient
+
+name: Daily Report
+
+on:
+  schedule:
+    # Run at 6 PM ET (11 PM UTC) on weekdays
+    - cron: '0 23 * * 1-5'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  daily-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install flask
+          
+      - name: Generate and send daily email
+        env:
+          EODHD_API_KEY: ${{ secrets.EODHD_API_KEY }}
+          EMAIL_SMTP_SERVER: smtp.gmail.com
+          EMAIL_SMTP_PORT: 587
+          EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_USERNAME }}
+          EMAIL_RECIPIENTS: ${{ secrets.EMAIL_RECIPIENTS }}
+        run: |
+          python scripts/send_daily_email.py
+          
+      - name: Update dashboard data
+        env:
+          EODHD_API_KEY: ${{ secrets.EODHD_API_KEY }}
+        run: |
+          python scripts/generate_dashboard_data.py
+          
+      - name: Commit updated data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add dashboard/data/portfolio.json
+          git diff --staged --quiet || git commit -m "Update dashboard data [automated]"
+          git push

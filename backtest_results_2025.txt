@@ -1,0 +1,12 @@
+2025 FULL YEAR BACKTEST RESULTS
+==================================================
+Initial Value: 1,000,000
+Final Value: 1283081.56
+Portfolio Return: 28.31%
+Benchmark (SPY) Return: 16.64%
+Total Trades: 252
+Harvested Losses: 0.0
+Final Positions: 100
+Trading Days: 250
+TLH Sell Trades: 0
+Has BRK.B: False

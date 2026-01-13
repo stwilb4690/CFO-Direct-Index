@@ -297,11 +297,21 @@ def run_backtest(
     if progress_callback:
         progress_callback(f"Found {len(trading_days)} trading days ({actual_first} to {actual_last})")
 
-    # Fetch BENCHMARK prices (SPY) for comparison
+    # Fetch BENCHMARK prices (SPY) for comparison - USE TOTAL RETURN
     if progress_callback:
-        progress_callback("Fetching benchmark (SPY) data...")
+        progress_callback("Fetching benchmark data (Total Return)...")
     
-    benchmark_df = provider.get_prices(["SPY"], start_date, end_date)
+    # Use get_benchmark_prices for adjusted close (total return) if available
+    # This is critical: comparing our Total Return portfolio vs Price Return SPY
+    # creates ~1.5-2% of fake alpha annually (compounded)
+    benchmark_df = None
+    if hasattr(provider, 'get_benchmark_prices'):
+        benchmark_df = provider.get_benchmark_prices("SPY", start_date, end_date)
+    
+    if benchmark_df is None or benchmark_df.empty:
+        # Fallback to regular prices (will be price return only)
+        benchmark_df = provider.get_prices(["SPY"], start_date, end_date)
+    
     benchmark_prices = {}
     if not benchmark_df.empty:
         for _, row in benchmark_df.iterrows():

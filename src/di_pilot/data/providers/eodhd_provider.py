@@ -470,6 +470,54 @@ class EODHDProvider(DataProvider):
         
         return results
 
+    def get_benchmark_prices(
+        self,
+        symbol: str,
+        start_date: date,
+        end_date: date,
+    ) -> pd.DataFrame:
+        """
+        Fetch ADJUSTED close prices for benchmarking (Total Return).
+        
+        Unlike get_prices() which forces Raw Close for tax lots, this 
+        prioritizes Adjusted Close to simulate reinvested dividends.
+        This is critical for accurate benchmark comparison.
+        
+        Args:
+            symbol: Benchmark symbol (e.g., 'SPY')
+            start_date: Start date
+            end_date: End date
+            
+        Returns:
+            DataFrame with columns: date, symbol, close (adjusted)
+        """
+        # Ensure symbol format for API
+        api_symbol = symbol.replace(".", "-")
+        url = f"{self.BASE_URL}/eod/{api_symbol}.US"
+        params = {
+            "from": start_date.isoformat(),
+            "to": end_date.isoformat(),
+            "api_token": self._api_key,
+            "fmt": "json",
+        }
+        
+        try:
+            data = self._make_request(url, params)
+            records = []
+            for item in data:
+                # PRIORITIZE ADJUSTED CLOSE for total return benchmark
+                price = item.get("adjusted_close") or item.get("close")
+                if price:
+                    records.append({
+                        "date": date.fromisoformat(item["date"]),
+                        "symbol": symbol,
+                        "close": float(price)
+                    })
+            return pd.DataFrame(records)
+        except Exception as e:
+            print(f"Benchmark fetch failed: {e}")
+            return pd.DataFrame()
+
 
     def get_constituents(
         self,
@@ -548,6 +596,13 @@ class EODHDProvider(DataProvider):
             # We avoid blindly splitting on '.' which deletes share classes
             raw_symbol = str(symbol).upper()
             clean_symbol = raw_symbol.replace("-", ".") # Internal format uses dots
+            
+            # CRITICAL FIX: Map root symbols to share classes
+            # EODHD returns "BRK" but we need "BRK.B" for Berkshire
+            if clean_symbol == "BRK":
+                clean_symbol = "BRK.B"
+            elif clean_symbol == "BF":
+                clean_symbol = "BF.B"
             
             # For historical dates, check if this symbol was active
             if as_of_date and historical and active_on_date:
